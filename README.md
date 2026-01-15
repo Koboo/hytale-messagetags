@@ -10,3 +10,4 @@ and added to your project as a dependency, done by the ``eu.koboo.pluginmanifest
 - [PluginManifest GitHub](https://github.com/Koboo/hytale-pluginmanifest)
 - [HytaleModding Docs](https://hytalemodding.dev/en/docs)
 - [Curseforge Wiki](https://support.curseforge.com/en/support/solutions/folders/9000202192)
+- [Hytale Server Manual](https://support.hytale.com/hc/en-us/articles/45326769420827-Hytale-Server-Manual)

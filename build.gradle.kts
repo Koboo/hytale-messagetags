@@ -29,13 +29,14 @@ dependencies {
 pluginManifest {
     // Here you can configure:
     // 1. manifest.json generation properties
-    // 2. If and where your HytaleServer.jar is.
+    // 2. If and where your HytaleServer.jar is
     //
     // For more information see GitHub:
     // https://github.com/Koboo/hytale-pluginmanifest
 }
 
 java {
+    // Sets gradle's used java version to "Java 25"
     toolchain.languageVersion.set(JavaLanguageVersion.of(25))
     withSourcesJar()
     withJavadocJar()
@@ -43,11 +44,14 @@ java {
 
 tasks {
     compileJava {
+        // Sets the compiling charset of your JAR to "UTF-8"
         options.encoding = "UTF-8"
     }
     javadoc {
+        // Sets the compiling charset of your Javadocs to "UTF-8"
         options.encoding = "UTF-8"
         // Comment out this line to enable Javadoc warnings.
+        // NOTE: This will probably spam your build-messages.
         (options as CoreJavadocOptions).addStringOption("Xdoclint:none", "-quiet")
     }
 }

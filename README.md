@@ -63,10 +63,25 @@ and added to your project as a dependency, done by the ``eu.koboo.pluginmanifest
 
 ### Summary
 
-| Aspect      | BlockEntity (Entity)            | Block with Data (Block)          |
-|-------------|----------------------------------|----------------------------------|
-| Store       | `EntityStore`                   | `ChunkStore`                     |
-| Movement    | Can move                         | Fixed position                   |
-| Example     | Falling sand, dropped item      | Chest, spawn marker              |
-| Java Type   | `Component<EntityStore>`        | `Component<ChunkStore>`          |
-| Created via | `assembleDefaultBlockEntity()`  | JSON `"BlockEntity"` config      |
+| Aspect      | BlockEntity (Entity)           | Block with Data (Block)     |
+|-------------|--------------------------------|-----------------------------|
+| Store       | `EntityStore`                  | `ChunkStore`                |
+| Movement    | Can move                       | Fixed position              |
+| Example     | Falling sand, dropped item     | Chest, spawn marker         |
+| Java Type   | `Component<EntityStore>`       | `Component<ChunkStore>`     |
+| Created via | `assembleDefaultBlockEntity()` | JSON `"BlockEntity"` config |
+
+## Where do I get..
+
+### PlayerRef
+
+- ``PlayerRef playerRef = Universe.get().getPlayer(uuid);``
+- ``PlayerRef playerRef = reference.getStore().getComponent(reference, PlayerRef.getComponentType());``
+
+### Player
+
+- ``Player player = reference.getStore().getComponent(reference, Player.getComponentType());``
+
+### World
+
+- ``World world = Universe.get().getWorld(uuid);``

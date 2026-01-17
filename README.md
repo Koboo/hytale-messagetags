@@ -16,3 +16,4 @@ and added to your project as a dependency, done by the ``eu.koboo.pluginmanifest
 - [Hytale modding tutorials by Kaupenjoe](https://www.youtube.com/@ModdingByKaupenjoe/videos)
 - [Hytale modding tutorials by TroubleDEV](https://www.youtube.com/@TroubleDEV)
 - [Hytale tutorials by HytaleGuides (non-official)](https://www.youtube.com/@HytaleGuidesOfficial/videos)
+- [hytale.game (non-official)](https://hytale.game/en/)

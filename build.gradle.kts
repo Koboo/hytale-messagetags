@@ -7,7 +7,7 @@ plugins {
     // So if you build this project with "shadowJar" the JAR file name will be:
     // "hytale-plugin-template-1.0.0-all.jar"
     id("com.gradleup.shadow") version("9.3.1")
-    id("eu.koboo.pluginmanifest") version("1.0.24-rc.1")
+    id("eu.koboo.pluginmanifest") version("1.0.24")
 }
 
 group = "eu.koboo"
@@ -30,6 +30,15 @@ pluginManifest {
     // Nothing to configure.
     // The plugin already does most of the things for us. :)
     // https://github.com/Koboo/hytale-pluginmanifest
+
+    manifestConfiguration {
+        pluginGroup = "Koboo"
+        pluginName = "TemplatePlugin"
+    }
+
+    runtimeConfiguration {
+        runtimeDirectory = "D:/PluginManifestRuntime"
+    }
 }
 
 java {

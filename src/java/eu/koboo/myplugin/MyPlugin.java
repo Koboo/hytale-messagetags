@@ -7,7 +7,7 @@ import eu.koboo.myplugin.commands.GetTargetBlockCommand;
 
 import javax.annotation.Nonnull;
 
-public class MyPlugin extends JavaPlugin{
+public class MyPlugin extends JavaPlugin {
 
     public MyPlugin(@Nonnull JavaPluginInit init) {
         super(init);

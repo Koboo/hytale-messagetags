@@ -2,23 +2,19 @@ package eu.koboo.myplugin.commands;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
-import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.Message;
-import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayerCommand;
-import com.hypixel.hytale.server.core.entity.InteractionManager;
-import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
-import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
-import com.hypixel.hytale.server.core.modules.interaction.InteractionModule;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.server.core.util.TargetUtil;
-import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
+
+import javax.annotation.Nonnull;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 
 public class GetTargetBlockCommand extends AbstractPlayerCommand {
 
@@ -27,31 +23,64 @@ public class GetTargetBlockCommand extends AbstractPlayerCommand {
     }
 
     @Override
-    protected void execute(@NonNullDecl CommandContext context,
-                           @NonNullDecl Store<EntityStore> store,
-                           @NonNullDecl Ref<EntityStore> ref,
-                           @NonNullDecl PlayerRef playerRef,
-                           @NonNullDecl World world) {
-        world.execute(() -> {
-            int maxDistance = 16;
-            Vector3i blockPosition = TargetUtil.getTargetBlock(
-                    ref,
-                    maxDistance,
-                    store);
-            if(blockPosition == null) {
-                context.sendMessage(Message.raw("No block found!"));
+    protected void execute(@Nonnull CommandContext ctx,
+                           @Nonnull Store<EntityStore> store,
+                           @Nonnull Ref<EntityStore> ref,
+                           @Nonnull PlayerRef playerRef,
+                           @Nonnull World world) {
+
+        String upsideDownName = "upsidedown";
+        World upsideDownWorld;
+        if (Universe.get().isWorldLoadable(upsideDownName)) {
+            try {
+                CompletableFuture<World> future = Universe.get().loadWorld(upsideDownName);
+                upsideDownWorld = future.join();
+            } catch (CompletionException e) {
+                ctx.sendMessage(Message.raw("Erm, no loading: " + e.getMessage()));
                 return;
             }
-            BlockType blockType = world.getBlockType(blockPosition);
-            if (blockType == null) {
-                context.sendMessage(Message.raw("No block found!"));
+        } else {
+            upsideDownWorld = Universe.get().getWorld(upsideDownName);
+        }
+        if (upsideDownWorld == null) {
+            Path path = Universe.get().getPath();
+            Path upsidedownPath = path.resolve("worlds/" + upsideDownName);
+            try {
+                copyDirectory(
+                        path.resolve("worlds/default"),
+                        upsidedownPath
+                );
+            } catch (IOException exp) {
+                ctx.sendMessage(Message.raw("Erm, no: " + exp.getMessage()));
                 return;
             }
-            TransformComponent transformComponent = store.getComponent(ref, TransformComponent.getComponentType());
-            assert transformComponent != null;
-            Vector3d position = transformComponent.getPosition();
-            double distance = position.distanceTo(blockPosition);
-            context.sendMessage(Message.raw("Looking at block: " + blockType.getId() + " (" + distance + " blocks away)"));
-        });
+            try {
+                CompletableFuture<World> worldFuture = Universe.get().makeWorld(
+                        upsideDownName,
+                        upsidedownPath,
+                        world.getWorldConfig(),
+                        false
+                );
+                upsideDownWorld = worldFuture.join();
+            } catch (CompletionException e) {
+                ctx.sendMessage(Message.raw("Erm, no making: " + e.getMessage()));
+                return;
+            }
+            if (!upsideDownWorld.isStarted()) {
+                try {
+                    CompletableFuture<Void> future = upsideDownWorld.start();
+                    future.join();
+                } catch (CompletionException e) {
+                    ctx.sendMessage(Message.raw("Erm, no starting: " + e.getMessage()));
+                    return;
+                }
+            }
+        }
+        // We probably got the world now
+        ctx.sendMessage(Message.raw("Trying to teleport now..."));
+    }
+
+    private void copyDirectory(Path source, Path target) throws IOException {
+
     }
 }

@@ -14,8 +14,6 @@ group = "eu.koboo"
 version = "1.0.0"
 
 repositories {
-    mavenLocal()
-    mavenCentral()
     maven {
         name = "entixReposilite"
         url = uri("https://repo.entix.eu/releases")
@@ -45,7 +43,7 @@ pluginManifest {
 }
 
 java {
-    // Sets gradle's used java version to "Java 25"
+    // Sets gradle's used java version to "25"
     toolchain.languageVersion.set(JavaLanguageVersion.of(25))
     withSourcesJar()
     withJavadocJar()
@@ -70,7 +68,7 @@ sourceSets {
         java.setSrcDirs(listOf("src/java"))
         resources.setSrcDirs(listOf("src/resources"))
     }
-    // We don't need test sources, we test on the server itself.
+    // We don't need test sources, we test it on the server itself.
     test {
         java.setSrcDirs(emptyList<String>())
         resources.setSrcDirs(emptyList<String>())

@@ -14,11 +14,14 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import eu.koboo.messagetags.api.MessageTags;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 public class CommandTagsTest extends AbstractCommandCollection {
 
     public CommandTagsTest() {
-        super("test", "Prints out test messages and their json representation");
+        super("tags", "Prints out test messages and their json representation");
         addSubCommand(new Test1("1"));
         addSubCommand(new Test2("2"));
         addSubCommand(new Test3("3"));
@@ -28,6 +31,7 @@ public class CommandTagsTest extends AbstractCommandCollection {
         addSubCommand(new Test7("7"));
         addSubCommand(new Test8("8"));
         addSubCommand(new Test9("9"));
+        addSubCommand(new Test10("10"));
     }
 
     public static class Test1 extends AbstractPlayerCommand {
@@ -210,6 +214,30 @@ public class CommandTagsTest extends AbstractCommandCollection {
 
         private String transitionTag(float progress) {
             return "<transition:blue:red:yellow:" + progress + ">";
+        }
+    }
+
+    public static class Test10 extends AbstractPlayerCommand {
+
+        public Test10(String name) {
+            super(name, "");
+            setAllowsExtraArguments(true);
+        }
+
+        @Override
+        protected void execute(@Nonnull CommandContext context,
+                               @Nonnull Store<EntityStore> store,
+                               @Nonnull Ref<EntityStore> ref,
+                               @Nonnull PlayerRef playerRef,
+                               @Nonnull World world) {
+            String inputString = context.getInputString();
+            String[] split = inputString.split(" ");
+            split[0] = null; // label
+            split[1] = null; // argument
+            inputString = String.join(" ", Arrays.stream(split).filter(Objects::nonNull).toArray(String[]::new));
+            Player player = store.ensureAndGetComponent(ref, Player.getComponentType());
+            player.sendMessage(Message.raw(inputString));
+            player.sendMessage(MessageTags.parse(inputString));
         }
     }
 }

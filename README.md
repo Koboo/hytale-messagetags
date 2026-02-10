@@ -130,7 +130,7 @@ _Preview: This text is italic_
 
 ## Color
 
-<span style="color:yellow">Preview: This text is colored</span>
+Applies the color to the text.
 
 #### Tags:
 

@@ -146,7 +146,7 @@ Applies the color to the text.
 
 #### Arguments:
 
-- `COLOR` — Any valid color format
+- `COLOR` — Any valid color ([Support Color Format](#supported-color-formats))
 
 #### Notes:
 
@@ -238,7 +238,7 @@ Adds the gradient to the following text.
 
 #### Arguments:
 
-- `COLOR` — Any valid color format
+- `COLOR` — Any valid color ([Support Color Format](#supported-color-formats))
 
 ## Color Transitions
 
@@ -253,7 +253,7 @@ Adds the transition to the following text.
 
 #### Arguments:
 
-- `COLOR` — Any valid color format
+- `COLOR` — Any valid color format ([Support Color Format](#supported-color-formats))
 - `PHASE` — A number between 0 and 1
 
 ## Supported Color Formats

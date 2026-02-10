@@ -4,7 +4,7 @@ MessageTags is a library and a server plugin for Hytale.
 It allows easy message parsing and formatting using html-semantics,
 and is similar to kyoris MiniMessage in Minecraft.
 
-_____________________________________
+Basically, a MiniMessage clone for Hytale.
 
 ## Overview
 

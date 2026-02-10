@@ -28,10 +28,9 @@ Basically, a MiniMessage clone for Hytale.
 - [MavenCentral (Plugin)](https://mvnrepository.com/artifact/eu.koboo/messagetags-plugin)
 - [Discord](https://discord.koboo.eu/)
 
-## Features
+## 📑 Features
 
-### Styling and formatting
-
+**Styling and formatting**
 - Colors
 - Color gradients
 - Color transitions
@@ -42,8 +41,7 @@ Basically, a MiniMessage clone for Hytale.
 - Style and format resets
 - Unlimited nesting
 
-### Extensibility
-
+**Extensibility**
 - Stripping support (Remove styles and formatting)
 - Create own ``MessageParser``
 - Create own ``NamedColor``
@@ -52,19 +50,18 @@ Basically, a MiniMessage clone for Hytale.
   - Standalone plugin
   - Maven library
 
-### Performance
-
+**Performance**
 - Zero-regex parsing
 - Minimal object allocation
 - Single-pass parsing
 
-## Limitations
+## 🚫 Limitations
 
 - Dynamic colors cannot be closed
 - Gradients do not apply to translations
 - Invalid tags are rendered as raw text
 
-## Quick Start
+## 🐇 Quick Start
 
 **Add dependency**
 ````kotlin
@@ -85,7 +82,7 @@ Message message = MessageTags.strip("<bold><red>Hello World!</red></bold>");
 // Output: "Hello World!"
 ````
 
-## Supported Tags
+## 🏷 Supported Tags
 
 - [Bold](#bold)
 - [Underlined](#underlined)
@@ -152,7 +149,7 @@ Applies the color to the text.
 
 #### Arguments:
 
-- `COLOR` — Any valid color ([Support Color Format](#supported-color-formats))
+- `COLOR` — Any valid color ([Support Color Format](#-supported-color-formats))
 
 #### Notes:
 
@@ -244,7 +241,7 @@ Adds the gradient to the following text.
 
 #### Arguments:
 
-- `COLOR` — Any valid color ([Support Color Format](#supported-color-formats))
+- `COLOR` — Any valid color ([Support Color Format](#-supported-color-formats))
 
 ## Color Transitions
 
@@ -259,10 +256,10 @@ Adds the transition to the following text.
 
 #### Arguments:
 
-- `COLOR` — Any valid color format ([Support Color Format](#supported-color-formats))
+- `COLOR` — Any valid color format ([Support Color Format](#-supported-color-formats))
 - `PHASE` — A number between 0 and 1
 
-## Supported Color Formats
+## 🎨 Supported Color Formats
 
 Here is a list of all supported color formats with an example.
 

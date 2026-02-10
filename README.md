@@ -10,21 +10,10 @@ _____________________________________
 
 - [Features](#features)
 - [Limitations](#limitations)
-- Tags:
-  - [Bold](#bold)
-  - [Underlined](#underlined)
-  - [Italic](#italic)
-  - [Color](#color)
-  - [Line breaks](#line-breaks)
-  - [Link](#link)
-  - [Monospace](#monospace)
-  - [Reset](#reset)
-  - [Translation](#translation)
-  - [Gradients](#color-gradients)
-  - [Transitions](#color-transitions)
+- [Quick Start](#quick-start)
+- [Links](#links)
+- [Supported Tags](#tags)
 - [Supported Color Formats](#supported-color-formats)
-
-_____________________________________
 
 ## Features
 
@@ -56,15 +45,11 @@ _____________________________________
 - Minimal object allocation
 - Single-pass parsing
 
-_____________________________________
-
 ## Limitations
 
 - Dynamic colors cannot be closed
 - Gradients do not apply to translations
 - Invalid tags are rendered as raw text
-
-_____________________________________
 
 ## Quick Start
 
@@ -87,7 +72,26 @@ Message message = MessageTags.strip("<bold><red>Hello World!</red></bold>");
 // Output: "Hello World!"
 ````
 
-_____________________________________
+## Links
+
+- [GitHub](https://github.com/Koboo/hytale-messagetags)
+- [CurseForge](https://www.curseforge.com/hytale/mods/messagetags)
+- [ModTale](https://modtale.net/mod/messagetags-d0e70919-7bf1-4123-ae43-2c4d85d549b5)
+- [MavenCentral](https://mvnrepository.com/artifact/eu.koboo/messagetags-api)
+
+## Supported Tags
+
+- [Bold](#bold)
+- [Underlined](#underlined)
+- [Italic](#italic)
+- [Color](#color)
+- [Line breaks](#line-breaks)
+- [Link](#link)
+- [Monospace](#monospace)
+- [Reset](#reset)
+- [Translation](#translation)
+- [Gradients](#color-gradients)
+- [Transitions](#color-transitions)
 
 ## Bold
 
@@ -251,8 +255,6 @@ Adds the transition to the following text.
 
 - `COLOR` — Any valid color format
 - `PHASE` — A number between 0 and 1
-
-_____________________________________
 
 ## Supported Color Formats
 

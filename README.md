@@ -1,5 +1,11 @@
 # Hytale MessageTags
 
+![IMG](https://img.shields.io/maven-central/v/eu.koboo/messagetags-api?label=messagetags-api&color=green&logo=apachemaven)
+![IMG](https://img.shields.io/maven-central/v/eu.koboo/messagetags-plugin?label=messagetags-plugin&color=green&logo=apachemaven)
+
+![IMG](https://img.shields.io/curseforge/dt/1458950?logo=curseforge&label=downloads)
+![IMG](https://img.shields.io/discord/1021053609359708211?logo=discord)
+
 MessageTags is a library and a server plugin for Hytale.
 It allows easy message parsing and formatting using html-semantics,
 and is similar to kyoris MiniMessage in Minecraft.
@@ -11,9 +17,16 @@ Basically, a MiniMessage clone for Hytale.
 - [Features](#features)
 - [Limitations](#limitations)
 - [Quick Start](#quick-start)
-- [Links](#links)
 - [Supported Tags](#tags)
 - [Supported Color Formats](#supported-color-formats)
+
+**Links**
+- [GitHub](https://github.com/Koboo/hytale-messagetags)
+- [CurseForge](https://www.curseforge.com/hytale/mods/messagetags)
+- [ModTale](https://modtale.net/mod/messagetags-d0e70919-7bf1-4123-ae43-2c4d85d549b5)
+- [MavenCentral (API)](https://mvnrepository.com/artifact/eu.koboo/messagetags-api)
+- [MavenCentral (Plugin)](https://mvnrepository.com/artifact/eu.koboo/messagetags-plugin)
+- [Discord](https://discord.koboo.eu/)
 
 ## Features
 
@@ -71,13 +84,6 @@ Message message = MessageTags.parse("<bold><red>Hello World!</red></bold>");
 Message message = MessageTags.strip("<bold><red>Hello World!</red></bold>");
 // Output: "Hello World!"
 ````
-
-## Links
-
-- [GitHub](https://github.com/Koboo/hytale-messagetags)
-- [CurseForge](https://www.curseforge.com/hytale/mods/messagetags)
-- [ModTale](https://modtale.net/mod/messagetags-d0e70919-7bf1-4123-ae43-2c4d85d549b5)
-- [MavenCentral](https://mvnrepository.com/artifact/eu.koboo/messagetags-api)
 
 ## Supported Tags
 

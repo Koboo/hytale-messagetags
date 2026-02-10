@@ -1,0 +1,3 @@
+pluginManifest {
+    isServerPlugin = false
+}

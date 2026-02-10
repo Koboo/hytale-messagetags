@@ -69,22 +69,22 @@ public final class NamedColorRegistry {
 
     public void registerNamedColor(@Nonnull NamedColor namedColor) {
         Character colorCode = namedColor.colorCode();
-        if(colorCode != null) {
+        if (colorCode != null) {
             if (DISALLOWED_COLOR_CODES.contains(colorCode)) {
                 throw new IllegalArgumentException("colorCode " + colorCode + " is preserved as tag token, you can't use it!");
             }
             characterToColor.put(colorCode, namedColor);
         }
         String name = namedColor.name().toLowerCase(Locale.ROOT).trim();
-        if(name.isEmpty()) {
+        if (name.isEmpty()) {
             throw new IllegalArgumentException("Name cannot be empty!");
         }
         nameToColor.put(name, namedColor);
         String hexCode = namedColor.hexCode();
-        if(hexCode.trim().isEmpty()) {
+        if (hexCode.trim().isEmpty()) {
             throw new IllegalArgumentException("HexCode cannot be empty!");
         }
-        if(hexCode.length() == 6) {
+        if (hexCode.length() == 6) {
             throw new IllegalArgumentException("HexCode has to bge prefixed with '#'");
         }
         hexCode = hexCode.toLowerCase(Locale.ROOT);

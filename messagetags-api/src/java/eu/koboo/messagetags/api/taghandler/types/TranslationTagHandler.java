@@ -21,10 +21,10 @@ public final class TranslationTagHandler extends TagHandler {
 
     @Override
     public boolean handle(@Nonnull MessageBuilder state,
-                       @Nonnull String root,
-                       int nameStart, int nameEnd,
-                       int argumentStart, int argumentEnd,
-                       @Nonnull TagAction action) {
+                          @Nonnull String root,
+                          int nameStart, int nameEnd,
+                          int argumentStart, int argumentEnd,
+                          @Nonnull TagAction action) {
         if (action != TagAction.Open && action != TagAction.Directive) {
             return false;
         }

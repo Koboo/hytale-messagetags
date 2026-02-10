@@ -22,22 +22,22 @@ public final class GradientTagHandler extends TagHandler {
 
     @Override
     public boolean handle(@Nonnull MessageBuilder state,
-                       @Nonnull String root,
-                       int nameStart, int nameEnd,
-                       int argumentStart, int argumentEnd,
-                       @Nonnull TagAction action) {
+                          @Nonnull String root,
+                          int nameStart, int nameEnd,
+                          int argumentStart, int argumentEnd,
+                          @Nonnull TagAction action) {
         switch (action) {
             case Open -> {
                 String argument = getArgument(root, argumentStart, argumentEnd);
                 List<String> colorList = createColorList(argument);
-                if(colorList == null || colorList.isEmpty()) {
+                if (colorList == null || colorList.isEmpty()) {
                     return false;
                 }
                 state.gradientColors = colorList;
                 return true;
             }
             case Close -> {
-                if(state.gradientColors != null) {
+                if (state.gradientColors != null) {
                     state.gradientColors.clear();
                     state.gradientColors = null;
                 }
@@ -48,17 +48,17 @@ public final class GradientTagHandler extends TagHandler {
     }
 
     private List<String> createColorList(String argument) {
-        if(argument == null) {
+        if (argument == null) {
             return null;
         }
         String[] colorSplit = argument.split(":");
-        if(colorSplit.length < 2) {
+        if (colorSplit.length < 2) {
             return null;
         }
         List<String> colorList = new ArrayList<>();
         for (String colorString : colorSplit) {
             String color = ColorParser.parseColor(colorString);
-            if(color == null) {
+            if (color == null) {
                 return null;
             }
             colorList.add(color);

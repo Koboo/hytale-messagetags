@@ -23,33 +23,33 @@ public final class TransitionTagHandler extends TagHandler {
 
     @Override
     public boolean handle(@Nonnull MessageBuilder state,
-                       @Nonnull String root,
-                       int nameStart, int nameEnd,
-                       int argumentStart, int argumentEnd,
-                       @Nonnull TagAction action) {
+                          @Nonnull String root,
+                          int nameStart, int nameEnd,
+                          int argumentStart, int argumentEnd,
+                          @Nonnull TagAction action) {
         switch (action) {
             case Open -> {
                 String argument = getArgument(root, argumentStart, argumentEnd);
-                if(argument == null) {
+                if (argument == null) {
                     return false;
                 }
                 String[] colorSplit = argument.split(":");
                 int length = colorSplit.length;
                 // At least 2 color and a phase
-                if(length < 3) {
+                if (length < 3) {
                     return false;
                 }
                 int lastCursor = length - 1;
                 List<String> colorList = createColorList(colorSplit, length, lastCursor);
-                if(colorList == null || colorList.isEmpty()) {
+                if (colorList == null || colorList.isEmpty()) {
                     return false;
                 }
                 float phase = getPhase(colorSplit, lastCursor);
-                if(phase < 0 || phase > 1) {
+                if (phase < 0 || phase > 1) {
                     return false;
                 }
                 String phaseColor = ColorUtils.interpolateColor(colorList, phase);
-                if(phaseColor == null) {
+                if (phaseColor == null) {
                     return false;
                 }
                 state.color = phaseColor;
@@ -66,12 +66,12 @@ public final class TransitionTagHandler extends TagHandler {
     private List<String> createColorList(String[] colorSplit, int length, int lastCursor) {
         List<String> colorList = new ArrayList<>();
         for (int cursor = 0; cursor < length; cursor++) {
-            if(cursor == lastCursor) {
+            if (cursor == lastCursor) {
                 break;
             }
             String colorString = colorSplit[cursor];
             String color = ColorParser.parseColor(colorString);
-            if(color == null) {
+            if (color == null) {
                 return null;
             }
             colorList.add(color);

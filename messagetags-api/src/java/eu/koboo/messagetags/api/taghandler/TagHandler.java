@@ -61,7 +61,7 @@ public abstract class TagHandler {
         @Nonnull String root,
         int start, int end) {
         for (String tag : tagList) {
-            if(!equalsIgnoreCase(tag, root, start, end)) {
+            if (!equalsIgnoreCase(tag, root, start, end)) {
                 continue;
             }
             return true;
@@ -71,14 +71,14 @@ public abstract class TagHandler {
 
     @Nullable
     protected static String getArgument(@Nonnull String root, int argumentStart, int argumentEnd) {
-        if(argumentStart == -1 || argumentEnd == -1) {
+        if (argumentStart == -1 || argumentEnd == -1) {
             return null;
         }
-        if(argumentStart >= argumentEnd) {
+        if (argumentStart >= argumentEnd) {
             return null;
         }
         String argument = root.substring(argumentStart, argumentEnd).trim();
-        if(argument.isEmpty()) {
+        if (argument.isEmpty()) {
             return null;
         }
         return argument;

@@ -38,7 +38,7 @@ public final class ColorUtils {
         if (r < 0 || g < 0 || b < 0) {
             return null;
         }
-        if(r > 255 || g > 255 || b > 255) {
+        if (r > 255 || g > 255 || b > 255) {
             return null;
         }
         char[] out = new char[7];
@@ -56,7 +56,7 @@ public final class ColorUtils {
 
     @Nullable
     public static String rgbToHex(short[] rgb) {
-        if(rgb == null || rgb.length != 3) {
+        if (rgb == null || rgb.length != 3) {
             return null;
         }
         short r = rgb[0];

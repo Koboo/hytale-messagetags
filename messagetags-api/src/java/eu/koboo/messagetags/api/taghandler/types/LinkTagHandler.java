@@ -20,14 +20,14 @@ public final class LinkTagHandler extends TagHandler {
 
     @Override
     public boolean handle(@Nonnull MessageBuilder state,
-                       @Nonnull String root,
-                       int nameStart, int nameEnd,
-                       int argumentStart, int argumentEnd,
-                       @Nonnull TagAction action) {
+                          @Nonnull String root,
+                          int nameStart, int nameEnd,
+                          int argumentStart, int argumentEnd,
+                          @Nonnull TagAction action) {
         switch (action) {
             case Open -> {
                 String link = getArgument(root, argumentStart, argumentEnd);
-                if(link == null) {
+                if (link == null) {
                     return false;
                 }
                 state.link = link;

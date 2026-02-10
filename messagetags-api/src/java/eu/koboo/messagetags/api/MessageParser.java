@@ -1,9 +1,6 @@
 package eu.koboo.messagetags.api;
 
-import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.Message;
-import com.hypixel.hytale.server.core.console.ConsoleSender;
-import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import eu.koboo.messagetags.api.taghandler.MessageBuilder;
 import eu.koboo.messagetags.api.taghandler.TagAction;
 import eu.koboo.messagetags.api.taghandler.TagHandler;
@@ -118,7 +115,7 @@ public final class MessageParser {
             boolean hasArguments = false;
             while (tagNameEndIndex < tagCloseBracketIndex) {
                 char nameEndToken = inputText.charAt(tagNameEndIndex);
-                if(nameEndToken == TAG_SEPARATOR) {
+                if (nameEndToken == TAG_SEPARATOR) {
                     hasArguments = true;
                     break;
                 }
@@ -132,7 +129,7 @@ public final class MessageParser {
             // let the TagHandler decode the string according to their needs.
             final int argumentStart;
             final int argumentEnd;
-            if(hasArguments) {
+            if (hasArguments) {
                 argumentStart = tagNameEndIndex + 1;
                 argumentEnd = tagCloseBracketIndex;
             } else {
@@ -203,7 +200,7 @@ public final class MessageParser {
     }
 
     public void flushTextContent(MessageBuilder state, String text, int contentStart, int contentEnd) {
-        if(contentStart >= contentEnd) {
+        if (contentStart >= contentEnd) {
             return;
         }
         String textPart = text.substring(contentStart, contentEnd);

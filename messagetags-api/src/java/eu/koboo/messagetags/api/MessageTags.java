@@ -18,6 +18,7 @@ public final class MessageTags {
     /**
      * Uses the given String and parses it to Hytale's {@link Message} object,
      * applying all registered {@link TagHandler}.
+     *
      * @param text The text to parse.
      * @return The parsed {@link Message}.
      */
@@ -29,6 +30,7 @@ public final class MessageTags {
     /**
      * Uses the given String and strips away every tag, color and formatting
      * and returns a colorless string.
+     *
      * @param text The text to strip.
      * @return The parsed {@link Message}.
      */
@@ -39,6 +41,7 @@ public final class MessageTags {
 
     /**
      * Register a non-default {@link TagHandler} to the global {@link MessageParser} instance.
+     *
      * @param tagHandler The {@link TagHandler} instance to register.
      */
     public static void registerTagHandler(@Nonnull TagHandler tagHandler) {
@@ -47,6 +50,7 @@ public final class MessageTags {
 
     /**
      * Creates a new {@link MessageParser} instance.
+     *
      * @return The newly created {@link MessageParser} instance.
      */
     @Nonnull
@@ -56,12 +60,13 @@ public final class MessageTags {
 
     /**
      * Converts a {@link Message} object to it's JSON representation string.
+     *
      * @param message The {@link Message} object to convert.
      * @return The JSON representation string.
      */
     @Nullable
     public static String toJson(@Nullable Message message) {
-        if(message == null) {
+        if (message == null) {
             return null;
         }
         BsonValue encode = Message.CODEC.encode(message, new ExtraInfo());

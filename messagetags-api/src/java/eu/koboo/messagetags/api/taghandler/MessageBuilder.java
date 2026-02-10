@@ -1,12 +1,9 @@
 package eu.koboo.messagetags.api.taghandler;
 
-import com.hypixel.hytale.math.util.MathUtil;
 import com.hypixel.hytale.protocol.MaybeBool;
 import com.hypixel.hytale.server.core.Message;
-import eu.koboo.messagetags.api.colors.ColorParser;
 import eu.koboo.messagetags.api.colors.ColorUtils;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 

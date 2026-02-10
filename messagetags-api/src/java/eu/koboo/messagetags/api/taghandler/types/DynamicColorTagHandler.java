@@ -20,16 +20,16 @@ public final class DynamicColorTagHandler extends TagHandler {
 
     @Override
     public boolean handle(@Nonnull MessageBuilder state,
-                       @Nonnull String root,
-                       int nameStart, int nameEnd,
-                       int argumentStart, int argumentEnd,
-                       @Nonnull TagAction action) {
-        if(action != TagAction.Open && action != TagAction.Directive) {
+                          @Nonnull String root,
+                          int nameStart, int nameEnd,
+                          int argumentStart, int argumentEnd,
+                          @Nonnull TagAction action) {
+        if (action != TagAction.Open && action != TagAction.Directive) {
             return false;
         }
         String tag = getTag(root, nameStart, nameEnd);
         String colorHexCode = ColorParser.parseColor(tag);
-        if(colorHexCode == null) {
+        if (colorHexCode == null) {
             return false;
         }
         state.color = colorHexCode;

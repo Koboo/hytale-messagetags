@@ -21,18 +21,18 @@ public final class ColorTagHandler extends TagHandler {
 
     @Override
     public boolean handle(@Nonnull MessageBuilder state,
-                       @Nonnull String root,
-                       int nameStart, int nameEnd,
-                       int argumentStart, int argumentEnd,
-                       @Nonnull TagAction action) {
+                          @Nonnull String root,
+                          int nameStart, int nameEnd,
+                          int argumentStart, int argumentEnd,
+                          @Nonnull TagAction action) {
         switch (action) {
             case Open -> {
                 String argument = getArgument(root, argumentStart, argumentEnd);
-                if(argument == null) {
+                if (argument == null) {
                     return false;
                 }
                 String color = ColorParser.parseColor(argument);
-                if(color == null) {
+                if (color == null) {
                     return false;
                 }
                 state.color = color;

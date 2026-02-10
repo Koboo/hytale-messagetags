@@ -2,7 +2,6 @@ package eu.koboo.messagetags.api.colors;
 
 import eu.koboo.messagetags.api.MessageParser;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Locale;
 

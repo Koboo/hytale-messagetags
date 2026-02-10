@@ -14,11 +14,11 @@ Basically, a MiniMessage clone for Hytale.
 
 ## Overview
 
-- [Features](#features)
-- [Limitations](#limitations)
-- [Quick Start](#quick-start)
+- [Features](#-features)
+- [Limitations](#-limitations)
+- [Quick Start](#-quick-start)
 - [Supported Tags](#tags)
-- [Supported Color Formats](#supported-color-formats)
+- [Supported Color Formats](#-supported-color-formats)
 
 **Links**
 - [GitHub](https://github.com/Koboo/hytale-messagetags)
@@ -107,6 +107,8 @@ Message message = MessageTags.strip("<bold><red>Hello World!</red></bold>");
 <b>This text is bold</b>
 ````
 
+![IMG](https://i.imgur.com/r7FVRbM.png)
+
 ## Underlined
 
 <u>Preview: This text is underlined</u>
@@ -119,6 +121,8 @@ Message message = MessageTags.strip("<bold><red>Hello World!</red></bold>");
 <ul>This text is underlined</ul>
 ````
 
+![IMG](https://i.imgur.com/GwarcXb.png)
+
 ## Italic
 
 _Preview: This text is italic_
@@ -130,6 +134,8 @@ _Preview: This text is italic_
 <i>This text is italic</i>
 <em>This text is italic</em>
 ````
+
+![IMG](https://i.imgur.com/lNPfKAC.png)
 
 ## Color
 
@@ -146,6 +152,8 @@ Applies the color to the text.
 ````html
 <COLOR>This text is colored
 ````
+
+![IMG](https://i.imgur.com/hECAIsL.png)
 
 #### Arguments:
 
@@ -168,6 +176,8 @@ Inserts a new line break using `\n`
 <br/>
 ````
 
+![IMG](https://i.imgur.com/GIOBpSN.png)
+
 ## Link
 
 [Preview: This text has an embedded link](https://github.com/Koboo/README/#link)
@@ -184,6 +194,8 @@ Inserts a new line break using `\n`
 
 - `URL` — Any valid URL
 
+![IMG](https://i.imgur.com/fiqppUu.png)
+
 ## Monospace
 
 ``Preview: This text is monospaced``
@@ -197,6 +209,8 @@ Inserts a new line break using `\n`
 <ms>This text is monospaced</ms>
 ````
 
+![IMG](https://i.imgur.com/7WdLYgt.png)
+
 ## Reset
 
 Closes any unclosed styles and tags.
@@ -207,6 +221,8 @@ Closes any unclosed styles and tags.
 <reset/>
 <r/>
 ````
+
+![IMG](https://i.imgur.com/vaIGOkh.png)
 
 ## Translation
 
@@ -222,6 +238,8 @@ Inserts the message from the resource files translations based on the given tran
 #### Arguments:
 
 - `TRANSLATION_KEY` — Any valid resource file translation
+
+![IMG](https://i.imgur.com/gz8eVYG.png)
 
 #### Notes:
 
@@ -243,6 +261,8 @@ Adds the gradient to the following text.
 
 - `COLOR` — Any valid color ([Support Color Format](#-supported-color-formats))
 
+![IMG](https://i.imgur.com/GmgzGz3.png)
+
 ## Color Transitions
 
 Adds the transition to the following text.
@@ -258,6 +278,8 @@ Adds the transition to the following text.
 
 - `COLOR` — Any valid color format ([Support Color Format](#-supported-color-formats))
 - `PHASE` — A number between 0 and 1
+
+![IMG](https://i.imgur.com/exwSw76.png)
 
 ## 🎨 Supported Color Formats
 

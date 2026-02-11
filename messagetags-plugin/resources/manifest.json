@@ -1,0 +1,18 @@
+{
+    "Name": "MessageTags",
+    "Group": "Koboo",
+    "Version": "1.0.0",
+    "ServerVersion": "*",
+    "Main": "eu.koboo.messagetags.plugin.MessageTagsPlugin",
+    "Description": "Color and format parser for Hytale messages",
+    "Website": "https://github.com/Koboo/hytale-messagetags",
+    "Authors": [
+        {
+            "Name": "Koboo",
+            "Url": "https://github.com/Koboo",
+            "Email": "admin@koboo.eu"
+        }
+    ],
+    "DisabledByDefault": false,
+    "IncludesAssetPack": false
+}

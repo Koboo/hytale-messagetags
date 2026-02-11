@@ -29,15 +29,15 @@ public final class ColorTagHandler extends TagHandler {
                 if (argument == null) {
                     return false;
                 }
-                int colorValue = state.parseColor(argument);
-                if (colorValue == -1) {
+                String color = state.parseColor(argument);
+                if (color == null) {
                     return false;
                 }
-                state.color = colorValue;
+                state.color = color;
                 return true;
             }
             case Close -> {
-                state.color = -1;
+                state.color = null;
                 return true;
             }
         }

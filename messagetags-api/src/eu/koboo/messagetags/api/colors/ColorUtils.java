@@ -63,15 +63,18 @@ public final class ColorUtils {
         return new String(hex);
     }
 
-    public static int interpolateColor(int[] colors, float progress) {
+    public static String interpolateColor(String[] colors, float progress) {
+        if(colors == null || colors.length == 0) {
+            return null;
+        }
         progress = MathUtil.clamp(progress, 0, 1);
         int colorsAmount = colors.length;
         float scaled = progress * (colorsAmount - 1);
         int index = Math.min((int) scaled, colorsAmount - 2);
         float local = scaled - index;
 
-        int firstColor = colors[index];
-        int secondColor = colors[index + 1];
+        int firstColor = ColorUtils.hexToRGB(colors[index]);
+        int secondColor = ColorUtils.hexToRGB(colors[index + 1]);
 
         int r1 = (firstColor >> 16) & 0xFF;
         int g1 = (firstColor >> 8) & 0xFF;
@@ -85,7 +88,9 @@ public final class ColorUtils {
         short g = (short) (g1 + (g2 - g1) * local);
         short b = (short) (b1 + (b2 - b1) * local);
 
-        return rgbToInt(r, g, b);
+        int rgb = rgbToInt(r, g, b);
+
+        return rgbToHex(rgb);
     }
 
     public static short parseShort(String string) {

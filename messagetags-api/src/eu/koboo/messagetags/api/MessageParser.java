@@ -51,7 +51,7 @@ public final class MessageParser {
         registerTagHandler(GradientTagHandler.INSTANCE);
         registerTagHandler(ItalicTagHandler.INSTANCE);
         registerTagHandler(LinkTagHandler.INSTANCE);
-        registerTagHandler(MonospacedTagHandler.INSTANCE);
+        registerTagHandler(MonospaceTagHandler.INSTANCE);
         registerTagHandler(LineBreakTagHandler.INSTANCE);
         registerTagHandler(ResetTagHandler.INSTANCE);
         registerTagHandler(TransitionTagHandler.INSTANCE);

@@ -1,5 +1,6 @@
 package eu.koboo.messagetags.api.taghandler.types;
 
+import com.hypixel.hytale.common.util.ArrayUtil;
 import eu.koboo.messagetags.api.taghandler.MessageBuilder;
 import eu.koboo.messagetags.api.taghandler.TagAction;
 import eu.koboo.messagetags.api.taghandler.TagHandler;
@@ -26,7 +27,7 @@ public final class GradientTagHandler extends TagHandler {
         switch (action) {
             case Open -> {
                 String argument = state.getArgument(argumentStart, argumentEnd);
-                int[] colors = createColorList(state, argument);
+                String[] colors = createColorList(state, argument);
                 if (colors == null || colors.length == 0) {
                     return false;
                 }
@@ -41,7 +42,7 @@ public final class GradientTagHandler extends TagHandler {
         return false;
     }
 
-    private int[] createColorList(MessageBuilder state, String argument) {
+    private String[] createColorList(MessageBuilder state, String argument) {
         if (argument == null) {
             return null;
         }
@@ -49,13 +50,13 @@ public final class GradientTagHandler extends TagHandler {
         if (colorSplit.length < 2) {
             return null;
         }
-        int[] colors = new int[0];
+        String[] colors = new String[0];
         for (String colorString : colorSplit) {
-            int colorValue = state.parseColor(colorString);
-            if (colorValue == -1) {
+            String color = state.parseColor(colorString);
+            if (color == null) {
                 return null;
             }
-            colors = Arrays.append(colors, colorValue);
+            colors = ArrayUtil.append(colors, color);
         }
         return colors;
     }

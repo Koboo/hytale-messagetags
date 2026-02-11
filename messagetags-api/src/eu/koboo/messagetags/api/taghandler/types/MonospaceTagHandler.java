@@ -6,9 +6,9 @@ import eu.koboo.messagetags.api.taghandler.TagHandler;
 
 import javax.annotation.Nonnull;
 
-public final class MonospacedTagHandler extends TagHandler {
+public final class MonospaceTagHandler extends TagHandler {
 
-    public static final MonospacedTagHandler INSTANCE = new MonospacedTagHandler();
+    public static final MonospaceTagHandler INSTANCE = new MonospaceTagHandler();
 
     private static final String[] TAGS = new String[]{"monospace", "mono"};
 

@@ -22,9 +22,9 @@ public final class MessageBuilder {
     public boolean italic;
     public boolean monospaced;
     public boolean underlined;
-    public int color;
+    public String color;
     public String link;
-    public int[] gradientColors;
+    public String[] gradientColors;
 
     public MessageBuilder() {
     }
@@ -62,7 +62,7 @@ public final class MessageBuilder {
         italic = false;
         monospaced = false;
         underlined = false;
-        color = -1;
+        color = null;
         link = null;
         gradientColors = null;
     }
@@ -104,8 +104,8 @@ public final class MessageBuilder {
         if (underlined) {
             message.underlined = MaybeBool.True;
         }
-        if (color != -1) {
-            message.color = ColorUtils.rgbToHex(color);
+        if (color != null) {
+            message.color = color;
         }
         if (link != null && !link.isEmpty()) {
             message.link = link;
@@ -125,9 +125,9 @@ public final class MessageBuilder {
             FormattedMessage message = createByText(String.valueOf(textChar));
             applyStyleTo(message);
 
-            int hexColor = ColorUtils.interpolateColor(gradientColors, progress);
-            if (hexColor != -1) {
-                message.color = ColorUtils.rgbToHex(hexColor);
+            String hexColor = ColorUtils.interpolateColor(gradientColors, progress);
+            if (hexColor != null) {
+                message.color = hexColor;
             }
 
             gradientMessageList.add(message);
@@ -147,25 +147,25 @@ public final class MessageBuilder {
         return message;
     }
 
-    public int parseColor(String colorString) {
+    public String parseColor(String colorString) {
         if (colorString == null) {
-            return -1;
+            return null;
         }
         int length = colorString.length();
         if(length < 1) {
-            return -1;
+            return null;
         }
         char firstCharacter = colorString.charAt(0);
 
         // #ffffff
         if (firstCharacter == MessageParser.COLOR_PREFIX && length == 7) {
-            return ColorUtils.hexToRGB(colorString);
+            return colorString;
         }
 
         // white -> #ffffff
         NamedColor namedColor = parser.getNamedColorByName(colorString);
         if (namedColor != null) {
-            return namedColor.value;
+            return namedColor.hexCode;
         }
 
         // &f -> #ffffff
@@ -173,10 +173,10 @@ public final class MessageBuilder {
         boolean startsWithColorToken = firstCharacter == MessageParser.COLOR_AMPERSAND
             || firstCharacter == MessageParser.COLOR_SECTION;
         if (length == 2 && startsWithColorToken) {
-            char colorChar = colorString.substring(1).charAt(0);
+            char colorChar = colorString.charAt(1);
             namedColor = parser.getNamedColorByChar(colorChar);
             if (namedColor != null) {
-                return namedColor.value;
+                return namedColor.hexCode;
             }
         }
 
@@ -187,14 +187,18 @@ public final class MessageBuilder {
             }
             String[] splitRGB = colorString.split(",");
             if (splitRGB.length != 3) {
-                return -1;
+                return null;
             }
             short r = ColorUtils.parseShort(splitRGB[0]);
             short g = ColorUtils.parseShort(splitRGB[1]);
             short b = ColorUtils.parseShort(splitRGB[2]);
-            return ColorUtils.rgbToInt(r, g, b);
+            int colorValue = ColorUtils.rgbToInt(r, g, b);
+            if(colorValue == -1) {
+                return null;
+            }
+            return ColorUtils.rgbToHex(colorValue);
         }
-        return -1;
+        return null;
     }
 
     @Nullable

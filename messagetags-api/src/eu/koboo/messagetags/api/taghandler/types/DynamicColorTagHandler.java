@@ -13,8 +13,8 @@ public final class DynamicColorTagHandler extends TagHandler {
     @Override
     public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd) {
         String tag = getTag(state.getInputText(), nameStart, nameEnd);
-        int colorValue = state.parseColor(tag);
-        return colorValue != -1;
+        String color = state.parseColor(tag);
+        return color != null;
     }
 
     @Override
@@ -26,11 +26,11 @@ public final class DynamicColorTagHandler extends TagHandler {
             return false;
         }
         String tag = getTag(state.getInputText(), nameStart, nameEnd);
-        int colorValue = state.parseColor(tag);
-        if (colorValue == -1) {
+        String color = state.parseColor(tag);
+        if (color == null) {
             return false;
         }
-        state.color = colorValue;
+        state.color = color;
         return true;
     }
 }

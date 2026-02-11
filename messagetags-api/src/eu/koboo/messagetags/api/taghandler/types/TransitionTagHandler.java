@@ -1,5 +1,6 @@
 package eu.koboo.messagetags.api.taghandler.types;
 
+import com.hypixel.hytale.common.util.ArrayUtil;
 import eu.koboo.messagetags.api.colors.ColorUtils;
 import eu.koboo.messagetags.api.taghandler.MessageBuilder;
 import eu.koboo.messagetags.api.taghandler.TagAction;
@@ -39,7 +40,7 @@ public final class TransitionTagHandler extends TagHandler {
                     return false;
                 }
                 int lastCursor = length - 1;
-                int[] colors = createColorList(state, colorSplit, length, lastCursor);
+                String[] colors = createColorList(state, colorSplit, length, lastCursor);
                 if (colors == null || colors.length == 0) {
                     return false;
                 }
@@ -47,33 +48,33 @@ public final class TransitionTagHandler extends TagHandler {
                 if (phase < 0 || phase > 1) {
                     return false;
                 }
-                int phaseColor = ColorUtils.interpolateColor(colors, phase);
-                if (phaseColor == -1) {
+                String color = ColorUtils.interpolateColor(colors, phase);
+                if(color == null) {
                     return false;
                 }
-                state.color = phaseColor;
+                state.color = color;
                 return true;
             }
             case Close -> {
-                state.color = -1;
+                state.color = null;
                 return true;
             }
         }
         return false;
     }
 
-    private int[] createColorList(MessageBuilder state, String[] colorSplit, int length, int lastCursor) {
-        int[] colors = new int[0];
+    private String[] createColorList(MessageBuilder state, String[] colorSplit, int length, int lastCursor) {
+        String[] colors = new String[0];
         for (int cursor = 0; cursor < length; cursor++) {
             if (cursor == lastCursor) {
                 break;
             }
             String colorString = colorSplit[cursor];
-            int color = state.parseColor(colorString);
-            if (color == -1) {
+            String color = state.parseColor(colorString);
+            if (color == null) {
                 return null;
             }
-            colors = Arrays.append(colors, color);
+            colors = ArrayUtil.append(colors, color);
         }
         return colors;
     }

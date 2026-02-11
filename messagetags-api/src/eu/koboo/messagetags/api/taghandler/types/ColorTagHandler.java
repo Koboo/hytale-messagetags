@@ -11,7 +11,7 @@ public final class ColorTagHandler extends TagHandler {
 
     public static final ColorTagHandler INSTANCE = new ColorTagHandler();
 
-    private static final List<String> TAGS = List.of("color", "colour", "c");
+    private static final String[] TAGS = new String[]{"color", "colour", "c"};
 
     @Override
     public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd) {

@@ -11,7 +11,7 @@ public final class UnderlinedTagHandler extends TagHandler {
 
     public static final UnderlinedTagHandler INSTANCE = new UnderlinedTagHandler();
 
-    private static final List<String> TAGS = List.of("underlined", "underline", "ul");
+    private static final String[] TAGS = new String[]{"underline", "ul"};
 
     @Override
     public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd) {

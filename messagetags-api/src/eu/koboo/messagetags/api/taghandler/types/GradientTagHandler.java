@@ -11,7 +11,7 @@ public final class GradientTagHandler extends TagHandler {
 
     public static final GradientTagHandler INSTANCE = new GradientTagHandler();
 
-    private static final List<String> TAGS = List.of("gradient", "grnt", "grad");
+    private static final String[] TAGS = new String[]{"gradient", "grnt"};
 
     @Override
     public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd) {

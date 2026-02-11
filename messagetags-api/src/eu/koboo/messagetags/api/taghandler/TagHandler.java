@@ -39,11 +39,6 @@ public abstract class TagHandler {
             return false;
         }
 
-        // Is one of both strings empty? If so, we don't need to iterate.
-        if (root.isEmpty() || string.isEmpty()) {
-            return false;
-        }
-
         for (int rootIndex = 0; rootIndex < checkedLength; rootIndex++) {
             char rootChar = Character.toLowerCase(root.charAt(start + rootIndex));
             char tagChar = Character.toLowerCase(string.charAt(rootIndex));
@@ -55,10 +50,15 @@ public abstract class TagHandler {
     }
 
     protected static boolean hasTagOf(
-        @Nonnull List<String> tagList,
+        @Nonnull String[] tagList,
         @Nonnull String root,
         int start, int end) {
-        for (String tag : tagList) {
+        int length = tagList.length;
+        if (length == 0) {
+            return false;
+        }
+        for (int i = 0; i < length; i++) {
+            String tag = tagList[i];
             if (!equalsIgnoreCase(tag, root, start, end)) {
                 continue;
             }

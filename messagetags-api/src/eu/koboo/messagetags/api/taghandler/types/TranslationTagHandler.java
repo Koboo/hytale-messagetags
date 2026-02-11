@@ -12,7 +12,7 @@ public final class TranslationTagHandler extends TagHandler {
 
     public static final TranslationTagHandler INSTANCE = new TranslationTagHandler();
 
-    private static final List<String> TAGS = List.of("translation", "lang");
+    private static final String[] TAGS = new String[]{"translation", "lang"};
 
     @Override
     public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd) {

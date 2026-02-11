@@ -5,13 +5,12 @@ import eu.koboo.messagetags.api.taghandler.TagAction;
 import eu.koboo.messagetags.api.taghandler.TagHandler;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 
 public final class MonospacedTagHandler extends TagHandler {
 
     public static final MonospacedTagHandler INSTANCE = new MonospacedTagHandler();
 
-    private static final List<String> TAGS = List.of("monospaced", "monospace", "mono", "ms");
+    private static final String[] TAGS = new String[]{"monospace", "mono"};
 
     @Override
     public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd) {

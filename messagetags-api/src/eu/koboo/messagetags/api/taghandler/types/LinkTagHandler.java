@@ -11,7 +11,7 @@ public final class LinkTagHandler extends TagHandler {
 
     public static final LinkTagHandler INSTANCE = new LinkTagHandler();
 
-    private static final List<String> TAGS = List.of("link", "url", "uri");
+    private static final String[] TAGS = new String[]{"link", "url"};
 
     @Override
     public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd) {

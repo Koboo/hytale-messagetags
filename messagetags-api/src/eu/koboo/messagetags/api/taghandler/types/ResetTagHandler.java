@@ -11,7 +11,7 @@ public final class ResetTagHandler extends TagHandler {
 
     public static final ResetTagHandler INSTANCE = new ResetTagHandler();
 
-    private static final List<String> TAGS = List.of("reset", "r");
+    private static final String[] TAGS = new String[]{"reset", "r"};
 
     @Override
     public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd) {

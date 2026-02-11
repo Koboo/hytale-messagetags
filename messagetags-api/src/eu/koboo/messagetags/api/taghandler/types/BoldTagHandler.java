@@ -11,7 +11,7 @@ public final class BoldTagHandler extends TagHandler {
 
     public static final BoldTagHandler INSTANCE = new BoldTagHandler();
 
-    private static final List<String> TAGS = List.of("bold", "b");
+    private static final String[] TAGS = new String[]{"bold", "b"};
 
     @Override
     public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd) {

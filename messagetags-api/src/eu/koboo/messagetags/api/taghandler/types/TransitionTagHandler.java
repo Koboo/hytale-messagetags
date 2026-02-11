@@ -14,7 +14,7 @@ public final class TransitionTagHandler extends TagHandler {
 
     public static final TransitionTagHandler INSTANCE = new TransitionTagHandler();
 
-    private static final List<String> TAGS = List.of("transition", "trnsn");
+    private static final String[] TAGS = new String[]{"transition", "trnsn"};
 
     @Override
     public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd) {

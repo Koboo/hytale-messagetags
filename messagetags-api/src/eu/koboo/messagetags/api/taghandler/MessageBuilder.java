@@ -151,11 +151,8 @@ public final class MessageBuilder {
         if (colorString == null) {
             return -1;
         }
-        if(colorString.indexOf(' ') != -1) {
-            colorString = colorString.replace(' ', Character.MIN_VALUE);
-        }
         int length = colorString.length();
-        if(length == 0) {
+        if(length < 1) {
             return -1;
         }
         char firstCharacter = colorString.charAt(0);

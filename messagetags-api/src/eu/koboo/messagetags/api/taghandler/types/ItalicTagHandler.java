@@ -5,13 +5,12 @@ import eu.koboo.messagetags.api.taghandler.TagAction;
 import eu.koboo.messagetags.api.taghandler.TagHandler;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 
 public final class ItalicTagHandler extends TagHandler {
 
     public static final ItalicTagHandler INSTANCE = new ItalicTagHandler();
 
-    private static final List<String> TAGS = List.of("italic", "em", "i");
+    private static final String[] TAGS = new String[]{"italic", "i"};
 
     @Override
     public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd) {

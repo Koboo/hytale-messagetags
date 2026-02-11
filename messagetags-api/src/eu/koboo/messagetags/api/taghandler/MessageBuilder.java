@@ -16,7 +16,7 @@ public final class MessageBuilder {
     private MessageParser parser;
     private String inputText;
     private boolean strip;
-    private List<FormattedMessage> messageList = new ArrayList<>();
+    private final List<FormattedMessage> messageList = new ArrayList<>();
 
     public boolean bold;
     public boolean italic;

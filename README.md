@@ -150,7 +150,6 @@ Every tag follows the same format. There only 3 tag types:
 #### Tags:
 
 ````html
-<underlined>Hello World!</underlined>
 <underline>Hello World!</underline>
 <ul>Hello World!</ul>
 ````
@@ -166,7 +165,6 @@ _Preview: Hello World!_
 ````html
 <italic>Hello World!</italic>
 <i>Hello World!</i>
-<em>Hello World!</em>
 ````
 
 ## Monospace
@@ -178,10 +176,8 @@ _Preview: Hello World!_
 #### Tags:
 
 ````html
-<monospaced>Hello World!</monospaced>
 <monospace>Hello World!</monospace>
 <mono>Hello World!</mono>
-<ms>Hello World!</ms>
 ````
 
 ## Color
@@ -194,8 +190,8 @@ Applies the color to the text.
 
 ````html
 <color:COLOR>Hello World!</color>
-<colour:COLOR>Hello World!</color>
-<c:COLOR>Hello World!</color>
+<colour:COLOR>Hello World!</colour>
+<c:COLOR>Hello World!</c>
 ````
 
 ````html
@@ -220,7 +216,6 @@ Inserts a new line break using `\n`
 #### Tags:
 
 ````html
-<newline/>
 <linebreak/>
 <br/>
 ````
@@ -236,7 +231,6 @@ Inserts a new line break using `\n`
 ````html
 <link:URL>Hello World!</link>
 <url:URL>Hello World!</url>
-<uri:URL>Hello World!</uri>
 ````
 
 #### Arguments:
@@ -288,7 +282,6 @@ Adds the gradient to the following text.
 ````html
 <gradient:COLOR:COLOR:COLOR>Hello World!</gradient>
 <grnt:COLOR:COLOR:COLOR>Hello World!</grnt>
-<grad:COLOR:COLOR:COLOR>Hello World!</grad>
 ````
 
 #### Arguments:
@@ -336,7 +329,7 @@ Here is a list of all supported color formats with an example.
 
 ## Named colors
 
-The builtin named color represent the legacy color codes from Minecraft.
+The builtin named color represents the legacy color codes from Minecraft.
 
 | Name        | ColorCode | Hexcode |
 |-------------|-----------|---------|

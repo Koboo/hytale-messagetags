@@ -7,30 +7,29 @@ import eu.koboo.messagetags.api.taghandler.TagHandler;
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public final class BoldTagHandler extends TagHandler {
+public final class UnderlinedTagHandler extends TagHandler {
 
-    public static final BoldTagHandler INSTANCE = new BoldTagHandler();
+    public static final UnderlinedTagHandler INSTANCE = new UnderlinedTagHandler();
 
-    private static final List<String> TAGS = List.of("bold", "b");
+    private static final List<String> TAGS = List.of("underlined", "underline", "ul");
 
     @Override
-    public boolean canHandle(@Nonnull String root, int nameStart, int nameEnd) {
-        return hasTagOf(TAGS, root, nameStart, nameEnd);
+    public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd) {
+        return hasTagOf(TAGS, state.getInputText(), nameStart, nameEnd);
     }
 
     @Override
     public boolean handle(@Nonnull MessageBuilder state,
-                          @Nonnull String root,
                           int nameStart, int nameEnd,
                           int argumentStart, int argumentEnd,
                           @Nonnull TagAction action) {
         switch (action) {
             case Open -> {
-                state.bold = true;
+                state.underlined = true;
                 return true;
             }
             case Close -> {
-                state.bold = false;
+                state.underlined = false;
                 return true;
             }
         }

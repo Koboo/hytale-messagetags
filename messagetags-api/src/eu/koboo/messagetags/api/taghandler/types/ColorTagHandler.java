@@ -7,34 +7,37 @@ import eu.koboo.messagetags.api.taghandler.TagHandler;
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public final class LinkTagHandler extends TagHandler {
+public final class ColorTagHandler extends TagHandler {
 
-    public static final LinkTagHandler INSTANCE = new LinkTagHandler();
+    public static final ColorTagHandler INSTANCE = new ColorTagHandler();
 
-    private static final List<String> TAGS = List.of("link", "url", "uri");
+    private static final List<String> TAGS = List.of("color", "colour", "c");
 
     @Override
-    public boolean canHandle(@Nonnull String root, int nameStart, int nameEnd) {
-        return hasTagOf(TAGS, root, nameStart, nameEnd);
+    public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd) {
+        return hasTagOf(TAGS, state.getInputText(), nameStart, nameEnd);
     }
 
     @Override
     public boolean handle(@Nonnull MessageBuilder state,
-                          @Nonnull String root,
                           int nameStart, int nameEnd,
                           int argumentStart, int argumentEnd,
                           @Nonnull TagAction action) {
         switch (action) {
             case Open -> {
-                String link = getArgument(root, argumentStart, argumentEnd);
-                if (link == null) {
+                String argument = state.getArgument(argumentStart, argumentEnd);
+                if (argument == null) {
                     return false;
                 }
-                state.link = link;
+                int colorValue = state.parseColor(argument);
+                if (colorValue == -1) {
+                    return false;
+                }
+                state.color = colorValue;
                 return true;
             }
             case Close -> {
-                state.link = null;
+                state.color = -1;
                 return true;
             }
         }

@@ -26,7 +26,6 @@ sourceSets {
 jmh {
     jvmArgs.add("--enable-native-access=ALL-UNNAMED")
     profilers.add("gc")
-    profilers.add("stack")
 
     // Switch based on your needs
     //resultFormat = "TEXT"

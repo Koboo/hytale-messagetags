@@ -1,6 +1,5 @@
 package eu.koboo.messagetags.api.taghandler.types;
 
-import eu.koboo.messagetags.api.colors.ColorParser;
 import eu.koboo.messagetags.api.colors.ColorUtils;
 import eu.koboo.messagetags.api.taghandler.MessageBuilder;
 import eu.koboo.messagetags.api.taghandler.TagAction;
@@ -9,6 +8,7 @@ import eu.koboo.messagetags.api.taghandler.TagHandler;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import org.bouncycastle.util.Arrays;
 
 public final class TransitionTagHandler extends TagHandler {
 
@@ -17,19 +17,18 @@ public final class TransitionTagHandler extends TagHandler {
     private static final List<String> TAGS = List.of("transition", "trnsn");
 
     @Override
-    public boolean canHandle(@Nonnull String root, int nameStart, int nameEnd) {
-        return hasTagOf(TAGS, root, nameStart, nameEnd);
+    public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd) {
+        return hasTagOf(TAGS, state.getInputText(), nameStart, nameEnd);
     }
 
     @Override
     public boolean handle(@Nonnull MessageBuilder state,
-                          @Nonnull String root,
                           int nameStart, int nameEnd,
                           int argumentStart, int argumentEnd,
                           @Nonnull TagAction action) {
         switch (action) {
             case Open -> {
-                String argument = getArgument(root, argumentStart, argumentEnd);
+                String argument = state.getArgument(argumentStart, argumentEnd);
                 if (argument == null) {
                     return false;
                 }
@@ -40,43 +39,43 @@ public final class TransitionTagHandler extends TagHandler {
                     return false;
                 }
                 int lastCursor = length - 1;
-                List<String> colorList = createColorList(colorSplit, length, lastCursor);
-                if (colorList == null || colorList.isEmpty()) {
+                int[] colors = createColorList(state, colorSplit, length, lastCursor);
+                if (colors == null || colors.length == 0) {
                     return false;
                 }
                 float phase = getPhase(colorSplit, lastCursor);
                 if (phase < 0 || phase > 1) {
                     return false;
                 }
-                String phaseColor = ColorUtils.interpolateColor(colorList, phase);
-                if (phaseColor == null) {
+                int phaseColor = ColorUtils.interpolateColor(colors, phase);
+                if (phaseColor == -1) {
                     return false;
                 }
                 state.color = phaseColor;
                 return true;
             }
             case Close -> {
-                state.color = null;
+                state.color = -1;
                 return true;
             }
         }
         return false;
     }
 
-    private List<String> createColorList(String[] colorSplit, int length, int lastCursor) {
-        List<String> colorList = new ArrayList<>();
+    private int[] createColorList(MessageBuilder state, String[] colorSplit, int length, int lastCursor) {
+        int[] colors = new int[0];
         for (int cursor = 0; cursor < length; cursor++) {
             if (cursor == lastCursor) {
                 break;
             }
             String colorString = colorSplit[cursor];
-            String color = ColorParser.parseColor(colorString);
-            if (color == null) {
+            int color = state.parseColor(colorString);
+            if (color == -1) {
                 return null;
             }
-            colorList.add(color);
+            colors = Arrays.append(colors, color);
         }
-        return colorList;
+        return colors;
     }
 
     private float getPhase(String[] colorSplit, int lastCursor) {

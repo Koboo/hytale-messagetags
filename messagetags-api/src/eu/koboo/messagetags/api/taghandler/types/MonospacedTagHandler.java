@@ -14,13 +14,12 @@ public final class MonospacedTagHandler extends TagHandler {
     private static final List<String> TAGS = List.of("monospaced", "monospace", "mono", "ms");
 
     @Override
-    public boolean canHandle(@Nonnull String root, int nameStart, int nameEnd) {
-        return hasTagOf(TAGS, root, nameStart, nameEnd);
+    public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd) {
+        return hasTagOf(TAGS, state.getInputText(), nameStart, nameEnd);
     }
 
     @Override
     public boolean handle(@Nonnull MessageBuilder state,
-                          @Nonnull String root,
                           int nameStart, int nameEnd,
                           int argumentStart, int argumentEnd,
                           @Nonnull TagAction action) {

@@ -1,6 +1,6 @@
 package eu.koboo.messagetags.api.taghandler.types;
 
-import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.protocol.FormattedMessage;
 import eu.koboo.messagetags.api.taghandler.MessageBuilder;
 import eu.koboo.messagetags.api.taghandler.TagAction;
 import eu.koboo.messagetags.api.taghandler.TagHandler;
@@ -13,16 +13,20 @@ public final class LineBreakTagHandler extends TagHandler {
     public static final LineBreakTagHandler INSTANCE = new LineBreakTagHandler();
 
     private static final List<String> TAGS = List.of("newline", "linebreak", "br");
-    private static final Message LINE_SEPARATOR = Message.raw("\n");
+    private static final FormattedMessage LINE_SEPARATOR;
+
+    static {
+        LINE_SEPARATOR = new FormattedMessage();
+        LINE_SEPARATOR.rawText = "\n";
+    }
 
     @Override
-    public boolean canHandle(@Nonnull String root, int nameStart, int nameEnd) {
-        return hasTagOf(TAGS, root, nameStart, nameEnd);
+    public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd) {
+        return hasTagOf(TAGS, state.getInputText(), nameStart, nameEnd);
     }
 
     @Override
     public boolean handle(@Nonnull MessageBuilder state,
-                          @Nonnull String root,
                           int nameStart, int nameEnd,
                           int argumentStart, int argumentEnd,
                           @Nonnull TagAction action) {
@@ -31,7 +35,7 @@ public final class LineBreakTagHandler extends TagHandler {
         }
         // Since then does a line separator need styling? O_o
         //state.applyStyleTo(LINE_SEPARATOR);
-        state.getRootMessage().insert(LINE_SEPARATOR);
+        state.appendMessage(LINE_SEPARATOR);
         return true;
     }
 }

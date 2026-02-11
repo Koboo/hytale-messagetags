@@ -1,6 +1,5 @@
 package eu.koboo.messagetags.api.taghandler.types;
 
-import eu.koboo.messagetags.api.colors.ColorParser;
 import eu.koboo.messagetags.api.taghandler.MessageBuilder;
 import eu.koboo.messagetags.api.taghandler.TagAction;
 import eu.koboo.messagetags.api.taghandler.TagHandler;
@@ -12,27 +11,26 @@ public final class DynamicColorTagHandler extends TagHandler {
     public static final DynamicColorTagHandler INSTANCE = new DynamicColorTagHandler();
 
     @Override
-    public boolean canHandle(@Nonnull String root, int nameStart, int nameEnd) {
-        String tag = getTag(root, nameStart, nameEnd);
-        String colorHexCode = ColorParser.parseColor(tag);
-        return colorHexCode != null;
+    public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd) {
+        String tag = getTag(state.getInputText(), nameStart, nameEnd);
+        int colorValue = state.parseColor(tag);
+        return colorValue != -1;
     }
 
     @Override
     public boolean handle(@Nonnull MessageBuilder state,
-                          @Nonnull String root,
                           int nameStart, int nameEnd,
                           int argumentStart, int argumentEnd,
                           @Nonnull TagAction action) {
         if (action != TagAction.Open && action != TagAction.Directive) {
             return false;
         }
-        String tag = getTag(root, nameStart, nameEnd);
-        String colorHexCode = ColorParser.parseColor(tag);
-        if (colorHexCode == null) {
+        String tag = getTag(state.getInputText(), nameStart, nameEnd);
+        int colorValue = state.parseColor(tag);
+        if (colorValue == -1) {
             return false;
         }
-        state.color = colorHexCode;
+        state.color = colorValue;
         return true;
     }
 }

@@ -18,7 +18,7 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 import org.openjdk.jmh.infra.Blackhole;
 
-@BenchmarkMode(Mode.AverageTime)
+@BenchmarkMode({Mode.AverageTime, Mode.Throughput})
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @Warmup(iterations = 5, time = 2)
 @Measurement(iterations = 5, time = 3)
@@ -27,26 +27,24 @@ import org.openjdk.jmh.infra.Blackhole;
 public class ParserBenchmark {
 
     @Param({
-        "Hello World!",
         "<bold><italic><underline>Hello World</underline></italic></bold>",
-        "<bold>Aw<underline>eso</underline>me <color:#fcba03>ben<white>chm<red>ar<i>k</i> <color:dark_red>, but <link:https://github.com/Koboo/>ho</link>w<reset> fast <i>a</i>r<monospace>e</monospace>we really?",
-        "<transition:blue:red:yellow:0.5>Hello <gradient:blue:red:yellow>World!<gradient></transition>",
+        "<bold>Aw<underline>eso</underline>me <color:#fcba03>ben<white>chm<red>ar<i>k</i> <color:dark_red>, but how<reset> fast <i>a</i>r<monospace>e</monospace>we really?",
     })
     private String input;
 
-    @OperationsPerInvocation(100)
+    //@OperationsPerInvocation(100)
     @Benchmark
     public void parseMessageTags(Blackhole blackhole) {
         blackhole.consume(MessageTags.parse(input));
     }
 
-    @OperationsPerInvocation(100)
+    //@OperationsPerInvocation(100)
     @Benchmark
     public void parseTinyMessages(Blackhole blackhole) {
         blackhole.consume(TinyMsg.parse(input));
     }
 
-    @OperationsPerInvocation(100)
+    //@OperationsPerInvocation(100)
     @Benchmark
     public void parseTaleMessage(Blackhole blackhole) {
         blackhole.consume(TaleMessage.parse(input));

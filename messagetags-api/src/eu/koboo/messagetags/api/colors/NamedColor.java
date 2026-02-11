@@ -1,13 +1,24 @@
 package eu.koboo.messagetags.api.colors;
 
+import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public record NamedColor(
-    @Nonnull String name,
-    @Nullable Character colorCode,
-    @Nonnull String hexCode
-) {
+public class NamedColor{
+
+    @Nonnull
+    public final String name;
+    public final char colorCode;
+    @Nonnull
+    public final String hexCode;
+    public final int value;
+
+    public NamedColor(String name, char colorCode, String hexCode) {
+        this.name = name.toLowerCase(Locale.ROOT).trim();
+        this.colorCode = colorCode;
+        this.hexCode = hexCode.toLowerCase(Locale.ROOT).trim();
+        this.value = ColorUtils.hexToRGB(hexCode);
+    }
 
     public static final NamedColor Black = new NamedColor("Black", '0', "#000000");
     public static final NamedColor DarkBlue = new NamedColor("DarkBlue", '1', "#0000AA");

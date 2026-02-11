@@ -3,21 +3,24 @@ package eu.koboo.messagetags.api;
 public final class StringCursor {
 
     // original string
-    private final String input;
+    private String input;
 
     // inclusive
-    private final int startPos;
+    private int startPos;
     // exclusive
-    private final int endPos;
+    private int endPos;
 
     // relative to startPos
     private int currentPos;
 
-    public StringCursor(String input) {
-        this(input, 0, input.length());
+    public StringCursor() {
     }
 
-    public StringCursor(String input, int startPos, int endPos) {
+    public void init(String input) {
+        init(input, 0, input.length());
+    }
+
+    public void init(String input, int startPos, int endPos) {
         if (input == null) {
             throw new IllegalArgumentException("Input string must not be null.");
         }
@@ -28,12 +31,12 @@ public final class StringCursor {
 
         if (endPos < startPos) {
             throw new IndexOutOfBoundsException("endPos cannot be smaller than startPos. startPos="
-                    + startPos + ", endPos=" + endPos);
+                + startPos + ", endPos=" + endPos);
         }
 
         if (endPos > input.length()) {
             throw new IndexOutOfBoundsException("endPos exceeds input length. endPos="
-                    + endPos + ", length=" + input.length());
+                + endPos + ", length=" + input.length());
         }
 
         this.input = input;
@@ -168,11 +171,9 @@ public final class StringCursor {
 
     public StringCursor subCursor(int relativeStart, int relativeEnd) {
         assertRelativeOffset(relativeStart, relativeEnd);
-        return new StringCursor(
-                input,
-                startPos + relativeStart,
-                startPos + relativeEnd
-        );
+        StringCursor cursor = new StringCursor();
+        cursor.init(input, startPos + relativeStart, endPos + relativeEnd);
+        return cursor;
     }
 
     public String subString(int relativeStart, int relativeEnd) {

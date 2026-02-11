@@ -2,6 +2,7 @@ package eu.koboo.messagetags.api;
 
 import com.hypixel.hytale.codec.ExtraInfo;
 import com.hypixel.hytale.server.core.Message;
+import eu.koboo.messagetags.api.colors.NamedColor;
 import eu.koboo.messagetags.api.taghandler.TagHandler;
 import org.bson.BsonValue;
 
@@ -29,7 +30,7 @@ public final class MessageTags {
 
     /**
      * Uses the given String and strips away every tag, color and formatting
-     * and returns a colorless string.
+     * and returns the same structure as the parse method.
      *
      * @param text The text to strip.
      * @return The parsed {@link Message}.
@@ -40,12 +41,34 @@ public final class MessageTags {
     }
 
     /**
+     * Uses the given String and strips away every tag, color and formatting
+     * and returns a colorless string.
+     *
+     * @param text The text to strip.
+     * @return The parsed and simplified {@link String}.
+     */
+    @Nullable
+    public static String stripToString(@Nullable String text) {
+        Message message = INSTANCE.parse(text, true);
+        return INSTANCE.stripRawText(message);
+    }
+
+    /**
      * Register a non-default {@link TagHandler} to the global {@link MessageParser} instance.
      *
      * @param tagHandler The {@link TagHandler} instance to register.
      */
     public static void registerTagHandler(@Nonnull TagHandler tagHandler) {
         INSTANCE.registerTagHandler(tagHandler);
+    }
+
+    /**
+     * Register a non-default {@link NamedColor} to the global {@link MessageParser} instance.
+     *
+     * @param namedColor The {@link NamedColor} instance to register.
+     */
+    public static void registerNamedColor(@Nonnull NamedColor namedColor) {
+        INSTANCE.registerNamedColor(namedColor);
     }
 
     /**

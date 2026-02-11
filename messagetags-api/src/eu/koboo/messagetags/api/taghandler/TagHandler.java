@@ -1,20 +1,18 @@
 package eu.koboo.messagetags.api.taghandler;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
 
 public abstract class TagHandler {
 
     public abstract boolean canHandle(
-        @Nonnull String root,
+        @Nonnull MessageBuilder state,
         int nameStart,
         int nameEnd
     );
 
     public abstract boolean handle(
         @Nonnull MessageBuilder state,
-        @Nonnull String root,
         int nameStart,
         int nameEnd,
         int argumentStart,
@@ -67,20 +65,5 @@ public abstract class TagHandler {
             return true;
         }
         return false;
-    }
-
-    @Nullable
-    protected static String getArgument(@Nonnull String root, int argumentStart, int argumentEnd) {
-        if (argumentStart == -1 || argumentEnd == -1) {
-            return null;
-        }
-        if (argumentStart >= argumentEnd) {
-            return null;
-        }
-        String argument = root.substring(argumentStart, argumentEnd).trim();
-        if (argument.isEmpty()) {
-            return null;
-        }
-        return argument;
     }
 }

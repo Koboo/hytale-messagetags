@@ -15,10 +15,12 @@ Basically, a MiniMessage clone for Hytale.
 ## Overview
 
 - [Features](#-features)
-- [Limitations](#-limitations)
 - [Quick Start](#-quick-start)
-- [Supported Tags](#tags)
+- [Tag Format](#tag-format)
+- [Builtin Tags](#builtin-tags)
 - [Supported Color Formats](#-supported-color-formats)
+- [Named Colors](#named-colors)
+- [MiniMessage Online Editor](#minimessage-online-editor)
 
 **Links**
 - [GitHub](https://github.com/Koboo/hytale-messagetags)
@@ -48,15 +50,14 @@ Basically, a MiniMessage clone for Hytale.
 - Implement own ``TagHandler``
 - Multiplatform support:
   - Standalone plugin
-  - Maven library
+  - Maven/Gradle library (shadable)
 
 **Performance**
 - Zero-regex parsing
 - Minimal object allocation
 - Single-pass parsing
 
-## 🚫 Limitations
-
+**Limitations**
 - Dynamic colors cannot be closed
 - Gradients do not apply to translations
 - Invalid tags are rendered as raw text
@@ -66,23 +67,55 @@ Basically, a MiniMessage clone for Hytale.
 **Add dependency**
 ````kotlin
 dependencies {
-    implementation("eu.koboo:hytale-messagetags:1.0.0")
+    // To include the library in your plugin:
+    implementation("eu.koboo:messagetags-api:1.0.0")
+
+    // Or to use the standalone plugin:
+    compileOnly("eu.koboo:messagetags-plugin:1.0.0")
 }
 ````
 
-**Parse message**
+**Add manifest dependency (plugin-only)**
+````json
+{
+    "Dependencies": {
+        "Koboo:MessageTags": "*"
+    }
+}
+````
+
+**Parse text to Message**
 ````java
 Message message = MessageTags.parse("<bold><red>Hello World!</red></bold>");
 // Output: bold + red "Hello World!"
 ````
 
-**Strip message**
+**Strip text to Message**
 ````java
 Message message = MessageTags.strip("<bold><red>Hello World!</red></bold>");
 // Output: "Hello World!"
 ````
 
-## 🏷 Supported Tags
+## Tag Format
+
+Every tag follows the same format. There only 3 tag types:
+
+**Opening a new tag**
+````html
+<TAG_NAME:ARGUMENT_1:ARGUMENT_2>
+````
+
+**Closing a previously opened tag**
+````html
+</TAG_NAME>
+````
+
+**Insert a directive tag** (A tag with "closes" itself)
+````html
+<TAG_NAME/>
+````
+
+## Builtin Tags
 
 - [Bold](#bold)
 - [Underlined](#underlined)
@@ -98,62 +131,76 @@ Message message = MessageTags.strip("<bold><red>Hello World!</red></bold>");
 
 ## Bold
 
-**Preview: This text is bold**
+**Preview: Hello World!**
+![IMG](https://i.imgur.com/r7FVRbM.png)
 
 #### Tags:
 
 ````html
-<bold>This text is bold</bold>
-<b>This text is bold</b>
+<bold>Hello World!</bold>
+<b>Hello World!</b>
 ````
-
-![IMG](https://i.imgur.com/r7FVRbM.png)
 
 ## Underlined
 
-<u>Preview: This text is underlined</u>
-
-#### Tags:
-
-````html
-<underlined>This text is underlined</underlined>
-<underline>This text is underlined</underline>
-<ul>This text is underlined</ul>
-````
+<u>Preview: Hello World!</u>
 
 ![IMG](https://i.imgur.com/GwarcXb.png)
 
+#### Tags:
+
+````html
+<underlined>Hello World!</underlined>
+<underline>Hello World!</underline>
+<ul>Hello World!</ul>
+````
+
 ## Italic
 
-_Preview: This text is italic_
+_Preview: Hello World!_
+
+![IMG](https://i.imgur.com/lNPfKAC.png)
 
 #### Tags:
 
 ````html
-<italic>This text is italic</italic>
-<i>This text is italic</i>
-<em>This text is italic</em>
+<italic>Hello World!</italic>
+<i>Hello World!</i>
+<em>Hello World!</em>
 ````
 
-![IMG](https://i.imgur.com/lNPfKAC.png)
+## Monospace
+
+``Preview: This text is monospaced``
+
+![IMG](https://i.imgur.com/7WdLYgt.png)
+
+#### Tags:
+
+````html
+<monospaced>Hello World!</monospaced>
+<monospace>Hello World!</monospace>
+<mono>Hello World!</mono>
+<ms>Hello World!</ms>
+````
 
 ## Color
 
 Applies the color to the text.
 
+![IMG](https://i.imgur.com/hECAIsL.png)
+
 #### Tags:
 
 ````html
-<color:COLOR>This text is colored</color>
-<colour:COLOR>This text is colored</color>
-<c:COLOR>This text is colored</color>
+<color:COLOR>Hello World!</color>
+<colour:COLOR>Hello World!</color>
+<c:COLOR>Hello World!</color>
 ````
 
 ````html
-<COLOR>This text is colored
+<COLOR>Hello World!
 ````
-
-![IMG](https://i.imgur.com/hECAIsL.png)
 
 #### Arguments:
 
@@ -168,6 +215,8 @@ Applies the color to the text.
 
 Inserts a new line break using `\n`
 
+![IMG](https://i.imgur.com/GIOBpSN.png)
+
 #### Tags:
 
 ````html
@@ -176,44 +225,29 @@ Inserts a new line break using `\n`
 <br/>
 ````
 
-![IMG](https://i.imgur.com/GIOBpSN.png)
-
 ## Link
 
 [Preview: This text has an embedded link](https://github.com/Koboo/README/#link)
 
+![IMG](https://i.imgur.com/fiqppUu.png)
+
 #### Tags:
 
 ````html
-<link:URL>This text is clickable</link>
-<url:URL>This text is clickable</url>
-<uri:URL>This text is clickable</uri>
+<link:URL>Hello World!</link>
+<url:URL>Hello World!</url>
+<uri:URL>Hello World!</uri>
 ````
 
 #### Arguments:
 
 - `URL` — Any valid URL
 
-![IMG](https://i.imgur.com/fiqppUu.png)
-
-## Monospace
-
-``Preview: This text is monospaced``
-
-#### Tags:
-
-````html
-<monospaced>This text is monospaced</monospaced>
-<monospace>This text is monospaced</monospace>
-<mono>This text is monospaced</mono>
-<ms>This text is monospaced</ms>
-````
-
-![IMG](https://i.imgur.com/7WdLYgt.png)
-
 ## Reset
 
 Closes any unclosed styles and tags.
+
+![IMG](https://i.imgur.com/vaIGOkh.png)
 
 #### Tags:
 
@@ -222,11 +256,11 @@ Closes any unclosed styles and tags.
 <r/>
 ````
 
-![IMG](https://i.imgur.com/vaIGOkh.png)
-
 ## Translation
 
 Inserts the message from the resource files translations based on the given translation key.
+
+![IMG](https://i.imgur.com/gz8eVYG.png)
 
 #### Tags:
 
@@ -239,8 +273,6 @@ Inserts the message from the resource files translations based on the given tran
 
 - `TRANSLATION_KEY` — Any valid resource file translation
 
-![IMG](https://i.imgur.com/gz8eVYG.png)
-
 #### Notes:
 
 - Translations don't support gradients because the actual text gets parsed by the client.
@@ -248,6 +280,8 @@ Inserts the message from the resource files translations based on the given tran
 ## Color Gradients
 
 Adds the gradient to the following text.
+
+![IMG](https://i.imgur.com/GmgzGz3.png)
 
 #### Tags:
 
@@ -261,11 +295,11 @@ Adds the gradient to the following text.
 
 - `COLOR` — Any valid color ([Support Color Format](#-supported-color-formats))
 
-![IMG](https://i.imgur.com/GmgzGz3.png)
-
 ## Color Transitions
 
 Adds the transition to the following text.
+
+![IMG](https://i.imgur.com/exwSw76.png)
 
 #### Tags:
 
@@ -278,8 +312,6 @@ Adds the transition to the following text.
 
 - `COLOR` — Any valid color format ([Support Color Format](#-supported-color-formats))
 - `PHASE` — A number between 0 and 1
-
-![IMG](https://i.imgur.com/exwSw76.png)
 
 ## 🎨 Supported Color Formats
 
@@ -301,3 +333,33 @@ Here is a list of all supported color formats with an example.
 - You can register your own ``NamedColor``
 - You can override existing ``NamedColor``
 - Your custom ``NamedColor`` also support color codes using `§` and `&`
+
+## Named colors
+
+The builtin named color represent the legacy color codes from Minecraft.
+
+| Name        | ColorCode | Hexcode |
+|-------------|-----------|---------|
+| Black       | 0         | #000000 |
+| DarkBlue    | 1         | #0000AA |
+| DarkGreen   | 2         | #00AA00 |
+| DarkAqua    | 3         | #00AAAA |
+| DarkRed     | 4         | #AA0000 |
+| DarkPurple  | 5         | #AA00AA |
+| Gold        | 6         | #FFAA00 |
+| Gray        | 7         | #AAAAAA |
+| DarkGray    | 8         | #555555 |
+| Blue        | 9         | #5555FF |
+| Green       | a         | #55FF55 |
+| Aqua        | b         | #55FFFF |
+| Red         | c         | #FF5555 |
+| LightPurple | d         | #FF55FF |
+| Yellow      | e         | #FFFF55 |
+| White       | f         | #FFFFFF |
+
+## MiniMessage Online Editor
+
+There is also a web editor for MiniMessage, which displays your preview in a Minecraft-style.
+You can edit your texts there and just parse them using this library.
+
+[MiniMessage Web Editor](https://webui.advntr.dev/)

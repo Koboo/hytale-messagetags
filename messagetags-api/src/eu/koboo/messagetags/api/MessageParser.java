@@ -48,7 +48,6 @@ public final class MessageParser {
     MessageParser() {
         registerTagHandler(BoldTagHandler.INSTANCE);
         registerTagHandler(ColorTagHandler.INSTANCE);
-        registerTagHandler(DynamicColorTagHandler.INSTANCE);
         registerTagHandler(GradientTagHandler.INSTANCE);
         registerTagHandler(ItalicTagHandler.INSTANCE);
         registerTagHandler(LinkTagHandler.INSTANCE);
@@ -263,9 +262,28 @@ public final class MessageParser {
                 break;
             }
 
+            // Unhandled text. Check if we have a dynamic color tag and if so, apply it.
+            if (!wasHandled) {
+                TagHandler dynamicColorHandler = DynamicColorTagHandler.INSTANCE;
+                if(dynamicColorHandler.canHandle(state, tagNameStartPos, tagNameEndPos)) {
+
+                    String preTagContent = cursor.subString(textStartPos, tagOpenPos);
+                    if (preTagContent != null && !preTagContent.isEmpty()) {
+                        state.appendStyledText(preTagContent);
+                    }
+
+                    wasHandled = dynamicColorHandler.handle(
+                        state,
+                        tagNameStartPos, tagNameEndPos,
+                        argumentStart, argumentEnd,
+                        action
+                    );
+                }
+            }
+
             // Check if the text was handled.
             // Unhandled text gets append as a raw message with the current styling. otherwise, we don't touch it.
-            if (!wasHandled) {
+            if(!wasHandled) {
                 String unhandledContent = cursor.subString(tagOpenPos, textEndPos);
                 if (unhandledContent != null && !unhandledContent.isEmpty()) {
                     state.appendStyledText(unhandledContent);

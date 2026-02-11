@@ -320,6 +320,9 @@ Here is a list of all supported color formats with an example.
 - `&f`
 - `§f`
 
+**RGB colors:**
+- `255,255,255`
+
 #### Notes:
 
 - All formats are functionally equivalent and can be mixed freely

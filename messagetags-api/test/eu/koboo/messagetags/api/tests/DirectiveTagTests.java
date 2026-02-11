@@ -14,9 +14,9 @@ public class DirectiveTagTests {
 
     static Stream<TestCase> provide() {
         return Stream.of(
-            new TestCase("lang:server.commands.help.desc", ""),
-            new TestCase("reset", ""),
-            new TestCase("linebreak", "")
+            new TestCase("lang:server.commands.help.desc", "{\"Children\": [{\"MessageId\": \"server.commands.help.desc\", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null}], \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null}"),
+            new TestCase("reset", "{\"Children\": [], \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null}"),
+            new TestCase("linebreak", "{\"Children\": [{\"RawText\": \"\\n\", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null}], \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null}")
         );
     }
 

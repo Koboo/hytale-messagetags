@@ -8,14 +8,12 @@ import eu.koboo.messagetags.api.taghandler.TagAction;
 import eu.koboo.messagetags.api.taghandler.TagHandler;
 import eu.koboo.messagetags.api.taghandler.types.*;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import org.bouncycastle.util.Arrays;
+import java.util.Locale;
+import java.util.Map;
 
 public final class MessageParser {
 
@@ -224,7 +222,12 @@ public final class MessageParser {
             final int argumentEnd;
             if (hasArguments) {
                 argumentStart = tagNameEndPos + 1;
-                argumentEnd = tagClosePos;
+                if(action == TagAction.Directive) {
+                    // Reduce away the '/'
+                    argumentEnd = tagClosePos - 1;
+                } else {
+                    argumentEnd = tagClosePos;
+                }
             } else {
                 argumentStart = -1;
                 argumentEnd = -1;
@@ -246,7 +249,7 @@ public final class MessageParser {
                 // The tag now gets parsed by its handler. If the handler can't handle
                 // the tag, the tag gets appended as raw text.
                 String preTagContent = cursor.subString(textStartPos, tagOpenPos);
-                if(preTagContent != null && !preTagContent.isEmpty()) {
+                if (preTagContent != null && !preTagContent.isEmpty()) {
                     state.appendStyledText(preTagContent);
                 }
 
@@ -264,7 +267,7 @@ public final class MessageParser {
             // Unhandled text gets append as a raw message with the current styling. otherwise, we don't touch it.
             if (!wasHandled) {
                 String unhandledContent = cursor.subString(tagOpenPos, textEndPos);
-                if(unhandledContent != null && !unhandledContent.isEmpty()) {
+                if (unhandledContent != null && !unhandledContent.isEmpty()) {
                     state.appendStyledText(unhandledContent);
                 }
             }
@@ -277,7 +280,7 @@ public final class MessageParser {
 
         // Flush any remaining inputText onto the currently pending message.
         String unflushedContent = cursor.subString(textStartPos, cursor.length());
-        if(unflushedContent != null && !unflushedContent.isEmpty()) {
+        if (unflushedContent != null && !unflushedContent.isEmpty()) {
             state.appendStyledText(unflushedContent);
         }
 
@@ -291,12 +294,12 @@ public final class MessageParser {
 
     @Nullable
     public String stripRawText(@Nullable Message message) {
-        if(message == null) {
+        if (message == null) {
             return null;
         }
         StringBuilder builder = new StringBuilder();
-        if(message.getRawText() != null || message.getMessageId() != null) {
-            if(message.getRawText() != null) {
+        if (message.getRawText() != null || message.getMessageId() != null) {
+            if (message.getRawText() != null) {
                 builder.append(message.getRawText());
             } else {
                 builder.append(message.getMessageId());

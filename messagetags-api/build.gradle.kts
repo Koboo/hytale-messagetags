@@ -11,19 +11,22 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.junit.platform/junit-platform-launcher
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:$jupiterVersion")
+
+    // We need hytale on test scope
+    testImplementation("com.hypixel.hytale:Server:2026.02.06-aa1b071c2")
 }
 
 tasks.test {
     useJUnitPlatform()
 }
 
-pluginManifest {
-    isServerPlugin = false
-}
-
 sourceSets {
+    main {
+        java.setSrcDirs(listOf("src"))
+        resources.setSrcDirs(emptyList<String>())
+    }
     test {
-        java.setSrcDirs(listOf("src/test"))
+        java.setSrcDirs(listOf("test"))
         resources.setSrcDirs(emptyList<String>())
     }
 }

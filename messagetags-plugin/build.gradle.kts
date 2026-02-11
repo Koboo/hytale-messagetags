@@ -2,16 +2,13 @@ dependencies {
     api(project(":messagetags-api"))
 }
 
-pluginManifest {
-    //isServerPlugin = false
-
-    manifestConfiguration {
-        pluginGroup = "Koboo"
-        pluginName = "MessageTags"
+sourceSets {
+    main {
+        java.setSrcDirs(listOf("src"))
+        resources.setSrcDirs(listOf("resources"))
     }
-
-    runtimeConfiguration {
-        runtimeDirectory = "D:/Hytale/hytale-runtime/"
-        isProjectRelative = false
+    test {
+        java.setSrcDirs(emptyList<String>())
+        resources.setSrcDirs(emptyList<String>())
     }
 }

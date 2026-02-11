@@ -4,11 +4,8 @@ import com.hypixel.hytale.math.util.MathUtil;
 import eu.koboo.messagetags.api.MessageParser;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public final class ColorUtils {
-
-    private static final char[] HEX = "0123456789ABCDEF".toCharArray();
 
     private ColorUtils() {
         throw new UnsupportedOperationException("Utility class");
@@ -19,16 +16,51 @@ public final class ColorUtils {
     }
 
     public static int hexToRGB(@Nonnull String hex) {
-        if (hex.indexOf(MessageParser.COLOR_PREFIX) == 0) {
-            hex = hex.substring(1);
+        int len = hex.length();
+        int start = 0;
+
+        // skip '#' if present
+        if (len > 0 && hex.charAt(0) == MessageParser.COLOR_PREFIX) {
+            start = 1;
         }
-        return Integer.parseInt(hex, 16);
+
+        int rgb = 0;
+        for (int i = start; i < len; i++) {
+            char c = hex.charAt(i);
+            int value;
+
+            if (c >= '0' && c <= '9') {
+                value = c - '0';
+            } else if (c >= 'a' && c <= 'f') {
+                value = 10 + (c - 'a');
+            } else if (c >= 'A' && c <= 'F') {
+                value = 10 + (c - 'A');
+            } else {
+                throw new IllegalArgumentException("Invalid hex character: " + c);
+            }
+
+            rgb = (rgb << 4) | value;
+        }
+
+        return rgb;
     }
 
     @Nonnull
     public static String rgbToHex(int rgb) {
-        //FIXME: Make it faster
-        return String.format("#%06X", rgb & 0xFFFFFF);
+        // Only use the lower 24 bits
+        int value = rgb & 0xFFFFFF;
+
+        // Pre-allocate a 7-char array: # + 6 hex digits
+        char[] hex = new char[7];
+        hex[0] = '#';
+
+        for (int i = 0; i < 6; i++) {
+            int shift = (5 - i) * 4;
+            int nibble = (value >> shift) & 0xF;
+            hex[i + 1] = (char) (nibble < 10 ? '0' + nibble : 'A' + (nibble - 10));
+        }
+
+        return new String(hex);
     }
 
     public static int interpolateColor(int[] colors, float progress) {
@@ -53,7 +85,6 @@ public final class ColorUtils {
         short g = (short) (g1 + (g2 - g1) * local);
         short b = (short) (b1 + (b2 - b1) * local);
 
-        //return rgbToHex(r, g, b);
         return rgbToInt(r, g, b);
     }
 

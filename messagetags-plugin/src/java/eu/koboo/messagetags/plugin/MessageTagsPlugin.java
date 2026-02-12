@@ -14,9 +14,6 @@ public class MessageTagsPlugin extends JavaPlugin {
     @Override
     protected void setup() {
         super.setup();
-        // Only register test and debug commands for explicit purposes
-        if ("true".equalsIgnoreCase(System.getenv("TEST"))) {
-            getCommandRegistry().registerCommand(new CommandTagsTest());
-        }
+        getCommandRegistry().registerCommand(new CommandTagsTest());
     }
 }

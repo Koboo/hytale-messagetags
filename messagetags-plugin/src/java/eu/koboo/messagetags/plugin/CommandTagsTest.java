@@ -46,7 +46,7 @@ public class CommandTagsTest extends AbstractCommandCollection {
                                @Nonnull PlayerRef playerRef,
                                @Nonnull World world) {
             Player player = store.ensureAndGetComponent(ref, Player.getComponentType());
-            Message parse = MessageTags.parse("<bold>Aw<ul>e<&6>so</ul>me <color:#fcba03>test <color:&4>New co<r>lo<em>r");
+            Message parse = MessageTags.parse("<bold>Aw<ul>e&6so</ul>me <color:#fcba03>test &4New co<r>lo<i>r");
             ConsoleSender.INSTANCE.sendMessage(Message.raw(MessageTags.toJson(parse)));
             player.sendMessage(parse);
         }
@@ -65,8 +65,8 @@ public class CommandTagsTest extends AbstractCommandCollection {
                                @Nonnull PlayerRef playerRef,
                                @Nonnull World world) {
             Player player = store.ensureAndGetComponent(ref, Player.getComponentType());
-            player.sendMessage(MessageTags.parse("<bold><color:&4>Test<newline><italic>New line with tag"));
-            player.sendMessage(MessageTags.parse("<bold><color:&4>Test\n<italic>New line with linebreak"));
+            player.sendMessage(MessageTags.parse("<bold>&4Test<newline><italic>New line with tag"));
+            player.sendMessage(MessageTags.parse("<bold>&4Test\n<italic>New line with linebreak"));
         }
     }
 
@@ -83,7 +83,7 @@ public class CommandTagsTest extends AbstractCommandCollection {
                                @Nonnull PlayerRef playerRef,
                                @Nonnull World world) {
             Player player = store.ensureAndGetComponent(ref, Player.getComponentType());
-            Message parse = MessageTags.parse("<bold><color:&4><lang:server.commands.help.desc><newline><italic>Testing translations");
+            Message parse = MessageTags.parse("<bold>&4<lang:server.commands.help.desc><newline><italic>Testing translations");
             ConsoleSender.INSTANCE.sendMessage(Message.raw(MessageTags.toJson(parse)));
             player.sendMessage(parse);
         }
@@ -102,7 +102,7 @@ public class CommandTagsTest extends AbstractCommandCollection {
                                @Nonnull PlayerRef playerRef,
                                @Nonnull World world) {
             Player player = store.ensureAndGetComponent(ref, Player.getComponentType());
-            Message parse = MessageTags.parse("<&b><link:https://github.com/Koboo>CLICK ME</link>");
+            Message parse = MessageTags.parse("&b<link:https://github.com/Koboo>CLICK ME</link>");
             ConsoleSender.INSTANCE.sendMessage(Message.raw(MessageTags.toJson(parse)));
             player.sendMessage(parse);
         }
@@ -121,7 +121,7 @@ public class CommandTagsTest extends AbstractCommandCollection {
                                @Nonnull PlayerRef playerRef,
                                @Nonnull World world) {
             Player player = store.ensureAndGetComponent(ref, Player.getComponentType());
-            Message parse = MessageTags.parse("<&b><link:https://github.com/Koboo><lang:server.commands.help.desc></link>Test<&a>NewMessage<newline>");
+            Message parse = MessageTags.parse("&b<link:https://github.com/Koboo><lang:server.commands.help.desc></link>Test&aNewMessage<newline>");
             ConsoleSender.INSTANCE.sendMessage(Message.raw(MessageTags.toJson(parse)));
             player.sendMessage(parse);
         }
@@ -159,7 +159,7 @@ public class CommandTagsTest extends AbstractCommandCollection {
                                @Nonnull PlayerRef playerRef,
                                @Nonnull World world) {
             Player player = store.ensureAndGetComponent(ref, Player.getComponentType());
-            Message parse = MessageTags.strip("<bold>Aw<ul>e<&6>so</ul>me <color:#fcba03>test <color:&4>But every<r>thing <em>stripped");
+            Message parse = MessageTags.strip("<bold>Aw<ul>e&6so</ul>me <color:#fcba03>test &4But every<r>thing <i>stripped");
             ConsoleSender.INSTANCE.sendMessage(Message.raw(MessageTags.toJson(parse)));
             player.sendMessage(parse);
         }

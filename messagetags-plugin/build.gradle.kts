@@ -4,8 +4,8 @@ dependencies {
 
 sourceSets {
     main {
-        java.setSrcDirs(listOf("src"))
-        resources.setSrcDirs(listOf("resources"))
+        java.setSrcDirs(listOf("src/java"))
+        resources.setSrcDirs(listOf("src/resources"))
     }
     test {
         java.setSrcDirs(emptyList<String>())

@@ -92,12 +92,4 @@ public final class ColorUtils {
 
         return rgbToHex(rgb);
     }
-
-    public static short parseShort(String string) {
-        try {
-            return Short.parseShort(string);
-        } catch (NumberFormatException e) {
-            return -1;
-        }
-    }
 }

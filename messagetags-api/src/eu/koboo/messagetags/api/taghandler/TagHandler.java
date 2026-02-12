@@ -1,7 +1,6 @@
 package eu.koboo.messagetags.api.taghandler;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 
 public abstract class TagHandler {
 
@@ -64,6 +63,6 @@ public abstract class TagHandler {
     }
 
     private static char toLowerAscii(char c) {
-        return (c >= 'A' && c <= 'Z') ? (char)(c | 0x20) : c;
+        return (c >= 'A' && c <= 'Z') ? (char) (c | 0x20) : c;
     }
 }

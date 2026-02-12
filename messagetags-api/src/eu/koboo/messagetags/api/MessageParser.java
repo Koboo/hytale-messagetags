@@ -1,7 +1,6 @@
 package eu.koboo.messagetags.api;
 
 import com.hypixel.hytale.common.util.ArrayUtil;
-import com.hypixel.hytale.protocol.FormattedMessage;
 import com.hypixel.hytale.server.core.Message;
 import eu.koboo.messagetags.api.colors.LegacyColorCodes;
 import eu.koboo.messagetags.api.colors.NamedColor;

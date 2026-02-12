@@ -6,7 +6,6 @@ import eu.koboo.messagetags.api.taghandler.TagAction;
 import eu.koboo.messagetags.api.taghandler.TagHandler;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 
 public final class TranslationTagHandler extends TagHandler {
 

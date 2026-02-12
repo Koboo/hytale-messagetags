@@ -5,12 +5,11 @@ import com.hypixel.hytale.protocol.MaybeBool;
 import com.hypixel.hytale.server.core.Message;
 import eu.koboo.messagetags.api.MessageParser;
 import eu.koboo.messagetags.api.colors.ColorUtils;
-
 import eu.koboo.messagetags.api.colors.NamedColor;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.Nullable;
 
 public final class MessageBuilder {
 

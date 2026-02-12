@@ -19,7 +19,7 @@ public final class LegacyColorCodes {
     }
 
     public static void applyLegacyColorCode(MessageBuilder state, char legacyCode) {
-        if(state.strip) {
+        if (state.strip) {
             return;
         }
         switch (legacyCode) {

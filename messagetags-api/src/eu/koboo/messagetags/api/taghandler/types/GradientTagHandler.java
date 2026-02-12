@@ -4,9 +4,8 @@ import com.hypixel.hytale.common.util.ArrayUtil;
 import eu.koboo.messagetags.api.taghandler.MessageBuilder;
 import eu.koboo.messagetags.api.taghandler.TagAction;
 import eu.koboo.messagetags.api.taghandler.TagHandler;
-import java.util.List;
+
 import javax.annotation.Nonnull;
-import org.bouncycastle.util.Arrays;
 
 public final class GradientTagHandler extends TagHandler {
 
@@ -21,9 +20,9 @@ public final class GradientTagHandler extends TagHandler {
 
     @Override
     public boolean handle(@Nonnull MessageBuilder state,
-        int nameStart, int nameEnd,
-        int argumentStart, int argumentEnd,
-        @Nonnull TagAction action) {
+                          int nameStart, int nameEnd,
+                          int argumentStart, int argumentEnd,
+                          @Nonnull TagAction action) {
         switch (action) {
             case Open -> {
                 String argument = state.getArgument(argumentStart, argumentEnd);

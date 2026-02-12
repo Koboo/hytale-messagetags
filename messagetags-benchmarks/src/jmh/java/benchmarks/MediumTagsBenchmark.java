@@ -4,7 +4,8 @@ import eu.koboo.messagetags.api.MessageTags;
 import fi.sulku.hytale.TinyMsg;
 import io.github.insideranh.talemessage.TaleMessage;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.Param;
 import org.openjdk.jmh.infra.Blackhole;
 
 

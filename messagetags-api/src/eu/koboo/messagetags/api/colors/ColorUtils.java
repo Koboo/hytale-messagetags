@@ -64,7 +64,7 @@ public final class ColorUtils {
     }
 
     public static String interpolateColor(String[] colors, float progress) {
-        if(colors == null || colors.length == 0) {
+        if (colors == null || colors.length == 0) {
             return null;
         }
         progress = MathUtil.clamp(progress, 0, 1);

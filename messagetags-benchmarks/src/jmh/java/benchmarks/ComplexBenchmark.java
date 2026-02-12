@@ -2,7 +2,6 @@ package benchmarks;
 
 import eu.koboo.messagetags.api.MessageTags;
 import fi.sulku.hytale.TinyMsg;
-import io.github.insideranh.talemessage.MiniMessageParser;
 import io.github.insideranh.talemessage.TaleMessage;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.openjdk.jmh.annotations.Benchmark;

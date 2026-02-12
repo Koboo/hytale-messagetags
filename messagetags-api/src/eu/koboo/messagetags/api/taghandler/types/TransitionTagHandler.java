@@ -7,9 +7,6 @@ import eu.koboo.messagetags.api.taghandler.TagAction;
 import eu.koboo.messagetags.api.taghandler.TagHandler;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
-import org.bouncycastle.util.Arrays;
 
 public final class TransitionTagHandler extends TagHandler {
 
@@ -49,7 +46,7 @@ public final class TransitionTagHandler extends TagHandler {
                     return false;
                 }
                 String color = ColorUtils.interpolateColor(colors, phase);
-                if(color == null) {
+                if (color == null) {
                     return false;
                 }
                 state.color = color;

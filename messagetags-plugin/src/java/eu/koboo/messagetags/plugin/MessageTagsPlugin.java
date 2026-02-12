@@ -14,6 +14,6 @@ public class MessageTagsPlugin extends JavaPlugin {
     @Override
     protected void setup() {
         super.setup();
-        getCommandRegistry().registerCommand(new CommandTagsTest());
+        //getCommandRegistry().registerCommand(new CommandTagsTest());
     }
 }

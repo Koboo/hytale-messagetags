@@ -1,6 +1,3 @@
-import com.vanniktech.maven.publish.JavaLibrary
-import com.vanniktech.maven.publish.JavadocJar
-
 plugins {
     id("java-library")
     id("maven-publish")
@@ -15,7 +12,7 @@ subprojects {
     apply(plugin = "com.gradleup.shadow")
 
     group = "eu.koboo"
-    version = "1.0.0"
+    version = "1.1.0"
 
     repositories {
         maven {
@@ -49,10 +46,6 @@ subprojects {
     }
 
     mavenPublishing {
-//        configure(JavaLibrary(
-//            javadocJar = JavadocJar.Javadoc(),
-//            sourcesJar = true,
-//        ))
         mavenPublishing {
             coordinates(
                 project.group.toString(),
@@ -110,17 +103,5 @@ subprojects {
                 }
             }
         }
-    }
-
-}
-
-sourceSets {
-    main {
-        java.setSrcDirs(emptyList<String>())
-        resources.setSrcDirs(emptyList<String>())
-    }
-    test {
-        java.setSrcDirs(emptyList<String>())
-        resources.setSrcDirs(emptyList<String>())
     }
 }

@@ -19,7 +19,7 @@ Basically, a MiniMessage clone for Hytale.
 - [Tag Format](#tag-format)
 - [Builtin Tags](#builtin-tags)
 - [Supported Color Formats](#-supported-color-formats)
-- [Named Colors](#named-colors)
+- [Named Colors](#named-and-legacy-colors)
 - [MiniMessage Online Editor](#minimessage-online-editor)
 
 **Links**
@@ -33,7 +33,7 @@ Basically, a MiniMessage clone for Hytale.
 ## 📑 Features
 
 **Styling and formatting**
-- Colors
+- Colors (Hexadecimal and named colors)
 - Color gradients
 - Color transitions
 - Embedded links
@@ -41,10 +41,11 @@ Basically, a MiniMessage clone for Hytale.
 - Text formatting
 - Line Breaks
 - Style and format resets
-- Unlimited nesting
+- Inline legacy color codes
 
 **Extensibility**
 - Stripping support (Remove styles and formatting)
+- No exception throwing
 - Create own ``MessageParser``
 - Create own ``NamedColor``
 - Implement own ``TagHandler``
@@ -316,10 +317,6 @@ Here is a list of all supported color formats with an example.
 **Named colors:**
 - `white`
 
-**Color codes:**
-- `&f`
-- `§f`
-
 **RGB colors:**
 - `255,255,255`
 
@@ -330,7 +327,7 @@ Here is a list of all supported color formats with an example.
 - You can override existing ``NamedColor``
 - Your custom ``NamedColor`` also support color codes using `§` and `&`
 
-## Named colors
+## Named and legacy colors
 
 The builtin named color represents the legacy color codes from Minecraft.
 
@@ -352,6 +349,12 @@ The builtin named color represents the legacy color codes from Minecraft.
 | LightPurple | d         | #FF55FF |
 | Yellow      | e         | #FFFF55 |
 | White       | f         | #FFFFFF |
+
+You can easily inline legacy color codes using the symbols ``§`` and ``&``.
+
+````html
+<bold>This is &6my §a§mawesome &rmessage, which uses legacy color codes!</bold>
+````
 
 ## MiniMessage Online Editor
 

@@ -5,21 +5,15 @@ public enum TagAction {
      * i.e.
      * "<TAG>"
      */
-    Open(1),
+    Open,
     /**
      * i.e.
      * "</TAG>"
      */
-    Close(2),
+    Close,
     /**
      * i.e.
      * "<TAG/>"
      */
-    Directive(1);
-
-    public final int namePosPadding;
-
-    TagAction(int namePosPadding) {
-        this.namePosPadding = namePosPadding;
-    }
+    Directive;
 }

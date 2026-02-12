@@ -24,11 +24,11 @@ public final class MonospaceTagHandler extends TagHandler {
                           @Nonnull TagAction action) {
         switch (action) {
             case Open -> {
-                state.monospaced = true;
+                state.monospace = true;
                 return true;
             }
             case Close -> {
-                state.monospaced = false;
+                state.monospace = false;
                 return true;
             }
         }

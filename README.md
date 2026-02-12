@@ -26,8 +26,8 @@ Basically, a MiniMessage clone for Hytale.
 - [GitHub](https://github.com/Koboo/hytale-messagetags)
 - [CurseForge](https://www.curseforge.com/hytale/mods/messagetags)
 - [ModTale](https://modtale.net/mod/messagetags-d0e70919-7bf1-4123-ae43-2c4d85d549b5)
-- [MavenCentral (API)](https://mvnrepository.com/artifact/eu.koboo/messagetags-api)
-- [MavenCentral (Plugin)](https://mvnrepository.com/artifact/eu.koboo/messagetags-plugin)
+- [MavenCentral (API)](https://central.sonatype.com/artifact/eu.koboo/messagetags-api)
+- [MavenCentral (Plugin)](https://central.sonatype.com/artifact/eu.koboo/messagetags-plugin)
 - [Discord](https://discord.koboo.eu/)
 
 ## 📑 Features

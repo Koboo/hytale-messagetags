@@ -5,11 +5,10 @@ import eu.koboo.messagetags.api.taghandler.TagAction;
 import eu.koboo.messagetags.api.taghandler.TagHandler;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 
-public final class UnderlinedTagHandler extends TagHandler {
+public final class UnderlineTagHandler extends TagHandler {
 
-    public static final UnderlinedTagHandler INSTANCE = new UnderlinedTagHandler();
+    public static final UnderlineTagHandler INSTANCE = new UnderlineTagHandler();
 
     private static final String[] TAGS = new String[]{"underline", "ul"};
 
@@ -25,11 +24,11 @@ public final class UnderlinedTagHandler extends TagHandler {
                           @Nonnull TagAction action) {
         switch (action) {
             case Open -> {
-                state.underlined = true;
+                state.underline = true;
                 return true;
             }
             case Close -> {
-                state.underlined = false;
+                state.underline = false;
                 return true;
             }
         }

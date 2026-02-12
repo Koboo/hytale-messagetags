@@ -1,7 +1,9 @@
 package eu.koboo.messagetags.api;
 
 import com.hypixel.hytale.common.util.ArrayUtil;
+import com.hypixel.hytale.protocol.FormattedMessage;
 import com.hypixel.hytale.server.core.Message;
+import eu.koboo.messagetags.api.colors.LegacyColorCodes;
 import eu.koboo.messagetags.api.colors.NamedColor;
 import eu.koboo.messagetags.api.taghandler.MessageBuilder;
 import eu.koboo.messagetags.api.taghandler.TagAction;
@@ -11,7 +13,6 @@ import eu.koboo.messagetags.api.taghandler.types.*;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -22,41 +23,32 @@ public final class MessageParser {
     public static final char TAG_SLASH = '/';
     public static final char TAG_SEPARATOR = ':';
     public static final char COLOR_PREFIX = '#';
-    public static final char COLOR_AMPERSAND = '&';
-    public static final char COLOR_SECTION = '§';
+    public static final char LEGACY_AMPERSAND = '&';
+    public static final char LEGACY_SECTION = '§';
 
-    private static final List<Character> DISALLOWED_COLOR_CODES = List.of(
-        MessageParser.COLOR_SECTION,
-        MessageParser.COLOR_AMPERSAND,
-        MessageParser.COLOR_PREFIX,
-        MessageParser.TAG_OPEN,
-        MessageParser.TAG_CLOSE,
-        MessageParser.TAG_SEPARATOR,
-        MessageParser.TAG_SLASH
-    );
-
-    private final ThreadLocal<MessageBuilder> threadState =
-        ThreadLocal.withInitial(MessageBuilder::new);
-    private final ThreadLocal<StringCursor> threadCursor =
-        ThreadLocal.withInitial(StringCursor::new);
     private TagHandler[] tagHandlers = new TagHandler[0];
+    private long handlerLength = 0;
 
-    private final Map<Character, NamedColor> characterToColorRegistry = new HashMap<>();
     private final Map<String, NamedColor> nameToColorRegistry = new HashMap<>();
-    private final Map<String, NamedColor> hexCodeToColorRegistry = new HashMap<>();
 
     MessageParser() {
+        // TagHandlers get execute based on the registration order.
+        registerTagHandler(ResetTagHandler.INSTANCE);
+        registerTagHandler(LineBreakTagHandler.INSTANCE);
+
         registerTagHandler(BoldTagHandler.INSTANCE);
+        registerTagHandler(ItalicTagHandler.INSTANCE);
+        registerTagHandler(UnderlineTagHandler.INSTANCE);
+        registerTagHandler(MonospaceTagHandler.INSTANCE);
+
+        registerTagHandler(LinkTagHandler.INSTANCE);
+        registerTagHandler(TranslationTagHandler.INSTANCE);
+
         registerTagHandler(ColorTagHandler.INSTANCE);
         registerTagHandler(GradientTagHandler.INSTANCE);
-        registerTagHandler(ItalicTagHandler.INSTANCE);
-        registerTagHandler(LinkTagHandler.INSTANCE);
-        registerTagHandler(MonospaceTagHandler.INSTANCE);
-        registerTagHandler(LineBreakTagHandler.INSTANCE);
-        registerTagHandler(ResetTagHandler.INSTANCE);
         registerTagHandler(TransitionTagHandler.INSTANCE);
-        registerTagHandler(TranslationTagHandler.INSTANCE);
-        registerTagHandler(UnderlinedTagHandler.INSTANCE);
+
+        registerTagHandler(DynamicColorTagHandler.INSTANCE);
 
         registerNamedColor(NamedColor.Black);
         registerNamedColor(NamedColor.DarkBlue);
@@ -78,53 +70,17 @@ public final class MessageParser {
 
     public void registerTagHandler(@Nonnull TagHandler tagHandler) {
         tagHandlers = ArrayUtil.append(tagHandlers, tagHandler);
+        handlerLength = tagHandlers.length;
     }
 
     public void registerNamedColor(@Nonnull NamedColor namedColor) {
-        char colorCode = namedColor.colorCode;
-        if (colorCode != Character.MIN_VALUE) {
-            if (DISALLOWED_COLOR_CODES.contains(colorCode)) {
-                throw new IllegalArgumentException("colorCode " + colorCode + " is preserved as tag token, you can't use it!");
-            }
-            characterToColorRegistry.put(colorCode, namedColor);
-        }
-        String name = namedColor.name;
-        if (name.isEmpty()) {
-            throw new IllegalArgumentException("Name cannot be empty!");
-        }
-        nameToColorRegistry.put(name, namedColor);
-        String hexCode = namedColor.hexCode;
-        if (hexCode.isEmpty()) {
-            throw new IllegalArgumentException("HexCode cannot be empty!");
-        }
-        if (hexCode.length() == 6) {
-            throw new IllegalArgumentException("HexCode has to be prefixed with '#'");
-        }
-        hexCode = hexCode.toLowerCase(Locale.ROOT);
-        hexCodeToColorRegistry.put(hexCode, namedColor);
-    }
-
-    @Nullable
-    public NamedColor getNamedColorByChar(char colorCharacter) {
-        return characterToColorRegistry.get(colorCharacter);
+        nameToColorRegistry.put(namedColor.name(), namedColor);
     }
 
     @Nullable
     public NamedColor getNamedColorByName(@Nonnull String colorName) {
-        colorName = colorName.toLowerCase(Locale.ROOT);
+        colorName = colorName.toLowerCase(Locale.ROOT).trim();
         return nameToColorRegistry.get(colorName);
-    }
-
-    @Nullable
-    public NamedColor getNamedColorByHexCode(@Nonnull String hexCode) {
-        if (hexCode.charAt(0) != MessageParser.COLOR_PREFIX) {
-            hexCode = MessageParser.COLOR_PREFIX + hexCode;
-        }
-        if (hexCode.length() != 7) {
-            return null;
-        }
-        hexCode = hexCode.toLowerCase(Locale.ROOT);
-        return hexCodeToColorRegistry.get(hexCode);
     }
 
     @Nonnull
@@ -133,112 +89,94 @@ public final class MessageParser {
         if (inputText == null || inputText.isEmpty()) {
             return Message.empty();
         }
-        // No '<' nor '>', return a raw message
-        if (inputText.indexOf(TAG_OPEN) == -1 || inputText.indexOf(TAG_CLOSE) == -1) {
-            return Message.raw(inputText);
-        }
         final int inputLength = inputText.length();
-        // Fewer or only 3 characters?
-        // Probably nothing we can parse.
-        // the tag brackets themselves need 2 characters at minimum.
-        if (inputLength <= 2) {
+        if (!hasParseableCharacter(inputText, inputLength)) {
             return Message.raw(inputText);
         }
 
-        final MessageBuilder state = threadState.get();
-        state.init(this, inputText, strip);
+        final MessageBuilder state = new MessageBuilder(this, inputText, strip);
 
-        final StringCursor cursor = threadCursor.get();
-        cursor.init(inputText);
+        int inputPos = 0;
 
-        int textStartPos = 0;
+        int openPos = -1;
+        int closePos = -1;
+        int argumentStartPos = -1;
+        int argumentEndPos = -1;
+        int slashPos = -1;
+
+        boolean isTagOpen = false;
+        boolean foundArgument = false;
+        boolean foundSlash = false;
+
+        int afterPreviousClosePos = 0;
 
         // Go through every character of the inputText
-        while (cursor.hasNext()) {
+        while (inputPos < inputLength) {
 
-            final char currentChar = cursor.currentChar();
+            final char character = inputText.charAt(inputPos);
 
-            // Normal inputText character
-            if (currentChar != TAG_OPEN) {
-                cursor.nextChar();
+            if (character == TAG_OPEN && !isTagOpen) {
+                isTagOpen = true;
+                openPos = inputPos;
+                inputPos++;
                 continue;
             }
 
-            // This is where the tag's open bracket is located
-            int tagOpenPos = cursor.currentPosition();
-
-            // This is where the tag's closing bracket is located (if present)
-            int tagClosePos = -1;
-            while (cursor.hasNext()) {
-                if (cursor.currentChar() == TAG_CLOSE) {
-                    tagClosePos = cursor.currentPosition();
-                    break;
-                }
-                cursor.nextChar();
-            }
-
-            // No closing bracket ('>') found,
-            // so we treat the previous opening bracket ('<') as normal inputText
-            if (tagClosePos == -1) {
-                cursor.nextChar();
+            if (character == TAG_SEPARATOR && !foundArgument && isTagOpen) {
+                foundArgument = true;
+                argumentStartPos = inputPos + 1;
+                inputPos++;
                 continue;
             }
 
-            TagAction action;
-            if (cursor.charEquals(tagOpenPos + 1, TAG_SLASH)) {
-                action = TagAction.Close;
-            } else if (cursor.charEquals(tagClosePos - 1, TAG_SLASH)) {
-                action = TagAction.Directive;
-            } else {
-                action = TagAction.Open;
+            if (character == TAG_SLASH && !foundSlash && isTagOpen) {
+                foundSlash = true;
+                slashPos = inputPos;
+                inputPos++;
+                continue;
             }
 
-            // Define the position of where the tag name starts
-            int tagNameStartPos = tagOpenPos + action.namePosPadding;
-            int textEndPos = tagClosePos + 1;
-
-            // If we reach a ':', '/' or '>'. The tags name ends there.
-            // ':' indicates a argument
-            // '/' indicates a directive tag
-            // '>' indicates a closing tag
-            int tagNameEndPos = tagNameStartPos;
-            boolean hasArguments = false;
-            while (tagNameEndPos < tagClosePos) {
-                char nameEndToken = inputText.charAt(tagNameEndPos);
-                if (nameEndToken == TAG_SEPARATOR) {
-                    hasArguments = true;
-                    break;
-                }
-                if (nameEndToken == TAG_SLASH) {
-                    break;
-                }
-                tagNameEndPos++;
+            if (character == TAG_CLOSE && isTagOpen) {
+                closePos = inputPos;
+                inputPos++;
             }
 
-            // Create the start and end position of the argument and
-            // let the TagHandler decode the string according to their needs.
-            final int argumentStart;
-            final int argumentEnd;
-            if (hasArguments) {
-                argumentStart = tagNameEndPos + 1;
-                if(action == TagAction.Directive) {
-                    // Reduce away the '/'
-                    argumentEnd = tagClosePos - 1;
+            if (isTagOpen && closePos != -1) {
+
+                int nameStartPos;
+                int nameEndPos;
+                TagAction action;
+
+                if (foundSlash && slashPos == openPos + 1) {
+                    // </tag>
+                    action = TagAction.Close;
+                    nameStartPos = openPos + 2;
+                    if (foundArgument) {
+                        nameEndPos = argumentStartPos - 1;
+                        argumentEndPos = closePos;
+                    } else {
+                        nameEndPos = closePos;
+                    }
+                } else if (foundSlash && slashPos == closePos - 1) {
+                    // <tag/>
+                    action = TagAction.Directive;
+                    nameStartPos = openPos + 1;
+                    if (foundArgument) {
+                        nameEndPos = argumentStartPos - 1;
+                        argumentEndPos = closePos - 1;
+                    } else {
+                        nameEndPos = closePos - 1;
+                    }
                 } else {
-                    argumentEnd = tagClosePos;
-                }
-            } else {
-                argumentStart = -1;
-                argumentEnd = -1;
-            }
-
-            // Execute the tag handlers
-            boolean wasHandled = false;
-            int tagHandlerAmount = tagHandlers.length;
-            for (int handlerIndex = 0; handlerIndex < tagHandlerAmount; handlerIndex++) {
-                TagHandler tagHandler = tagHandlers[handlerIndex];
-                if (!tagHandler.canHandle(state, tagNameStartPos, tagNameEndPos)) {
-                    continue;
+                    // <tag>
+                    action = TagAction.Open;
+                    nameStartPos = openPos + 1;
+                    if (foundArgument) {
+                        nameEndPos = argumentStartPos - 1;
+                        argumentEndPos = closePos;
+                    } else {
+                        nameEndPos = closePos;
+                    }
                 }
 
                 // Flush everything before the current tag
@@ -247,67 +185,78 @@ public final class MessageParser {
                 // The part "First" gets flushed with the current style.
                 // The tag now gets parsed by its handler. If the handler can't handle
                 // the tag, the tag gets appended as raw text.
-                String preTagContent = cursor.subString(textStartPos, tagOpenPos);
-                if (preTagContent != null && !preTagContent.isEmpty()) {
-                    state.appendStyledText(preTagContent);
-                }
+                flush(state, inputText, afterPreviousClosePos, openPos);
 
-                wasHandled = tagHandler.handle(
-                    state,
-                    tagNameStartPos, tagNameEndPos,
-                    argumentStart, argumentEnd,
-                    action
-                );
+                // Found tag positions and now we process it.
+                boolean wasHandled = false;
 
-                break;
-            }
-
-            // Unhandled text. Check if we have a dynamic color tag and if so, apply it.
-            if (!wasHandled) {
-                TagHandler dynamicColorHandler = DynamicColorTagHandler.INSTANCE;
-                if(dynamicColorHandler.canHandle(state, tagNameStartPos, tagNameEndPos)) {
-
-                    String preTagContent = cursor.subString(textStartPos, tagOpenPos);
-                    if (preTagContent != null && !preTagContent.isEmpty()) {
-                        state.appendStyledText(preTagContent);
+                for (int handlerIndex = 0; handlerIndex < handlerLength; handlerIndex++) {
+                    TagHandler tagHandler = tagHandlers[handlerIndex];
+                    boolean canHandle = tagHandler.canHandle(state, nameStartPos, nameEndPos);
+                    if (!canHandle) {
+                        continue;
                     }
 
-                    wasHandled = dynamicColorHandler.handle(
+                    // Flush everything before the current tag
+                    // Take in example this string:
+                    // "First<color:#ffffff>Second"
+                    // The part "First" gets flushed with the current style.
+                    // The tag now gets parsed by its handler. If the handler can't handle
+                    // the tag, the tag gets appended as raw text.
+
+                    wasHandled = tagHandler.handle(
                         state,
-                        tagNameStartPos, tagNameEndPos,
-                        argumentStart, argumentEnd,
+                        nameStartPos, nameEndPos,
+                        argumentStartPos, argumentEndPos,
                         action
                     );
+                    break;
+                }
+
+                // Check if the text was handled.
+                // Unhandled text gets append as a raw message with the current styling. otherwise, we don't touch it.
+                if (!wasHandled) {
+                    flush(state, inputText, openPos, closePos + 1);
+                }
+
+                // Move to next, we are at our close character
+                afterPreviousClosePos = inputPos;
+
+                // Resetting after tag handling
+                openPos = -1;
+                closePos = -1;
+                argumentStartPos = -1;
+                argumentEndPos = -1;
+                slashPos = -1;
+
+                isTagOpen = false;
+                foundArgument = false;
+                foundSlash = false;
+                continue;
+            }
+
+            // Check for '§' or '&'
+            if (character == LEGACY_AMPERSAND || character == LEGACY_SECTION) {
+                char legacyColorCode = inputText.charAt(inputPos + 1);
+                boolean isLegacyColorCode = LegacyColorCodes.isLegacyColorCode(legacyColorCode);
+                if (isLegacyColorCode) {
+                    flush(state, inputText, afterPreviousClosePos, inputPos);
+                    LegacyColorCodes.applyLegacyColorCode(state, legacyColorCode);
+
+                    inputPos = inputPos + 2;
+                    afterPreviousClosePos = inputPos;
+                    continue;
                 }
             }
 
-            // Check if the text was handled.
-            // Unhandled text gets append as a raw message with the current styling. otherwise, we don't touch it.
-            if(!wasHandled) {
-                String unhandledContent = cursor.subString(tagOpenPos, textEndPos);
-                if (unhandledContent != null && !unhandledContent.isEmpty()) {
-                    state.appendStyledText(unhandledContent);
-                }
-            }
-
-            // Move the cursor to the next character after the closing bracket
-            cursor.setPosition(textEndPos);
-            // Restart the process
-            textStartPos = textEndPos;
+            // collect raw text, token names, arguments and similar
+            inputPos++;
         }
 
         // Flush any remaining inputText onto the currently pending message.
-        String unflushedContent = cursor.subString(textStartPos, cursor.length());
-        if (unflushedContent != null && !unflushedContent.isEmpty()) {
-            state.appendStyledText(unflushedContent);
-        }
+        flush(state, inputText, afterPreviousClosePos, inputLength);
 
-        Message message = state.buildRootMessage();
-
-        threadState.remove();
-        threadCursor.remove();
-
-        return message;
+        return state.buildRootMessage();
     }
 
     @Nullable
@@ -328,5 +277,23 @@ public final class MessageParser {
             builder.append(childText);
         }
         return builder.toString();
+    }
+
+    private boolean hasParseableCharacter(String inputText, int inputLength) {
+        for (int i = 0; i < inputLength; i++) {
+            char character = inputText.charAt(i);
+            if (character == TAG_OPEN || character == LEGACY_AMPERSAND || character == LEGACY_SECTION) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void flush(MessageBuilder state, String inputText, int startPos, int endPos) {
+        if (startPos >= endPos) {
+            return;
+        }
+        String unflushedContent = inputText.substring(startPos, endPos);
+        state.appendStyledText(unflushedContent);
     }
 }

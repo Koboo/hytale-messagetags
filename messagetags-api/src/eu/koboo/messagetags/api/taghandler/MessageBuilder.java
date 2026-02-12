@@ -7,34 +7,30 @@ import eu.koboo.messagetags.api.MessageParser;
 import eu.koboo.messagetags.api.colors.ColorUtils;
 
 import eu.koboo.messagetags.api.colors.NamedColor;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nullable;
 
 public final class MessageBuilder {
 
-    private MessageParser parser;
-    private String inputText;
-    private boolean strip;
+    private final MessageParser parser;
+    private final String inputText;
+    public final boolean strip;
     private final List<FormattedMessage> messageList = new ArrayList<>();
 
     public boolean bold;
     public boolean italic;
-    public boolean monospaced;
-    public boolean underlined;
+    public boolean monospace;
+    public boolean underline;
     public String color;
     public String link;
     public String[] gradientColors;
 
-    public MessageBuilder() {
-    }
-
-    public void init(MessageParser parser, String inputText, boolean strip) {
+    public MessageBuilder(MessageParser parser, String inputText, boolean strip) {
         this.parser = parser;
         this.inputText = inputText;
         this.strip = strip;
-        this.messageList.clear();
-        resetStyle();
     }
 
     public String getInputText() {
@@ -60,16 +56,16 @@ public final class MessageBuilder {
     public void resetStyle() {
         bold = false;
         italic = false;
-        monospaced = false;
-        underlined = false;
+        monospace = false;
+        underline = false;
         color = null;
         link = null;
         gradientColors = null;
     }
 
     public void appendStyledText(String textPart) {
-        if(textPart == null || textPart.isEmpty()) {
-            throw new NullPointerException("textPart cannot be null or empty");
+        if (textPart == null || textPart.isEmpty()) {
+            return;
         }
         if (gradientColors != null && gradientColors.length != 0) {
             List<FormattedMessage> gradientMessageList = createGradientMessageList(textPart);
@@ -98,10 +94,10 @@ public final class MessageBuilder {
         if (italic) {
             message.italic = MaybeBool.True;
         }
-        if (monospaced) {
+        if (monospace) {
             message.monospace = MaybeBool.True;
         }
-        if (underlined) {
+        if (underline) {
             message.underlined = MaybeBool.True;
         }
         if (color != null) {
@@ -152,7 +148,7 @@ public final class MessageBuilder {
             return null;
         }
         int length = colorString.length();
-        if(length < 1) {
+        if (length < 1) {
             return null;
         }
         char firstCharacter = colorString.charAt(0);
@@ -165,38 +161,7 @@ public final class MessageBuilder {
         // white -> #ffffff
         NamedColor namedColor = parser.getNamedColorByName(colorString);
         if (namedColor != null) {
-            return namedColor.hexCode;
-        }
-
-        // &f -> #ffffff
-        // §f -> #ffffff
-        boolean startsWithColorToken = firstCharacter == MessageParser.COLOR_AMPERSAND
-            || firstCharacter == MessageParser.COLOR_SECTION;
-        if (length == 2 && startsWithColorToken) {
-            char colorChar = colorString.charAt(1);
-            namedColor = parser.getNamedColorByChar(colorChar);
-            if (namedColor != null) {
-                return namedColor.hexCode;
-            }
-        }
-
-        // 255,255,255 -> #ffffff
-        if (colorString.indexOf(',') != -1) {
-            if (colorString.indexOf(' ') != -1) {
-                colorString = colorString.replace(' ', Character.MIN_VALUE);
-            }
-            String[] splitRGB = colorString.split(",");
-            if (splitRGB.length != 3) {
-                return null;
-            }
-            short r = ColorUtils.parseShort(splitRGB[0]);
-            short g = ColorUtils.parseShort(splitRGB[1]);
-            short b = ColorUtils.parseShort(splitRGB[2]);
-            int colorValue = ColorUtils.rgbToInt(r, g, b);
-            if(colorValue == -1) {
-                return null;
-            }
-            return ColorUtils.rgbToHex(colorValue);
+            return namedColor.hexCode();
         }
         return null;
     }
@@ -216,3 +181,4 @@ public final class MessageBuilder {
         return argument;
     }
 }
+

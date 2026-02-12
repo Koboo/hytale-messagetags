@@ -10,6 +10,7 @@ dependencies {
     jmh(project(":messagetags-api"))
     jmh(files("libs/tinymessage-2.0.1.jar"))
     jmh(files("libs/TaleMessage-1.0.2.jar"))
+    jmh("net.kyori:adventure-text-minimessage:4.26.1")
 }
 
 sourceSets {
@@ -26,6 +27,7 @@ sourceSets {
 jmh {
     jvmArgs.add("--enable-native-access=ALL-UNNAMED")
     profilers.add("gc")
+    profilers.add("comp")
 
     // Switch based on your needs
     //resultFormat = "TEXT"

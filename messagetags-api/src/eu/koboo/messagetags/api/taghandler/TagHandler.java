@@ -40,8 +40,8 @@ public abstract class TagHandler {
         }
 
         for (int rootIndex = 0; rootIndex < checkedLength; rootIndex++) {
-            char rootChar = Character.toLowerCase(root.charAt(start + rootIndex));
-            char tagChar = Character.toLowerCase(string.charAt(rootIndex));
+            char rootChar = toLowerAscii(root.charAt(start + rootIndex));
+            char tagChar = toLowerAscii(string.charAt(rootIndex));
             if (rootChar != tagChar) {
                 return false;
             }
@@ -54,16 +54,16 @@ public abstract class TagHandler {
         @Nonnull String root,
         int start, int end) {
         int length = tagList.length;
-        if (length == 0) {
-            return false;
-        }
         for (int i = 0; i < length; i++) {
             String tag = tagList[i];
-            if (!equalsIgnoreCase(tag, root, start, end)) {
-                continue;
+            if (equalsIgnoreCase(tag, root, start, end)) {
+                return true;
             }
-            return true;
         }
         return false;
+    }
+
+    private static char toLowerAscii(char c) {
+        return (c >= 'A' && c <= 'Z') ? (char)(c | 0x20) : c;
     }
 }

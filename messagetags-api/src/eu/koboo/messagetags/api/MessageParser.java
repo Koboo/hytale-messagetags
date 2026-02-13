@@ -147,11 +147,11 @@ public final class MessageParser {
 
                 int nameStartPos;
                 int nameEndPos;
-                TagType action;
+                TagType currentType;
 
                 if (foundSlash && slashPos == openPos + 1) {
                     // </tag>
-                    action = TagType.Close;
+                    currentType = TagType.Close;
                     nameStartPos = openPos + 2;
                     if (foundArgument) {
                         nameEndPos = argumentStartPos - 1;
@@ -161,7 +161,7 @@ public final class MessageParser {
                     }
                 } else if (foundSlash && slashPos == closePos - 1) {
                     // <tag/>
-                    action = TagType.Directive;
+                    currentType = TagType.Directive;
                     nameStartPos = openPos + 1;
                     if (foundArgument) {
                         nameEndPos = argumentStartPos - 1;
@@ -171,7 +171,7 @@ public final class MessageParser {
                     }
                 } else {
                     // <tag>
-                    action = TagType.Open;
+                    currentType = TagType.Open;
                     nameStartPos = openPos + 1;
                     if (foundArgument) {
                         nameEndPos = argumentStartPos - 1;
@@ -192,7 +192,7 @@ public final class MessageParser {
                 state.updateCurrentTag(
                     nameStartPos, nameEndPos,
                     argumentStartPos, argumentEndPos,
-                    action
+                    currentType
                 );
 
                 // Found tag positions and now we process it.
@@ -216,7 +216,7 @@ public final class MessageParser {
                         state,
                         nameStartPos, nameEndPos,
                         argumentStartPos, argumentEndPos,
-                        action
+                        currentType
                     );
                     break;
                 }

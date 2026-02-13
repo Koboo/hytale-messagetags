@@ -10,7 +10,7 @@ public final class MonospaceTagHandler extends TagHandler {
 
     public static final MonospaceTagHandler INSTANCE = new MonospaceTagHandler();
 
-    private static final String[] TAGS = new String[]{"monospace", "mono"};
+    private static final String[] TAGS = new String[]{"monospace", "mono", "monospaced"};
 
     @Override
     public boolean canHandle(@Nonnull ParseContext context) {

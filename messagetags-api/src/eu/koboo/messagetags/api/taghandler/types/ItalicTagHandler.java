@@ -10,7 +10,7 @@ public final class ItalicTagHandler extends TagHandler {
 
     public static final ItalicTagHandler INSTANCE = new ItalicTagHandler();
 
-    private static final String[] TAGS = new String[]{"italic", "i"};
+    private static final String[] TAGS = new String[]{"italic", "i", "em"};
 
     @Override
     public boolean canHandle(@Nonnull ParseContext context) {

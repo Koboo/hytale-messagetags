@@ -11,7 +11,7 @@ public final class LineBreakTagHandler extends TagHandler {
 
     public static final LineBreakTagHandler INSTANCE = new LineBreakTagHandler();
 
-    private static final String[] TAGS = new String[]{"linebreak", "br"};
+    private static final String[] TAGS = new String[]{"linebreak", "br", "newline"};
     private static final FormattedMessage LINE_SEPARATOR;
 
     static {

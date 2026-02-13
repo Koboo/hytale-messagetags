@@ -10,7 +10,7 @@ public final class UnderlineTagHandler extends TagHandler {
 
     public static final UnderlineTagHandler INSTANCE = new UnderlineTagHandler();
 
-    private static final String[] TAGS = new String[]{"underline", "ul"};
+    private static final String[] TAGS = new String[]{"underline", "ul", "underlined"};
 
     @Override
     public boolean canHandle(@Nonnull ParseContext context) {

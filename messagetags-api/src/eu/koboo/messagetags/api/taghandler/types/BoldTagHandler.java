@@ -10,7 +10,7 @@ public final class BoldTagHandler extends TagHandler {
 
     public static final BoldTagHandler INSTANCE = new BoldTagHandler();
 
-    private static final String[] TAGS = new String[]{"bold", "b"};
+    private static final String[] TAGS = new String[]{"bold", "b", "strong"};
 
     @Override
     public boolean canHandle(@Nonnull ParseContext context) {

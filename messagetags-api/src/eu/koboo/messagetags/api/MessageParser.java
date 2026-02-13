@@ -5,7 +5,7 @@ import com.hypixel.hytale.server.core.Message;
 import eu.koboo.messagetags.api.colors.LegacyColorCodes;
 import eu.koboo.messagetags.api.colors.NamedColor;
 import eu.koboo.messagetags.api.taghandler.MessageBuilder;
-import eu.koboo.messagetags.api.taghandler.TagAction;
+import eu.koboo.messagetags.api.taghandler.TagType;
 import eu.koboo.messagetags.api.taghandler.TagHandler;
 import eu.koboo.messagetags.api.taghandler.types.*;
 import eu.koboo.messagetags.api.variables.TagVariable;
@@ -147,11 +147,11 @@ public final class MessageParser {
 
                 int nameStartPos;
                 int nameEndPos;
-                TagAction action;
+                TagType action;
 
                 if (foundSlash && slashPos == openPos + 1) {
                     // </tag>
-                    action = TagAction.Close;
+                    action = TagType.Close;
                     nameStartPos = openPos + 2;
                     if (foundArgument) {
                         nameEndPos = argumentStartPos - 1;
@@ -161,7 +161,7 @@ public final class MessageParser {
                     }
                 } else if (foundSlash && slashPos == closePos - 1) {
                     // <tag/>
-                    action = TagAction.Directive;
+                    action = TagType.Directive;
                     nameStartPos = openPos + 1;
                     if (foundArgument) {
                         nameEndPos = argumentStartPos - 1;
@@ -171,7 +171,7 @@ public final class MessageParser {
                     }
                 } else {
                     // <tag>
-                    action = TagAction.Open;
+                    action = TagType.Open;
                     nameStartPos = openPos + 1;
                     if (foundArgument) {
                         nameEndPos = argumentStartPos - 1;

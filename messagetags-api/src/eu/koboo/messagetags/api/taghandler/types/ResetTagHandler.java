@@ -1,7 +1,7 @@
 package eu.koboo.messagetags.api.taghandler.types;
 
 import eu.koboo.messagetags.api.taghandler.MessageBuilder;
-import eu.koboo.messagetags.api.taghandler.TagAction;
+import eu.koboo.messagetags.api.taghandler.TagType;
 import eu.koboo.messagetags.api.taghandler.TagHandler;
 
 import javax.annotation.Nonnull;
@@ -13,8 +13,8 @@ public final class ResetTagHandler extends TagHandler {
     private static final String[] TAGS = new String[]{"reset", "r"};
 
     @Override
-    public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd, @Nonnull TagAction action) {
-        if(!state.isType(TagAction.Open) && !state.isType(TagAction.Directive)) {
+    public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd, @Nonnull TagType action) {
+        if(!state.isType(TagType.Open) && !state.isType(TagType.Directive)) {
             return false;
         }
         return hasTagOf(TAGS, state.getInputText(), nameStart, nameEnd);
@@ -24,8 +24,8 @@ public final class ResetTagHandler extends TagHandler {
     public boolean handle(@Nonnull MessageBuilder state,
                           int nameStart, int nameEnd,
                           int argumentStart, int argumentEnd,
-                          @Nonnull TagAction action) {
-        if (action != TagAction.Open && action != TagAction.Directive) {
+                          @Nonnull TagType action) {
+        if (action != TagType.Open && action != TagType.Directive) {
             return false;
         }
         state.resetStyle();

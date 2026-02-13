@@ -2,7 +2,7 @@ package eu.koboo.messagetags.api.taghandler.types;
 
 import com.hypixel.hytale.protocol.FormattedMessage;
 import eu.koboo.messagetags.api.taghandler.MessageBuilder;
-import eu.koboo.messagetags.api.taghandler.TagAction;
+import eu.koboo.messagetags.api.taghandler.TagType;
 import eu.koboo.messagetags.api.taghandler.TagHandler;
 
 import javax.annotation.Nonnull;
@@ -20,8 +20,8 @@ public final class LineBreakTagHandler extends TagHandler {
     }
 
     @Override
-    public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd, @Nonnull TagAction action) {
-        if(!state.isType(TagAction.Open) && !state.isType(TagAction.Directive)) {
+    public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd, @Nonnull TagType action) {
+        if(!state.isType(TagType.Open) && !state.isType(TagType.Directive)) {
             return false;
         }
         return hasTagOf(TAGS, state.getInputText(), nameStart, nameEnd);
@@ -31,7 +31,7 @@ public final class LineBreakTagHandler extends TagHandler {
     public boolean handle(@Nonnull MessageBuilder state,
                           int nameStart, int nameEnd,
                           int argumentStart, int argumentEnd,
-                          @Nonnull TagAction action) {
+                          @Nonnull TagType action) {
         // Since then does a line separator need styling? O_o
         //state.applyStyleTo(LINE_SEPARATOR);
         state.appendMessage(LINE_SEPARATOR);

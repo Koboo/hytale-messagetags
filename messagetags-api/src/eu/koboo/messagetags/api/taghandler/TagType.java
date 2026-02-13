@@ -1,6 +1,6 @@
 package eu.koboo.messagetags.api.taghandler;
 
-public enum TagAction {
+public enum TagType {
     /**
      * i.e.
      * "<TAG>"

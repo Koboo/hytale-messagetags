@@ -31,7 +31,7 @@ public final class MessageBuilder {
     private int currentNameEnd;
     private int currentArgumentStart;
     private int currentArgumentEnd;
-    private TagAction currentAction;
+    private TagType currentAction;
 
     public MessageBuilder(MessageParser parser, String inputText, boolean strip) {
         this.parser = parser;
@@ -187,7 +187,7 @@ public final class MessageBuilder {
         return argument;
     }
 
-    public boolean isType(@Nonnull TagAction requiredAction) {
+    public boolean isType(@Nonnull TagType requiredAction) {
         return currentAction == requiredAction;
     }
 
@@ -199,7 +199,7 @@ public final class MessageBuilder {
     public void updateCurrentTag(
         int nameStartPos, int nameEndPos,
         int argumentStart, int argumentEnd,
-        @Nonnull TagAction action) {
+        @Nonnull TagType action) {
         this.currentNameStart = nameStartPos;
         this.currentNameEnd = nameEndPos;
         this.currentArgumentStart = argumentStart;

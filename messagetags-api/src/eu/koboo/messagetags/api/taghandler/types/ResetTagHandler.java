@@ -1,8 +1,8 @@
 package eu.koboo.messagetags.api.taghandler.types;
 
 import eu.koboo.messagetags.api.taghandler.ParseContext;
-import eu.koboo.messagetags.api.taghandler.TagType;
 import eu.koboo.messagetags.api.taghandler.TagHandler;
+import eu.koboo.messagetags.api.taghandler.TagType;
 
 import javax.annotation.Nonnull;
 
@@ -14,7 +14,7 @@ public final class ResetTagHandler extends TagHandler {
 
     @Override
     public boolean canHandle(@Nonnull ParseContext context) {
-        if(!context.isType(TagType.Open) && !context.isType(TagType.Directive)) {
+        if (!context.isType(TagType.Open) && !context.isType(TagType.Directive)) {
             return false;
         }
         return context.hasTagOf(TAGS);

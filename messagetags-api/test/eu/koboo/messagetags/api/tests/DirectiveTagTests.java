@@ -1,11 +1,12 @@
 package eu.koboo.messagetags.api.tests;
 
-import static eu.koboo.messagetags.api.tests.TestUtils.assertMessage;
-
 import eu.koboo.messagetags.api.MessageTags;
-import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
+
+import static eu.koboo.messagetags.api.tests.TestUtils.assertMessage;
 
 public class DirectiveTagTests {
 

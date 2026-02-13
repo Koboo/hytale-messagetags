@@ -1,8 +1,8 @@
 package eu.koboo.messagetags.api.taghandler.types;
 
 import eu.koboo.messagetags.api.taghandler.ParseContext;
-import eu.koboo.messagetags.api.taghandler.TagType;
 import eu.koboo.messagetags.api.taghandler.TagHandler;
+import eu.koboo.messagetags.api.taghandler.TagType;
 
 import javax.annotation.Nonnull;
 

@@ -9,14 +9,14 @@ public class TestUtils {
     public static void assertMessage(String expected, Message message) {
         String json = MessageTags.toJson(message);
         print(json);
-        if(expected != null && !expected.isEmpty()) {
+        if (expected != null && !expected.isEmpty()) {
             Assertions.assertEquals(expected, json);
         }
     }
 
     public static void assertStripped(String expected, String stripped) {
         print(stripped);
-        if(expected != null && !expected.isEmpty()) {
+        if (expected != null && !expected.isEmpty()) {
             Assertions.assertEquals(expected, stripped);
         }
     }

@@ -2,8 +2,8 @@ package eu.koboo.messagetags.api.taghandler.types;
 
 import com.hypixel.hytale.common.util.ArrayUtil;
 import eu.koboo.messagetags.api.taghandler.ParseContext;
-import eu.koboo.messagetags.api.taghandler.TagType;
 import eu.koboo.messagetags.api.taghandler.TagHandler;
+import eu.koboo.messagetags.api.taghandler.TagType;
 
 import javax.annotation.Nonnull;
 
@@ -15,7 +15,7 @@ public final class GradientTagHandler extends TagHandler {
 
     @Override
     public boolean canHandle(@Nonnull ParseContext context) {
-        if(!context.isType(TagType.Open) && !context.isType(TagType.Close)) {
+        if (!context.isType(TagType.Open) && !context.isType(TagType.Close)) {
             return false;
         }
         return context.hasTagOf(TAGS);

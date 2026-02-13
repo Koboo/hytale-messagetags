@@ -5,8 +5,8 @@ import com.hypixel.hytale.server.core.Message;
 import eu.koboo.messagetags.api.color.LegacyColorCodes;
 import eu.koboo.messagetags.api.color.NamedColor;
 import eu.koboo.messagetags.api.taghandler.ParseContext;
-import eu.koboo.messagetags.api.taghandler.TagType;
 import eu.koboo.messagetags.api.taghandler.TagHandler;
+import eu.koboo.messagetags.api.taghandler.TagType;
 import eu.koboo.messagetags.api.taghandler.types.*;
 import eu.koboo.messagetags.api.variable.TagVariable;
 
@@ -96,7 +96,7 @@ public final class MessageParser {
         // Check for any variables
         if (variables != null) {
             int variablesLength = variables.length;
-            if(variablesLength > 0) {
+            if (variablesLength > 0) {
                 // Replace the placeholder variables with their actual values
                 for (int i = 0; i < variablesLength; i++) {
                     TagVariable variable = variables[i];

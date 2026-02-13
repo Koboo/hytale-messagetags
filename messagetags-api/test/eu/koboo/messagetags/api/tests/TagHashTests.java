@@ -25,7 +25,7 @@ public class TagHashTests {
     private static void assertHash(Set<Integer> hashCodeSet, String tag, boolean expectContain) {
         int tagHash = MessageParser.createStringHashCode(tag, 0, tag.length());
         System.out.println(tag + " -> " + tagHash + " (" + hashCodeSet.contains(tagHash) + ")");
-        if(expectContain) {
+        if (expectContain) {
             Assertions.assertTrue(hashCodeSet.contains(tagHash));
         } else {
             Assertions.assertFalse(hashCodeSet.contains(tagHash));

@@ -20,7 +20,8 @@ Basically, a MiniMessage clone for Hytale.
 - [Builtin Tags](#builtin-tags)
 - [Supported Color Formats](#-supported-color-formats)
 - [Named Colors](#named-and-legacy-colors)
-- [MiniMessage Online Editor](#minimessage-online-editor)
+- [MiniMessage Online Editor](https://webui.advntr.dev/)
+- [Benchmarks](https://github.com/Koboo/hytale-messagetags/BENCHMARKS.md)
 
 **Links**
 - [GitHub](https://github.com/Koboo/hytale-messagetags)
@@ -133,7 +134,8 @@ Every tag follows the same format. There only 3 tag types:
 ## Bold
 
 **Preview: Hello World!**
-![IMG](https://i.imgur.com/r7FVRbM.png)
+
+![IMG](https://i.imgur.com/rU1fuLj.png)
 
 #### Tags:
 
@@ -146,7 +148,7 @@ Every tag follows the same format. There only 3 tag types:
 
 <u>Preview: Hello World!</u>
 
-![IMG](https://i.imgur.com/GwarcXb.png)
+![IMG](https://i.imgur.com/U6XmuoD.png)
 
 #### Tags:
 
@@ -159,7 +161,7 @@ Every tag follows the same format. There only 3 tag types:
 
 _Preview: Hello World!_
 
-![IMG](https://i.imgur.com/lNPfKAC.png)
+![IMG](https://i.imgur.com/YYa9ca1.png)
 
 #### Tags:
 
@@ -172,7 +174,7 @@ _Preview: Hello World!_
 
 ``Preview: This text is monospaced``
 
-![IMG](https://i.imgur.com/7WdLYgt.png)
+![IMG](https://i.imgur.com/9IUGbC6.png)
 
 #### Tags:
 
@@ -185,7 +187,7 @@ _Preview: Hello World!_
 
 Applies the color to the text.
 
-![IMG](https://i.imgur.com/hECAIsL.png)
+![IMG](https://i.imgur.com/5Yyyjo6.png)
 
 #### Tags:
 
@@ -212,7 +214,7 @@ Applies the color to the text.
 
 Inserts a new line break using `\n`
 
-![IMG](https://i.imgur.com/GIOBpSN.png)
+![IMG](https://i.imgur.com/0jpsgDy.png)
 
 #### Tags:
 
@@ -223,9 +225,9 @@ Inserts a new line break using `\n`
 
 ## Link
 
-[Preview: This text has an embedded link](https://github.com/Koboo/README/#link)
+[Preview: This text has an embedded link](https://github.com/Koboo/hytale-messagetags)
 
-![IMG](https://i.imgur.com/fiqppUu.png)
+![IMG](https://i.imgur.com/vnAX7Yo.png)
 
 #### Tags:
 
@@ -242,7 +244,7 @@ Inserts a new line break using `\n`
 
 Closes any unclosed styles and tags.
 
-![IMG](https://i.imgur.com/vaIGOkh.png)
+![IMG](https://i.imgur.com/OADPDqk.png)
 
 #### Tags:
 
@@ -317,15 +319,11 @@ Here is a list of all supported color formats with an example.
 **Named colors:**
 - `white`
 
-**RGB colors:**
-- `255,255,255`
-
 #### Notes:
 
 - All formats are functionally equivalent and can be mixed freely
 - You can register your own ``NamedColor``
 - You can override existing ``NamedColor``
-- Your custom ``NamedColor`` also support color codes using `§` and `&`
 
 ## Named and legacy colors
 
@@ -356,9 +354,16 @@ You can easily inline legacy color codes using the symbols ``§`` and ``&``.
 <bold>This is &6my §a§mawesome &rmessage, which uses legacy color codes!</bold>
 ````
 
+![IMG](https://i.imgur.com/xohJ1tL.png)
+
 ## MiniMessage Online Editor
 
 There is also a web editor for MiniMessage, which displays your preview in a Minecraft-style.
 You can edit your texts there and just parse them using this library.
 
 [MiniMessage Web Editor](https://webui.advntr.dev/)
+
+
+## Benchmarks
+
+You can check out benchmarks for this library [here](https://github.com/Koboo/hytale-messagetags/BENCHMARKS.md).

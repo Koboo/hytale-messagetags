@@ -9,6 +9,7 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 .kotlin
+NOTES.md
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

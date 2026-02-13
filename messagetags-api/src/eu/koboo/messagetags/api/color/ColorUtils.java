@@ -1,4 +1,4 @@
-package eu.koboo.messagetags.api.colors;
+package eu.koboo.messagetags.api.color;
 
 import com.hypixel.hytale.math.util.MathUtil;
 import eu.koboo.messagetags.api.MessageParser;

@@ -1,6 +1,6 @@
-package eu.koboo.messagetags.api.colors;
+package eu.koboo.messagetags.api.color;
 
-import eu.koboo.messagetags.api.taghandler.MessageBuilder;
+import eu.koboo.messagetags.api.taghandler.ParseContext;
 
 public final class LegacyColorCodes {
 
@@ -18,7 +18,7 @@ public final class LegacyColorCodes {
             || code == 'r';
     }
 
-    public static void applyLegacyColorCode(MessageBuilder state, char legacyCode) {
+    public static void applyLegacyColorCode(ParseContext state, char legacyCode) {
         if (state.strip) {
             return;
         }

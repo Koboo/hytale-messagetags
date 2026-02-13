@@ -1,4 +1,4 @@
-package eu.koboo.messagetags.api.colors;
+package eu.koboo.messagetags.api.color;
 
 import javax.annotation.Nonnull;
 import java.util.Locale;

@@ -4,15 +4,15 @@ import com.hypixel.hytale.protocol.FormattedMessage;
 import com.hypixel.hytale.protocol.MaybeBool;
 import com.hypixel.hytale.server.core.Message;
 import eu.koboo.messagetags.api.MessageParser;
-import eu.koboo.messagetags.api.colors.ColorUtils;
-import eu.koboo.messagetags.api.colors.NamedColor;
+import eu.koboo.messagetags.api.color.ColorUtils;
+import eu.koboo.messagetags.api.color.NamedColor;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class MessageBuilder {
+public final class ParseContext {
 
     private final MessageParser parser;
     private final String inputText;
@@ -33,7 +33,7 @@ public final class MessageBuilder {
     private int currentArgumentEnd;
     private TagType currentType;
 
-    public MessageBuilder(MessageParser parser, String inputText, boolean strip) {
+    public ParseContext(MessageParser parser, String inputText, boolean strip) {
         this.parser = parser;
         this.inputText = inputText;
         this.strip = strip;
@@ -194,6 +194,49 @@ public final class MessageBuilder {
     @Nonnull
     public String getCurrentTag() {
         return inputText.substring(currentNameStart, currentNameEnd);
+    }
+
+    private boolean equalsIgnoreCase(@Nonnull String string) {
+
+        // Start is bigger than or equal to the end? Can't be correct.
+        if (currentNameStart >= currentNameEnd) {
+            return false;
+        }
+
+        // Check if the given root and the text have equal length
+        int checkedLength = currentNameEnd - currentNameStart;
+        if (checkedLength != string.length()) {
+            return false;
+        }
+
+        for (int rootIndex = 0; rootIndex < checkedLength; rootIndex++) {
+            char rootChar = toLowerAscii(inputText.charAt(currentNameStart + rootIndex));
+            char tagChar = toLowerAscii(string.charAt(rootIndex));
+            if (rootChar != tagChar) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean hasTagOf(@Nonnull String[] tagList) {
+        int length = tagList.length;
+        for (int i = 0; i < length; i++) {
+            String tag = tagList[i];
+            if (equalsIgnoreCase(tag)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static char toLowerAscii(char c) {
+        return (c >= 'A' && c <= 'Z') ? (char) (c | 0x20) : c;
+    }
+
+    @Nonnull
+    public TagType getCurrentType() {
+        return currentType;
     }
 
     public void updateCurrentTag(

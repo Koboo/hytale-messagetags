@@ -1,7 +1,7 @@
 package eu.koboo.messagetags.api.taghandler.types;
 
 import com.hypixel.hytale.common.util.ArrayUtil;
-import eu.koboo.messagetags.api.taghandler.MessageBuilder;
+import eu.koboo.messagetags.api.taghandler.ParseContext;
 import eu.koboo.messagetags.api.taghandler.TagType;
 import eu.koboo.messagetags.api.taghandler.TagHandler;
 
@@ -14,37 +14,34 @@ public final class GradientTagHandler extends TagHandler {
     private static final String[] TAGS = new String[]{"gradient", "grnt"};
 
     @Override
-    public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd, @Nonnull TagType currentType) {
-        if(!state.isType(TagType.Open) && !state.isType(TagType.Close)) {
+    public boolean canHandle(@Nonnull ParseContext context) {
+        if(!context.isType(TagType.Open) && !context.isType(TagType.Close)) {
             return false;
         }
-        return hasTagOf(TAGS, state.getInputText(), nameStart, nameEnd);
+        return context.hasTagOf(TAGS);
     }
 
     @Override
-    public boolean handle(@Nonnull MessageBuilder state,
-                          int nameStart, int nameEnd,
-                          int argumentStart, int argumentEnd,
-                          @Nonnull TagType currentType) {
-        switch (currentType) {
+    public boolean handle(@Nonnull ParseContext context) {
+        switch (context.getCurrentType()) {
             case Open -> {
-                String argument = state.getArgument();
-                String[] colors = createColorList(state, argument);
+                String argument = context.getArgument();
+                String[] colors = createColorList(context, argument);
                 if (colors == null || colors.length == 0) {
                     return false;
                 }
-                state.gradientColors = colors;
+                context.gradientColors = colors;
                 return true;
             }
             case Close -> {
-                state.gradientColors = null;
+                context.gradientColors = null;
                 return true;
             }
         }
         return false;
     }
 
-    private String[] createColorList(MessageBuilder state, String argument) {
+    private String[] createColorList(ParseContext state, String argument) {
         if (argument == null) {
             return null;
         }

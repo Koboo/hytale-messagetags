@@ -1,6 +1,6 @@
 package eu.koboo.messagetags.api.taghandler.types;
 
-import eu.koboo.messagetags.api.taghandler.MessageBuilder;
+import eu.koboo.messagetags.api.taghandler.ParseContext;
 import eu.koboo.messagetags.api.taghandler.TagType;
 import eu.koboo.messagetags.api.taghandler.TagHandler;
 
@@ -11,26 +11,18 @@ public final class DynamicColorTagHandler extends TagHandler {
     public static final DynamicColorTagHandler INSTANCE = new DynamicColorTagHandler();
 
     @Override
-    public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd, @Nonnull TagType currentType) {
-        if(!state.isType(TagType.Open)) {
-            return false;
-        }
-        String tag = state.getCurrentTag();
-        String color = state.parseColor(tag);
-        return color != null;
+    public boolean canHandle(@Nonnull ParseContext context) {
+        return context.isType(TagType.Open);
     }
 
     @Override
-    public boolean handle(@Nonnull MessageBuilder state,
-                          int nameStart, int nameEnd,
-                          int argumentStart, int argumentEnd,
-                          @Nonnull TagType currentType) {
-        String tag = state.getCurrentTag();
-        String color = state.parseColor(tag);
+    public boolean handle(@Nonnull ParseContext context) {
+        String tag = context.getCurrentTag();
+        String color = context.parseColor(tag);
         if (color == null) {
             return false;
         }
-        state.color = color;
+        context.color = color;
         return true;
     }
 }

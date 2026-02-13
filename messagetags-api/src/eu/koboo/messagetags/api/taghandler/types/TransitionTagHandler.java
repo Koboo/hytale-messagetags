@@ -1,8 +1,8 @@
 package eu.koboo.messagetags.api.taghandler.types;
 
 import com.hypixel.hytale.common.util.ArrayUtil;
-import eu.koboo.messagetags.api.colors.ColorUtils;
-import eu.koboo.messagetags.api.taghandler.MessageBuilder;
+import eu.koboo.messagetags.api.color.ColorUtils;
+import eu.koboo.messagetags.api.taghandler.ParseContext;
 import eu.koboo.messagetags.api.taghandler.TagType;
 import eu.koboo.messagetags.api.taghandler.TagHandler;
 
@@ -15,21 +15,18 @@ public final class TransitionTagHandler extends TagHandler {
     private static final String[] TAGS = new String[]{"transition", "trnsn"};
 
     @Override
-    public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd, @Nonnull TagType currentType) {
-        if(!state.isType(TagType.Open) && !state.isType(TagType.Close)) {
+    public boolean canHandle(@Nonnull ParseContext context) {
+        if(!context.isType(TagType.Open) && !context.isType(TagType.Close)) {
             return false;
         }
-        return hasTagOf(TAGS, state.getInputText(), nameStart, nameEnd);
+        return context.hasTagOf(TAGS);
     }
 
     @Override
-    public boolean handle(@Nonnull MessageBuilder state,
-                          int nameStart, int nameEnd,
-                          int argumentStart, int argumentEnd,
-                          @Nonnull TagType currentType) {
-        switch (currentType) {
+    public boolean handle(@Nonnull ParseContext context) {
+        switch (context.getCurrentType()) {
             case Open -> {
-                String argument = state.getArgument();
+                String argument = context.getArgument();
                 if (argument == null) {
                     return false;
                 }
@@ -40,7 +37,7 @@ public final class TransitionTagHandler extends TagHandler {
                     return false;
                 }
                 int lastCursor = length - 1;
-                String[] colors = createColorList(state, colorSplit, length, lastCursor);
+                String[] colors = createColorList(context, colorSplit, length, lastCursor);
                 if (colors == null || colors.length == 0) {
                     return false;
                 }
@@ -52,18 +49,18 @@ public final class TransitionTagHandler extends TagHandler {
                 if (color == null) {
                     return false;
                 }
-                state.color = color;
+                context.color = color;
                 return true;
             }
             case Close -> {
-                state.color = null;
+                context.color = null;
                 return true;
             }
         }
         return false;
     }
 
-    private String[] createColorList(MessageBuilder state, String[] colorSplit, int length, int lastCursor) {
+    private String[] createColorList(ParseContext state, String[] colorSplit, int length, int lastCursor) {
         String[] colors = new String[0];
         for (int cursor = 0; cursor < length; cursor++) {
             if (cursor == lastCursor) {

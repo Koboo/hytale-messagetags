@@ -2,8 +2,9 @@ package eu.koboo.messagetags.api;
 
 import com.hypixel.hytale.codec.ExtraInfo;
 import com.hypixel.hytale.server.core.Message;
-import eu.koboo.messagetags.api.colors.NamedColor;
+import eu.koboo.messagetags.api.color.NamedColor;
 import eu.koboo.messagetags.api.taghandler.TagHandler;
+import eu.koboo.messagetags.api.variable.TagVariable;
 import org.bson.BsonValue;
 
 import javax.annotation.Nonnull;
@@ -24,8 +25,8 @@ public final class MessageTags {
      * @return The parsed {@link Message}.
      */
     @Nonnull
-    public static Message parse(@Nullable String text) {
-        return INSTANCE.parse(text, false);
+    public static Message parse(@Nullable String text, @Nullable TagVariable... variables) {
+        return INSTANCE.parse(text, false, variables);
     }
 
     /**
@@ -36,8 +37,8 @@ public final class MessageTags {
      * @return The parsed {@link Message}.
      */
     @Nonnull
-    public static Message strip(@Nullable String text) {
-        return INSTANCE.parse(text, true);
+    public static Message strip(@Nullable String text, @Nullable TagVariable... variables) {
+        return INSTANCE.parse(text, true, variables);
     }
 
     /**
@@ -48,8 +49,8 @@ public final class MessageTags {
      * @return The parsed and simplified {@link String}.
      */
     @Nullable
-    public static String stripToString(@Nullable String text) {
-        Message message = INSTANCE.parse(text, true);
+    public static String stripToString(@Nullable String text, @Nullable TagVariable... variables) {
+        Message message = INSTANCE.parse(text, true, variables);
         return INSTANCE.stripRawText(message);
     }
 

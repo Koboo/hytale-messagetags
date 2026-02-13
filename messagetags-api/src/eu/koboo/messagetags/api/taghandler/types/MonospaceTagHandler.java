@@ -1,6 +1,6 @@
 package eu.koboo.messagetags.api.taghandler.types;
 
-import eu.koboo.messagetags.api.taghandler.MessageBuilder;
+import eu.koboo.messagetags.api.taghandler.ParseContext;
 import eu.koboo.messagetags.api.taghandler.TagType;
 import eu.koboo.messagetags.api.taghandler.TagHandler;
 
@@ -13,25 +13,22 @@ public final class MonospaceTagHandler extends TagHandler {
     private static final String[] TAGS = new String[]{"monospace", "mono"};
 
     @Override
-    public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd, @Nonnull TagType currentType) {
-        if(!state.isType(TagType.Open) && !state.isType(TagType.Close)) {
+    public boolean canHandle(@Nonnull ParseContext context) {
+        if(!context.isType(TagType.Open) && !context.isType(TagType.Close)) {
             return false;
         }
-        return hasTagOf(TAGS, state.getInputText(), nameStart, nameEnd);
+        return context.hasTagOf(TAGS);
     }
 
     @Override
-    public boolean handle(@Nonnull MessageBuilder state,
-                          int nameStart, int nameEnd,
-                          int argumentStart, int argumentEnd,
-                          @Nonnull TagType currentType) {
-        switch (currentType) {
+    public boolean handle(@Nonnull ParseContext context) {
+        switch (context.getCurrentType()) {
             case Open -> {
-                state.monospace = true;
+                context.monospace = true;
                 return true;
             }
             case Close -> {
-                state.monospace = false;
+                context.monospace = false;
                 return true;
             }
         }

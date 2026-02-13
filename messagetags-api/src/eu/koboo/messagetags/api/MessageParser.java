@@ -2,13 +2,13 @@ package eu.koboo.messagetags.api;
 
 import com.hypixel.hytale.common.util.ArrayUtil;
 import com.hypixel.hytale.server.core.Message;
-import eu.koboo.messagetags.api.colors.LegacyColorCodes;
-import eu.koboo.messagetags.api.colors.NamedColor;
-import eu.koboo.messagetags.api.taghandler.MessageBuilder;
+import eu.koboo.messagetags.api.color.LegacyColorCodes;
+import eu.koboo.messagetags.api.color.NamedColor;
+import eu.koboo.messagetags.api.taghandler.ParseContext;
 import eu.koboo.messagetags.api.taghandler.TagType;
 import eu.koboo.messagetags.api.taghandler.TagHandler;
 import eu.koboo.messagetags.api.taghandler.types.*;
-import eu.koboo.messagetags.api.variables.TagVariable;
+import eu.koboo.messagetags.api.variable.TagVariable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -93,10 +93,17 @@ public final class MessageParser {
         if (!hasParseableCharacter(inputText, inputLength)) {
             return Message.raw(inputText);
         }
-        if (variables != null && variables.length > 0) {
+        if (variables != null) {
+            int variablesLength = variables.length;
+            if(variablesLength > 0) {
+                for (int i = 0; i < variablesLength; i++) {
+                    TagVariable variable = variables[i];
+                    inputText = inputText.replace(variable.name(), variable.value());
+                }
+            }
         }
 
-        final MessageBuilder state = new MessageBuilder(this, inputText, strip);
+        final ParseContext context = new ParseContext(this, inputText, strip);
 
         int inputPos = 0;
 
@@ -187,9 +194,9 @@ public final class MessageParser {
                 // The part "First" gets flushed with the current style.
                 // The tag now gets parsed by its handler. If the handler can't handle
                 // the tag, the tag gets appended as raw text.
-                flush(state, inputText, afterPreviousClosePos, openPos);
+                flush(context, inputText, afterPreviousClosePos, openPos);
 
-                state.updateCurrentTag(
+                context.updateCurrentTag(
                     nameStartPos, nameEndPos,
                     argumentStartPos, argumentEndPos,
                     currentType
@@ -200,7 +207,7 @@ public final class MessageParser {
 
                 for (int handlerIndex = 0; handlerIndex < handlerLength; handlerIndex++) {
                     TagHandler tagHandler = tagHandlers[handlerIndex];
-                    boolean canHandle = tagHandler.canHandle(state, nameStartPos, nameEndPos);
+                    boolean canHandle = tagHandler.canHandle(context);
                     if (!canHandle) {
                         continue;
                     }
@@ -212,19 +219,14 @@ public final class MessageParser {
                     // The tag now gets parsed by its handler. If the handler can't handle
                     // the tag, the tag gets appended as raw text.
 
-                    wasHandled = tagHandler.handle(
-                        state,
-                        nameStartPos, nameEndPos,
-                        argumentStartPos, argumentEndPos,
-                        currentType
-                    );
+                    wasHandled = tagHandler.handle(context);
                     break;
                 }
 
                 // Check if the text was handled.
                 // Unhandled text gets append as a raw message with the current styling. otherwise, we don't touch it.
                 if (!wasHandled) {
-                    flush(state, inputText, openPos, closePos + 1);
+                    flush(context, inputText, openPos, closePos + 1);
                 }
 
                 // Move to next, we are at our close character
@@ -248,8 +250,8 @@ public final class MessageParser {
                 char legacyColorCode = inputText.charAt(inputPos + 1);
                 boolean isLegacyColorCode = LegacyColorCodes.isLegacyColorCode(legacyColorCode);
                 if (isLegacyColorCode) {
-                    flush(state, inputText, afterPreviousClosePos, inputPos);
-                    LegacyColorCodes.applyLegacyColorCode(state, legacyColorCode);
+                    flush(context, inputText, afterPreviousClosePos, inputPos);
+                    LegacyColorCodes.applyLegacyColorCode(context, legacyColorCode);
 
                     inputPos = inputPos + 2;
                     afterPreviousClosePos = inputPos;
@@ -262,9 +264,9 @@ public final class MessageParser {
         }
 
         // Flush any remaining inputText onto the currently pending message.
-        flush(state, inputText, afterPreviousClosePos, inputLength);
+        flush(context, inputText, afterPreviousClosePos, inputLength);
 
-        return state.buildRootMessage();
+        return context.buildRootMessage();
     }
 
     @Nullable
@@ -297,7 +299,7 @@ public final class MessageParser {
         return false;
     }
 
-    private void flush(MessageBuilder state, String inputText, int startPos, int endPos) {
+    private void flush(ParseContext state, String inputText, int startPos, int endPos) {
         if (startPos >= endPos) {
             return;
         }

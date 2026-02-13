@@ -5,6 +5,7 @@ import static eu.koboo.messagetags.api.tests.TestUtils.assertMessage;
 import eu.koboo.messagetags.api.MessageTags;
 import java.util.stream.Stream;
 
+import eu.koboo.messagetags.api.variable.TagVariable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -67,6 +68,23 @@ public class SimpleTagTests {
         String expected = "{\"Children\": [{\"RawText\": \"L\", \"Bold\": true, \"Italic\": null, \"Monospace\": null, \"Underline\": null}, {\"RawText\": \"eg\", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null}, {\"RawText\": \"ac\", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null, \"Color\": \"#aa0000\"}, {\"RawText\": \"y c\", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": true, \"Color\": \"#aa0000\"}, {\"RawText\": \"olor \", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": true, \"Color\": \"#ffffff\"}, {\"RawText\": \"t\", \"Bold\": true, \"Italic\": null, \"Monospace\": null, \"Underline\": true, \"Color\": \"#ffffff\"}, {\"RawText\": \"est\", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null}, {\"RawText\": \"\\n\", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null}], \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null}";
         String tagText = "<bold>L</bold>eg&4ac<underline>y c§folor <bold>t&rest<linebreak>";
         assertMessage(expected, MessageTags.parse(tagText));
+    }
+
+    @Test
+    public void test5() {
+        String expected = "{\"Children\": [{\"RawText\": \"Hello World!\", \"Bold\": true, \"Italic\": null, \"Monospace\": null, \"Underline\": null}], \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null}";
+        String tagText = "<bold><text></bold>";
+        assertMessage(expected, MessageTags.parse(tagText, TagVariable.of("text", "Hello World!")));
+    }
+
+    @Test
+    public void test6() {
+        String expected = "{\"Children\": [{\"RawText\": \"Hello World!\", \"Bold\": true, \"Italic\": true, \"Monospace\": null, \"Underline\": null, \"Color\": \"#ff5555\"}], \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null}";
+        String tagText = "<bold><style><text></bold>";
+        assertMessage(expected, MessageTags.parse(tagText,
+            TagVariable.of("text", "Hello World!"),
+            TagVariable.of("style", "<red><italic>")
+        ));
     }
 
 }

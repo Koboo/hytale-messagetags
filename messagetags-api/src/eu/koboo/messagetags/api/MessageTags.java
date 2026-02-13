@@ -30,7 +30,7 @@ public final class MessageTags {
     }
 
     /**
-     * Uses the given String and strips away every tag, color and formatting
+     * Uses the given String and strips away every tag, color, and formatting
      * and returns the same structure as the parse method.
      *
      * @param text The text to strip.

@@ -89,17 +89,22 @@ public final class MessageParser {
         if (inputText == null || inputText.isEmpty()) {
             return Message.empty();
         }
-        final int inputLength = inputText.length();
+        int inputLength = inputText.length();
         if (!hasParseableCharacter(inputText, inputLength)) {
             return Message.raw(inputText);
         }
+        // Check for any variables
         if (variables != null) {
             int variablesLength = variables.length;
             if(variablesLength > 0) {
+                // Replace the placeholder variables with their actual values
                 for (int i = 0; i < variablesLength; i++) {
                     TagVariable variable = variables[i];
                     inputText = inputText.replace(variable.name(), variable.value());
                 }
+
+                // Reassign input length, probably changed if any variables were replaced
+                inputLength = inputText.length();
             }
         }
 

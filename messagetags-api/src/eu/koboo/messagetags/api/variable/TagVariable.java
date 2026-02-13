@@ -10,6 +10,12 @@ public record TagVariable(String name, String value) {
         if(name.isEmpty()) {
             throw new IllegalArgumentException("Name cannot be empty!");
         }
+        if(!name.startsWith("<")) {
+            name = "<" + name;
+        }
+        if(!name.endsWith(">")) {
+            name = name + ">";
+        }
         this.name = name;
         if(value == null) {
             throw new NullPointerException("Value cannot be null!");

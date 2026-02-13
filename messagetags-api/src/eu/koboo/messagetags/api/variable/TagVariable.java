@@ -1,8 +1,11 @@
 package eu.koboo.messagetags.api.variable;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public record TagVariable(String name, String value) {
 
-    public TagVariable(String name, String value) {
+    public TagVariable {
         if (name == null) {
             throw new NullPointerException("Name cannot be null!");
         }
@@ -16,18 +19,9 @@ public record TagVariable(String name, String value) {
         if (!name.endsWith(">")) {
             name = name + ">";
         }
-        this.name = name;
-        if (value == null) {
-            throw new NullPointerException("Value cannot be null!");
-        }
-        value = value.trim();
-        if (value.isEmpty()) {
-            throw new IllegalArgumentException("Value cannot be empty!");
-        }
-        this.value = value;
     }
 
-    public static TagVariable of(String name, String value) {
+    public static TagVariable of(@Nonnull String name, @Nullable String value) {
         return new TagVariable(name, value);
     }
 }

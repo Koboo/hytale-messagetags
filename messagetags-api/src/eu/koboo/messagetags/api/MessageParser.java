@@ -100,7 +100,11 @@ public final class MessageParser {
                 // Replace the placeholder variables with their actual values
                 for (int i = 0; i < variablesLength; i++) {
                     TagVariable variable = variables[i];
-                    inputText = inputText.replace(variable.name(), variable.value());
+                    String value = variable.value();
+                    if(value == null || value.isEmpty()) {
+                        continue;
+                    }
+                    inputText = inputText.replace(variable.name(), value);
                 }
 
                 // Reassign input length, probably changed if any variables were replaced

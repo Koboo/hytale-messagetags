@@ -11,8 +11,11 @@ public final class DynamicColorTagHandler extends TagHandler {
     public static final DynamicColorTagHandler INSTANCE = new DynamicColorTagHandler();
 
     @Override
-    public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd) {
-        String tag = getTag(state.getInputText(), nameStart, nameEnd);
+    public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd, @Nonnull TagAction action) {
+        if(!state.isType(TagAction.Open)) {
+            return false;
+        }
+        String tag = state.getCurrentTag();
         String color = state.parseColor(tag);
         return color != null;
     }
@@ -22,10 +25,7 @@ public final class DynamicColorTagHandler extends TagHandler {
                           int nameStart, int nameEnd,
                           int argumentStart, int argumentEnd,
                           @Nonnull TagAction action) {
-        if (action != TagAction.Open && action != TagAction.Directive) {
-            return false;
-        }
-        String tag = getTag(state.getInputText(), nameStart, nameEnd);
+        String tag = state.getCurrentTag();
         String color = state.parseColor(tag);
         if (color == null) {
             return false;

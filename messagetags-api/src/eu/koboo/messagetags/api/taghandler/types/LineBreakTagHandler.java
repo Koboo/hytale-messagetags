@@ -20,7 +20,10 @@ public final class LineBreakTagHandler extends TagHandler {
     }
 
     @Override
-    public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd) {
+    public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd, @Nonnull TagAction action) {
+        if(!state.isType(TagAction.Open) && !state.isType(TagAction.Directive)) {
+            return false;
+        }
         return hasTagOf(TAGS, state.getInputText(), nameStart, nameEnd);
     }
 
@@ -29,9 +32,6 @@ public final class LineBreakTagHandler extends TagHandler {
                           int nameStart, int nameEnd,
                           int argumentStart, int argumentEnd,
                           @Nonnull TagAction action) {
-        if (action != TagAction.Open && action != TagAction.Directive) {
-            return false;
-        }
         // Since then does a line separator need styling? O_o
         //state.applyStyleTo(LINE_SEPARATOR);
         state.appendMessage(LINE_SEPARATOR);

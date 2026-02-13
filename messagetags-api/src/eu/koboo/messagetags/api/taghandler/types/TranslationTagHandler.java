@@ -14,7 +14,10 @@ public final class TranslationTagHandler extends TagHandler {
     private static final String[] TAGS = new String[]{"translation", "lang"};
 
     @Override
-    public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd) {
+    public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd, @Nonnull TagAction action) {
+        if(!state.isType(TagAction.Open) && !state.isType(TagAction.Directive)) {
+            return false;
+        }
         return hasTagOf(TAGS, state.getInputText(), nameStart, nameEnd);
     }
 
@@ -26,7 +29,7 @@ public final class TranslationTagHandler extends TagHandler {
         if (action != TagAction.Open && action != TagAction.Directive) {
             return false;
         }
-        String translationKey = state.getArgument(argumentStart, argumentEnd);
+        String translationKey = state.getArgument();
         if (translationKey == null) {
             return false;
         }

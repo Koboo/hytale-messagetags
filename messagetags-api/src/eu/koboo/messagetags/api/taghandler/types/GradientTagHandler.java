@@ -14,7 +14,10 @@ public final class GradientTagHandler extends TagHandler {
     private static final String[] TAGS = new String[]{"gradient", "grnt"};
 
     @Override
-    public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd) {
+    public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd, @Nonnull TagAction action) {
+        if(!state.isType(TagAction.Open) && !state.isType(TagAction.Close)) {
+            return false;
+        }
         return hasTagOf(TAGS, state.getInputText(), nameStart, nameEnd);
     }
 
@@ -25,7 +28,7 @@ public final class GradientTagHandler extends TagHandler {
                           @Nonnull TagAction action) {
         switch (action) {
             case Open -> {
-                String argument = state.getArgument(argumentStart, argumentEnd);
+                String argument = state.getArgument();
                 String[] colors = createColorList(state, argument);
                 if (colors == null || colors.length == 0) {
                     return false;

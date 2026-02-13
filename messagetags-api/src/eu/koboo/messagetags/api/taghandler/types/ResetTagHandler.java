@@ -13,7 +13,10 @@ public final class ResetTagHandler extends TagHandler {
     private static final String[] TAGS = new String[]{"reset", "r"};
 
     @Override
-    public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd) {
+    public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd, @Nonnull TagAction action) {
+        if(!state.isType(TagAction.Open) && !state.isType(TagAction.Directive)) {
+            return false;
+        }
         return hasTagOf(TAGS, state.getInputText(), nameStart, nameEnd);
     }
 

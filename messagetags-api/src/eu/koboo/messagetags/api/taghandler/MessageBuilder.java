@@ -7,6 +7,7 @@ import eu.koboo.messagetags.api.MessageParser;
 import eu.koboo.messagetags.api.colors.ColorUtils;
 import eu.koboo.messagetags.api.colors.NamedColor;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,12 @@ public final class MessageBuilder {
     public String color;
     public String link;
     public String[] gradientColors;
+
+    private int currentNameStart;
+    private int currentNameEnd;
+    private int currentArgumentStart;
+    private int currentArgumentEnd;
+    private TagAction currentAction;
 
     public MessageBuilder(MessageParser parser, String inputText, boolean strip) {
         this.parser = parser;
@@ -166,18 +173,38 @@ public final class MessageBuilder {
     }
 
     @Nullable
-    public String getArgument(int argumentStart, int argumentEnd) {
-        if (argumentStart == -1 || argumentEnd == -1) {
+    public String getArgument() {
+        if (currentArgumentStart == -1 || currentArgumentEnd == -1) {
             return null;
         }
-        if (argumentStart >= argumentEnd) {
+        if (currentArgumentStart >= currentArgumentEnd) {
             return null;
         }
-        String argument = inputText.substring(argumentStart, argumentEnd).trim();
+        String argument = inputText.substring(currentArgumentStart, currentArgumentEnd).trim();
         if (argument.isEmpty()) {
             return null;
         }
         return argument;
+    }
+
+    public boolean isType(@Nonnull TagAction requiredAction) {
+        return currentAction == requiredAction;
+    }
+
+    @Nonnull
+    public String getCurrentTag() {
+        return inputText.substring(currentNameStart, currentNameEnd);
+    }
+
+    public void updateCurrentTag(
+        int nameStartPos, int nameEndPos,
+        int argumentStart, int argumentEnd,
+        @Nonnull TagAction action) {
+        this.currentNameStart = nameStartPos;
+        this.currentNameEnd = nameEndPos;
+        this.currentArgumentStart = argumentStart;
+        this.currentArgumentEnd = argumentEnd;
+        this.currentAction = action;
     }
 }
 

@@ -8,6 +8,7 @@ import eu.koboo.messagetags.api.taghandler.MessageBuilder;
 import eu.koboo.messagetags.api.taghandler.TagAction;
 import eu.koboo.messagetags.api.taghandler.TagHandler;
 import eu.koboo.messagetags.api.taghandler.types.*;
+import eu.koboo.messagetags.api.variables.TagVariable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -83,7 +84,7 @@ public final class MessageParser {
     }
 
     @Nonnull
-    public Message parse(@Nullable String inputText, boolean strip) {
+    public Message parse(@Nullable String inputText, boolean strip, TagVariable... variables) {
         // null or empty, return an empty message
         if (inputText == null || inputText.isEmpty()) {
             return Message.empty();
@@ -91,6 +92,8 @@ public final class MessageParser {
         final int inputLength = inputText.length();
         if (!hasParseableCharacter(inputText, inputLength)) {
             return Message.raw(inputText);
+        }
+        if (variables != null && variables.length > 0) {
         }
 
         final MessageBuilder state = new MessageBuilder(this, inputText, strip);
@@ -185,6 +188,12 @@ public final class MessageParser {
                 // The tag now gets parsed by its handler. If the handler can't handle
                 // the tag, the tag gets appended as raw text.
                 flush(state, inputText, afterPreviousClosePos, openPos);
+
+                state.updateCurrentTag(
+                    nameStartPos, nameEndPos,
+                    argumentStartPos, argumentEndPos,
+                    action
+                );
 
                 // Found tag positions and now we process it.
                 boolean wasHandled = false;
@@ -294,5 +303,13 @@ public final class MessageParser {
         }
         String unflushedContent = inputText.substring(startPos, endPos);
         state.appendStyledText(unflushedContent);
+    }
+
+    public static int createStringHashCode(String string, int start, int end) {
+        int hash = 0;
+        for (int i = start; i < end; i++) {
+            hash = hash * 31 + string.charAt(i);
+        }
+        return hash;
     }
 }

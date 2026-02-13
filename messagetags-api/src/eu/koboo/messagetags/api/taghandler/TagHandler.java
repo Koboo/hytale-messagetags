@@ -7,7 +7,8 @@ public abstract class TagHandler {
     public abstract boolean canHandle(
         @Nonnull MessageBuilder state,
         int nameStart,
-        int nameEnd
+        int nameEnd,
+        @Nonnull TagAction action
     );
 
     public abstract boolean handle(
@@ -18,10 +19,6 @@ public abstract class TagHandler {
         int argumentEnd,
         @Nonnull TagAction action
     );
-
-    protected static String getTag(@Nonnull String root, int start, int end) {
-        return root.substring(start, end);
-    }
 
     protected static boolean equalsIgnoreCase(
         @Nonnull String string,

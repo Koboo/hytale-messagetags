@@ -11,7 +11,7 @@ public final class DynamicColorTagHandler extends TagHandler {
     public static final DynamicColorTagHandler INSTANCE = new DynamicColorTagHandler();
 
     @Override
-    public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd, @Nonnull TagType action) {
+    public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd, @Nonnull TagType currentType) {
         if(!state.isType(TagType.Open)) {
             return false;
         }
@@ -24,7 +24,7 @@ public final class DynamicColorTagHandler extends TagHandler {
     public boolean handle(@Nonnull MessageBuilder state,
                           int nameStart, int nameEnd,
                           int argumentStart, int argumentEnd,
-                          @Nonnull TagType action) {
+                          @Nonnull TagType currentType) {
         String tag = state.getCurrentTag();
         String color = state.parseColor(tag);
         if (color == null) {

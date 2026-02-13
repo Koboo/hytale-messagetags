@@ -8,7 +8,7 @@ public abstract class TagHandler {
         @Nonnull MessageBuilder state,
         int nameStart,
         int nameEnd,
-        @Nonnull TagType action
+        @Nonnull TagType currentType
     );
 
     public abstract boolean handle(
@@ -17,7 +17,7 @@ public abstract class TagHandler {
         int nameEnd,
         int argumentStart,
         int argumentEnd,
-        @Nonnull TagType action
+        @Nonnull TagType currentType
     );
 
     protected static boolean equalsIgnoreCase(

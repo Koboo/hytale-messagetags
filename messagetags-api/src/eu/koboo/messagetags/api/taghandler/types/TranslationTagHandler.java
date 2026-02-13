@@ -14,7 +14,7 @@ public final class TranslationTagHandler extends TagHandler {
     private static final String[] TAGS = new String[]{"translation", "lang"};
 
     @Override
-    public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd, @Nonnull TagType action) {
+    public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd, @Nonnull TagType currentType) {
         if(!state.isType(TagType.Open) && !state.isType(TagType.Directive)) {
             return false;
         }
@@ -25,8 +25,8 @@ public final class TranslationTagHandler extends TagHandler {
     public boolean handle(@Nonnull MessageBuilder state,
                           int nameStart, int nameEnd,
                           int argumentStart, int argumentEnd,
-                          @Nonnull TagType action) {
-        if (action != TagType.Open && action != TagType.Directive) {
+                          @Nonnull TagType currentType) {
+        if (currentType != TagType.Open && currentType != TagType.Directive) {
             return false;
         }
         String translationKey = state.getArgument();

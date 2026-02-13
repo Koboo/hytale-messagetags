@@ -15,7 +15,7 @@ public final class TransitionTagHandler extends TagHandler {
     private static final String[] TAGS = new String[]{"transition", "trnsn"};
 
     @Override
-    public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd, @Nonnull TagType action) {
+    public boolean canHandle(@Nonnull MessageBuilder state, int nameStart, int nameEnd, @Nonnull TagType currentType) {
         if(!state.isType(TagType.Open) && !state.isType(TagType.Close)) {
             return false;
         }
@@ -26,8 +26,8 @@ public final class TransitionTagHandler extends TagHandler {
     public boolean handle(@Nonnull MessageBuilder state,
                           int nameStart, int nameEnd,
                           int argumentStart, int argumentEnd,
-                          @Nonnull TagType action) {
-        switch (action) {
+                          @Nonnull TagType currentType) {
+        switch (currentType) {
             case Open -> {
                 String argument = state.getArgument();
                 if (argument == null) {

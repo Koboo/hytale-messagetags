@@ -140,6 +140,7 @@ Every tag follows the same format. There only 3 tag types:
 #### Tags:
 
 ````html
+<strong>Hello World!</strong>
 <bold>Hello World!</bold>
 <b>Hello World!</b>
 ````
@@ -153,6 +154,7 @@ Every tag follows the same format. There only 3 tag types:
 #### Tags:
 
 ````html
+<underlined>Hello World!</underlined>
 <underline>Hello World!</underline>
 <ul>Hello World!</ul>
 ````
@@ -167,6 +169,7 @@ _Preview: Hello World!_
 
 ````html
 <italic>Hello World!</italic>
+<em>Hello World!</em>
 <i>Hello World!</i>
 ````
 
@@ -179,6 +182,7 @@ _Preview: Hello World!_
 #### Tags:
 
 ````html
+<monospaced>Hello World!</monospaced>
 <monospace>Hello World!</monospace>
 <mono>Hello World!</mono>
 ````

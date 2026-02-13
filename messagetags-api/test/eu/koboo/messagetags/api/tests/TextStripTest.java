@@ -42,4 +42,11 @@ public class TextStripTest {
         String tagText = "<gold>Leg&4acy c§folor t&rest";
         assertStripped(expected, MessageTags.stripToString(tagText));
     }
+
+    @Test
+    public void test6() {
+        String expected = "<bol>Leg&jac<unrline>y color <color:TT>test<liebreak>";
+        String tagText = "<bol>L</bold>eg&jac<unrline>y color <color:TT>test<liebreak>";
+        assertStripped(expected, MessageTags.stripToString(tagText));
+    }
 }

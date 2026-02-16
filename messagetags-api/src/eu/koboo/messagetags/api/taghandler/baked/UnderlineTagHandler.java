@@ -1,23 +1,21 @@
-package eu.koboo.messagetags.api.taghandler.types;
+package eu.koboo.messagetags.api.taghandler.baked;
 
+import eu.koboo.messagetags.api.taghandler.BakedTagHandler;
 import eu.koboo.messagetags.api.taghandler.ParseContext;
-import eu.koboo.messagetags.api.taghandler.TagHandler;
 import eu.koboo.messagetags.api.taghandler.TagType;
 
 import javax.annotation.Nonnull;
+import java.util.Set;
 
-public final class UnderlineTagHandler extends TagHandler {
+public final class UnderlineTagHandler extends BakedTagHandler {
+
+    private static final String[] TAGS = new String[]{"underline", "ul", "underlined"};
+    private static final Set<TagType> TYPES = Set.of(TagType.Open, TagType.Close);
 
     public static final UnderlineTagHandler INSTANCE = new UnderlineTagHandler();
 
-    private static final String[] TAGS = new String[]{"underline", "ul", "underlined"};
-
-    @Override
-    public boolean canHandle(@Nonnull ParseContext context) {
-        if (!context.isType(TagType.Open) && !context.isType(TagType.Close)) {
-            return false;
-        }
-        return context.hasTagOf(TAGS);
+    public UnderlineTagHandler() {
+        super(TAGS, TYPES);
     }
 
     @Override

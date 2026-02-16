@@ -1,23 +1,21 @@
-package eu.koboo.messagetags.api.taghandler.types;
+package eu.koboo.messagetags.api.taghandler.baked;
 
+import eu.koboo.messagetags.api.taghandler.BakedTagHandler;
 import eu.koboo.messagetags.api.taghandler.ParseContext;
-import eu.koboo.messagetags.api.taghandler.TagHandler;
 import eu.koboo.messagetags.api.taghandler.TagType;
 
 import javax.annotation.Nonnull;
+import java.util.Set;
 
-public final class BoldTagHandler extends TagHandler {
+public final class BoldTagHandler extends BakedTagHandler {
+
+    private static final String[] TAGS = new String[]{"bold", "b", "strong"};
+    private static final Set<TagType> TYPES = Set.of(TagType.Open, TagType.Close);
 
     public static final BoldTagHandler INSTANCE = new BoldTagHandler();
 
-    private static final String[] TAGS = new String[]{"bold", "b", "strong"};
-
-    @Override
-    public boolean canHandle(@Nonnull ParseContext context) {
-        if (!context.isType(TagType.Open) && !context.isType(TagType.Close)) {
-            return false;
-        }
-        return context.hasTagOf(TAGS);
+    public BoldTagHandler() {
+        super(TAGS, TYPES);
     }
 
     @Override

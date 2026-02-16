@@ -1,24 +1,22 @@
-package eu.koboo.messagetags.api.taghandler.types;
+package eu.koboo.messagetags.api.taghandler.baked;
 
 import com.hypixel.hytale.common.util.ArrayUtil;
+import eu.koboo.messagetags.api.taghandler.BakedTagHandler;
 import eu.koboo.messagetags.api.taghandler.ParseContext;
-import eu.koboo.messagetags.api.taghandler.TagHandler;
 import eu.koboo.messagetags.api.taghandler.TagType;
 
 import javax.annotation.Nonnull;
+import java.util.Set;
 
-public final class GradientTagHandler extends TagHandler {
+public final class GradientTagHandler extends BakedTagHandler {
+
+    private static final String[] TAGS = new String[]{"gradient", "grnt"};
+    private static final Set<TagType> TYPES = Set.of(TagType.Open, TagType.Close);
 
     public static final GradientTagHandler INSTANCE = new GradientTagHandler();
 
-    private static final String[] TAGS = new String[]{"gradient", "grnt"};
-
-    @Override
-    public boolean canHandle(@Nonnull ParseContext context) {
-        if (!context.isType(TagType.Open) && !context.isType(TagType.Close)) {
-            return false;
-        }
-        return context.hasTagOf(TAGS);
+    public GradientTagHandler() {
+        super(TAGS, TYPES);
     }
 
     @Override

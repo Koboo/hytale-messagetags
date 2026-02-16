@@ -1,23 +1,21 @@
-package eu.koboo.messagetags.api.taghandler.types;
+package eu.koboo.messagetags.api.taghandler.baked;
 
+import eu.koboo.messagetags.api.taghandler.BakedTagHandler;
 import eu.koboo.messagetags.api.taghandler.ParseContext;
-import eu.koboo.messagetags.api.taghandler.TagHandler;
 import eu.koboo.messagetags.api.taghandler.TagType;
 
 import javax.annotation.Nonnull;
+import java.util.Set;
 
-public final class LinkTagHandler extends TagHandler {
+public final class LinkTagHandler extends BakedTagHandler {
+
+    private static final String[] TAGS = new String[]{"link", "url"};
+    private static final Set<TagType> TYPES = Set.of(TagType.Open, TagType.Close);
 
     public static final LinkTagHandler INSTANCE = new LinkTagHandler();
 
-    private static final String[] TAGS = new String[]{"link", "url"};
-
-    @Override
-    public boolean canHandle(@Nonnull ParseContext context) {
-        if (!context.isType(TagType.Open) && !context.isType(TagType.Close)) {
-            return false;
-        }
-        return context.hasTagOf(TAGS);
+    public LinkTagHandler() {
+        super(TAGS, TYPES);
     }
 
     @Override

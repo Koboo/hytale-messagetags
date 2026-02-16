@@ -1,25 +1,23 @@
-package eu.koboo.messagetags.api.taghandler.types;
+package eu.koboo.messagetags.api.taghandler.baked;
 
 import com.hypixel.hytale.common.util.ArrayUtil;
 import eu.koboo.messagetags.api.color.ColorUtils;
+import eu.koboo.messagetags.api.taghandler.BakedTagHandler;
 import eu.koboo.messagetags.api.taghandler.ParseContext;
-import eu.koboo.messagetags.api.taghandler.TagHandler;
 import eu.koboo.messagetags.api.taghandler.TagType;
 
 import javax.annotation.Nonnull;
+import java.util.Set;
 
-public final class TransitionTagHandler extends TagHandler {
+public final class TransitionTagHandler extends BakedTagHandler {
+
+    private static final String[] TAGS = new String[]{"transition", "trnsn"};
+    private static final Set<TagType> TYPES = Set.of(TagType.Open, TagType.Close);
 
     public static final TransitionTagHandler INSTANCE = new TransitionTagHandler();
 
-    private static final String[] TAGS = new String[]{"transition", "trnsn"};
-
-    @Override
-    public boolean canHandle(@Nonnull ParseContext context) {
-        if (!context.isType(TagType.Open) && !context.isType(TagType.Close)) {
-            return false;
-        }
-        return context.hasTagOf(TAGS);
+    public TransitionTagHandler() {
+        super(TAGS, TYPES);
     }
 
     @Override

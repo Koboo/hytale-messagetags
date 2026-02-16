@@ -1,24 +1,22 @@
-package eu.koboo.messagetags.api.taghandler.types;
+package eu.koboo.messagetags.api.taghandler.baked;
 
 import com.hypixel.hytale.protocol.FormattedMessage;
+import eu.koboo.messagetags.api.taghandler.BakedTagHandler;
 import eu.koboo.messagetags.api.taghandler.ParseContext;
-import eu.koboo.messagetags.api.taghandler.TagHandler;
 import eu.koboo.messagetags.api.taghandler.TagType;
 
 import javax.annotation.Nonnull;
+import java.util.Set;
 
-public final class TranslationTagHandler extends TagHandler {
+public final class TranslationTagHandler extends BakedTagHandler {
+
+    private static final String[] TAGS = new String[]{"translation", "lang"};
+    private static final Set<TagType> TYPES = Set.of(TagType.Open, TagType.Directive);
 
     public static final TranslationTagHandler INSTANCE = new TranslationTagHandler();
 
-    private static final String[] TAGS = new String[]{"translation", "lang"};
-
-    @Override
-    public boolean canHandle(@Nonnull ParseContext context) {
-        if (!context.isType(TagType.Open) && !context.isType(TagType.Directive)) {
-            return false;
-        }
-        return context.hasTagOf(TAGS);
+    public TranslationTagHandler() {
+        super(TAGS, TYPES);
     }
 
     @Override

@@ -4,14 +4,20 @@ import com.hypixel.hytale.common.util.ArrayUtil;
 import com.hypixel.hytale.server.core.Message;
 import eu.koboo.messagetags.api.color.LegacyColorCodes;
 import eu.koboo.messagetags.api.color.NamedColor;
+import eu.koboo.messagetags.api.taghandler.BakedTagHandler;
 import eu.koboo.messagetags.api.taghandler.ParseContext;
-import eu.koboo.messagetags.api.taghandler.TagHandler;
+import eu.koboo.messagetags.api.taghandler.DynamicTagHandler;
 import eu.koboo.messagetags.api.taghandler.TagType;
-import eu.koboo.messagetags.api.taghandler.types.*;
-import eu.koboo.messagetags.api.variable.TagVariable;
+import eu.koboo.messagetags.api.taghandler.baked.*;
+import eu.koboo.messagetags.api.taghandler.dynamic.DynamicColorTagHandler;
+import eu.koboo.messagetags.api.taghandler.dynamic.DynamicPlaceholderTagHandler;
+import eu.koboo.messagetags.api.variable.TagPlaceholder;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -26,29 +32,31 @@ public final class MessageParser {
     public static final char LEGACY_AMPERSAND = '&';
     public static final char LEGACY_SECTION = '§';
 
-    private TagHandler[] tagHandlers = new TagHandler[0];
+    private final  Int2ObjectMap<BakedTagHandler> bakedTagHandlers = new Int2ObjectOpenHashMap<>();
+    private DynamicTagHandler[] dynamicTagHandlers = new DynamicTagHandler[0];
     private long handlerLength = 0;
 
     private final Map<String, NamedColor> nameToColorRegistry = new HashMap<>();
 
     MessageParser() {
         // TagHandlers get execute based on the registration order.
-        registerTagHandler(ResetTagHandler.INSTANCE);
-        registerTagHandler(LineBreakTagHandler.INSTANCE);
+        registerBakedTagHandler(new ResetTagHandler());
+        registerBakedTagHandler(new LineBreakTagHandler());
 
-        registerTagHandler(BoldTagHandler.INSTANCE);
-        registerTagHandler(ItalicTagHandler.INSTANCE);
-        registerTagHandler(UnderlineTagHandler.INSTANCE);
-        registerTagHandler(MonospaceTagHandler.INSTANCE);
+        registerBakedTagHandler(new BoldTagHandler());
+        registerBakedTagHandler(new ItalicTagHandler());
+        registerBakedTagHandler(new UnderlineTagHandler());
+        registerBakedTagHandler(new MonospaceTagHandler());
 
-        registerTagHandler(LinkTagHandler.INSTANCE);
-        registerTagHandler(TranslationTagHandler.INSTANCE);
+        registerBakedTagHandler(new LinkTagHandler());
+        registerBakedTagHandler(new TranslationTagHandler());
 
-        registerTagHandler(ColorTagHandler.INSTANCE);
-        registerTagHandler(GradientTagHandler.INSTANCE);
-        registerTagHandler(TransitionTagHandler.INSTANCE);
+        registerBakedTagHandler(new ColorTagHandler());
+        registerBakedTagHandler(new GradientTagHandler());
+        registerBakedTagHandler(new TransitionTagHandler());
 
-        registerTagHandler(DynamicColorTagHandler.INSTANCE);
+        registerDynamicTagHandler(DynamicPlaceholderTagHandler.INSTANCE);
+        registerDynamicTagHandler(DynamicColorTagHandler.INSTANCE);
 
         registerNamedColor(NamedColor.Black);
         registerNamedColor(NamedColor.DarkBlue);
@@ -68,9 +76,25 @@ public final class MessageParser {
         registerNamedColor(NamedColor.White);
     }
 
-    public void registerTagHandler(@Nonnull TagHandler tagHandler) {
-        tagHandlers = ArrayUtil.append(tagHandlers, tagHandler);
-        handlerLength = tagHandlers.length;
+    public void registerDynamicTagHandler(@Nonnull DynamicTagHandler dynamicTagHandler) {
+        dynamicTagHandlers = ArrayUtil.append(dynamicTagHandlers, dynamicTagHandler);
+        handlerLength = dynamicTagHandlers.length;
+    }
+
+    public void registerBakedTagHandler(@Nonnull BakedTagHandler bakedTagHandler) {
+        int tagLength = bakedTagHandler.handleTags.length;
+        for (int i = 0; i < tagLength; i++) {
+            String tag = bakedTagHandler.handleTags[i];
+            if (tag.trim().isEmpty()) {
+                throw new IllegalArgumentException("Tag cannot be empty!");
+            }
+            char[] charArray = tag.toCharArray();
+            int tagHash = Arrays.hashCode(charArray);
+            if (bakedTagHandlers.containsKey(tagHash)) {
+                throw new IllegalArgumentException("Tag already registered!");
+            }
+            bakedTagHandlers.put(tagHash, bakedTagHandler);
+        }
     }
 
     public void registerNamedColor(@Nonnull NamedColor namedColor) {
@@ -84,7 +108,7 @@ public final class MessageParser {
     }
 
     @Nonnull
-    public Message parse(@Nullable String inputText, boolean strip, TagVariable... variables) {
+    public Message parse(@Nullable String inputText, boolean strip, TagPlaceholder... placeholders) {
         // null or empty, return an empty message
         if (inputText == null || inputText.isEmpty()) {
             return Message.empty();
@@ -93,28 +117,28 @@ public final class MessageParser {
         if (!hasParseableCharacter(inputText, inputLength)) {
             return Message.raw(inputText);
         }
-        // Check for any variables
-        if (variables != null) {
-            int variablesLength = variables.length;
+        // Check for any placeholders
+        Map<String, TagPlaceholder> placeholderMap = null;
+        if (placeholders != null) {
+            placeholderMap = new HashMap<>();
+            int variablesLength = placeholders.length;
             if (variablesLength > 0) {
-                // Replace the placeholder variables with their actual values
                 for (int i = 0; i < variablesLength; i++) {
-                    TagVariable variable = variables[i];
-                    String value = variable.value();
-                    if(value == null || value.isEmpty()) {
+                    TagPlaceholder variable = placeholders[i];
+                    Object value = variable.value();
+                    if (value == null) {
                         continue;
                     }
-                    inputText = inputText.replace(variable.name(), value);
+                    placeholderMap.put(variable.name(), variable);
                 }
-
-                // Reassign input length, probably changed if any variables were replaced
-                inputLength = inputText.length();
             }
         }
 
-        final ParseContext context = new ParseContext(this, inputText, strip);
+        final ParseContext context = new ParseContext(this, inputText, placeholderMap, strip);
 
         int inputPos = 0;
+
+        char[] tagNameBuffer;
 
         int openPos = -1;
         int closePos = -1;
@@ -214,22 +238,25 @@ public final class MessageParser {
                 // Found tag positions and now we process it.
                 boolean wasHandled = false;
 
-                for (int handlerIndex = 0; handlerIndex < handlerLength; handlerIndex++) {
-                    TagHandler tagHandler = tagHandlers[handlerIndex];
-                    boolean canHandle = tagHandler.canHandle(context);
-                    if (!canHandle) {
-                        continue;
+                tagNameBuffer = new char[nameEndPos - nameStartPos];
+                inputText.getChars(nameStartPos, nameEndPos, tagNameBuffer, 0);
+                int tagHash = Arrays.hashCode(tagNameBuffer);
+                BakedTagHandler bakedTagHandler = bakedTagHandlers.get(tagHash);
+                if (bakedTagHandler != null
+                    && bakedTagHandler.handleTypeSet.contains(context.getCurrentType())) {
+                    wasHandled = bakedTagHandler.handle(context);
+                }
+
+                if (!wasHandled) {
+                    for (int handlerIndex = 0; handlerIndex < handlerLength; handlerIndex++) {
+                        DynamicTagHandler dynamicTagHandler = dynamicTagHandlers[handlerIndex];
+                        boolean canHandle = dynamicTagHandler.canHandle(context);
+                        if (!canHandle) {
+                            continue;
+                        }
+                        wasHandled = dynamicTagHandler.handle(context);
+                        break;
                     }
-
-                    // Flush everything before the current tag
-                    // Take in example this string:
-                    // "First<color:#ffffff>Second"
-                    // The part "First" gets flushed with the current style.
-                    // The tag now gets parsed by its handler. If the handler can't handle
-                    // the tag, the tag gets appended as raw text.
-
-                    wasHandled = tagHandler.handle(context);
-                    break;
                 }
 
                 // Check if the text was handled.

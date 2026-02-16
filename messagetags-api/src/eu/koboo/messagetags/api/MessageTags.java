@@ -3,8 +3,9 @@ package eu.koboo.messagetags.api;
 import com.hypixel.hytale.codec.ExtraInfo;
 import com.hypixel.hytale.server.core.Message;
 import eu.koboo.messagetags.api.color.NamedColor;
-import eu.koboo.messagetags.api.taghandler.TagHandler;
-import eu.koboo.messagetags.api.variable.TagVariable;
+import eu.koboo.messagetags.api.taghandler.BakedTagHandler;
+import eu.koboo.messagetags.api.taghandler.DynamicTagHandler;
+import eu.koboo.messagetags.api.variable.TagPlaceholder;
 import org.bson.BsonValue;
 
 import javax.annotation.Nonnull;
@@ -18,49 +19,57 @@ public final class MessageTags {
     private static final MessageParser INSTANCE = new MessageParser();
 
     /**
-     * Uses the given String and parses it to Hytale's {@link Message} object,
-     * applying all registered {@link TagHandler}.
+     * Uses the given String and parses it to Hytale's {@link Message} object.
      *
      * @param text The text to parse.
      * @return The parsed {@link Message}.
      */
     @Nonnull
-    public static Message parse(@Nullable String text, @Nullable TagVariable... variables) {
-        return INSTANCE.parse(text, false, variables);
+    public static Message parse(@Nullable String text, @Nullable TagPlaceholder... placeholders) {
+        return INSTANCE.parse(text, false, placeholders);
     }
 
     /**
      * Uses the given String and strips away every tag, color, and formatting
-     * and returns the same structure as the parse method.
+     * and returns the same structure of {@link Message} as the parse method.
      *
      * @param text The text to strip.
      * @return The parsed {@link Message}.
      */
     @Nonnull
-    public static Message strip(@Nullable String text, @Nullable TagVariable... variables) {
-        return INSTANCE.parse(text, true, variables);
+    public static Message strip(@Nullable String text, @Nullable TagPlaceholder... placeholders) {
+        return INSTANCE.parse(text, true, placeholders);
     }
 
     /**
-     * Uses the given String and strips away every tag, color and formatting
-     * and returns a colorless string.
+     * Uses the given String and strips away every tag, color, and formatting
+     * and returns a colorless simplified {@link String} instead of a {@link Message}.
      *
      * @param text The text to strip.
      * @return The parsed and simplified {@link String}.
      */
     @Nullable
-    public static String stripToString(@Nullable String text, @Nullable TagVariable... variables) {
-        Message message = INSTANCE.parse(text, true, variables);
+    public static String stripToString(@Nullable String text, @Nullable TagPlaceholder... placeholders) {
+        Message message = INSTANCE.parse(text, true, placeholders);
         return INSTANCE.stripRawText(message);
     }
 
     /**
-     * Register a non-default {@link TagHandler} to the global {@link MessageParser} instance.
+     * Register a non-default {@link DynamicTagHandler} to the global {@link MessageParser} instance.
      *
-     * @param tagHandler The {@link TagHandler} instance to register.
+     * @param dynamicTagHandler The {@link DynamicTagHandler} instance to register.
      */
-    public static void registerTagHandler(@Nonnull TagHandler tagHandler) {
-        INSTANCE.registerTagHandler(tagHandler);
+    public static void registerDynamicTagHandler(@Nonnull DynamicTagHandler dynamicTagHandler) {
+        INSTANCE.registerDynamicTagHandler(dynamicTagHandler);
+    }
+
+    /**
+     * Register a non-default {@link BakedTagHandler} to the global {@link MessageParser} instance.
+     *
+     * @param bakedTagHandler The {@link BakedTagHandler} instance to register.
+     */
+    public static void registerBakedTagHandler(@Nonnull BakedTagHandler bakedTagHandler) {
+        INSTANCE.registerBakedTagHandler(bakedTagHandler);
     }
 
     /**

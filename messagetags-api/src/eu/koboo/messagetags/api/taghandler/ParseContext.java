@@ -6,16 +6,19 @@ import com.hypixel.hytale.server.core.Message;
 import eu.koboo.messagetags.api.MessageParser;
 import eu.koboo.messagetags.api.color.ColorUtils;
 import eu.koboo.messagetags.api.color.NamedColor;
+import eu.koboo.messagetags.api.variable.TagPlaceholder;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public final class ParseContext {
 
     private final MessageParser parser;
     private final String inputText;
+    private final Map<String, TagPlaceholder> placeholderMap;
     public final boolean strip;
     private final List<FormattedMessage> messageList = new ArrayList<>();
 
@@ -33,14 +36,19 @@ public final class ParseContext {
     private int currentArgumentEnd;
     private TagType currentType;
 
-    public ParseContext(MessageParser parser, String inputText, boolean strip) {
+    public ParseContext(MessageParser parser, String inputText, Map<String, TagPlaceholder> placeholderMap, boolean strip) {
         this.parser = parser;
         this.inputText = inputText;
+        this.placeholderMap = placeholderMap;
         this.strip = strip;
     }
 
-    public String getInputText() {
-        return inputText;
+    public MessageParser getParser() {
+        return parser;
+    }
+
+    public Map<String, TagPlaceholder> getPlaceholderMap() {
+        return placeholderMap;
     }
 
     public Message buildRootMessage() {
@@ -52,11 +60,10 @@ public final class ParseContext {
         }
         rootMessage.children = messageArray;
         messageList.clear();
+        if(placeholderMap != null) {
+            placeholderMap.clear();
+        }
         return new Message(rootMessage);
-    }
-
-    public void appendMessage(FormattedMessage message) {
-        messageList.add(message);
     }
 
     public void resetStyle() {
@@ -75,9 +82,7 @@ public final class ParseContext {
         }
         if (gradientColors != null && gradientColors.length != 0) {
             List<FormattedMessage> gradientMessageList = createGradientMessageList(textPart);
-            for (FormattedMessage gradientMessage : gradientMessageList) {
-                appendMessage(gradientMessage);
-            }
+            messageList.addAll(gradientMessageList);
             return;
         }
         FormattedMessage message = createByText(textPart);
@@ -86,7 +91,7 @@ public final class ParseContext {
 
     public void appendStyledMessage(FormattedMessage message) {
         applyStyleTo(message);
-        appendMessage(message);
+        messageList.add(message);
     }
 
     private void applyStyleTo(FormattedMessage message) {
@@ -154,7 +159,7 @@ public final class ParseContext {
             return null;
         }
         int length = colorString.length();
-        if (length < 1) {
+        if (length == 0) {
             return null;
         }
         char firstCharacter = colorString.charAt(0);
@@ -196,47 +201,13 @@ public final class ParseContext {
         return inputText.substring(currentNameStart, currentNameEnd);
     }
 
-    private boolean equalsIgnoreCase(@Nonnull String string) {
-
-        // Start is bigger than or equal to the end? Can't be correct.
-        if (currentNameStart >= currentNameEnd) {
-            return false;
-        }
-
-        // Check if the given root and the text have equal length
-        int checkedLength = currentNameEnd - currentNameStart;
-        if (checkedLength != string.length()) {
-            return false;
-        }
-
-        for (int rootIndex = 0; rootIndex < checkedLength; rootIndex++) {
-            char rootChar = toLowerAscii(inputText.charAt(currentNameStart + rootIndex));
-            char tagChar = toLowerAscii(string.charAt(rootIndex));
-            if (rootChar != tagChar) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public boolean hasTagOf(@Nonnull String[] tagList) {
-        int length = tagList.length;
-        for (int i = 0; i < length; i++) {
-            String tag = tagList[i];
-            if (equalsIgnoreCase(tag)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static char toLowerAscii(char c) {
-        return (c >= 'A' && c <= 'Z') ? (char) (c | 0x20) : c;
-    }
-
     @Nonnull
     public TagType getCurrentType() {
         return currentType;
+    }
+
+    public boolean hasArguments() {
+        return currentArgumentStart != -1 && currentArgumentEnd != -1;
     }
 
     public void updateCurrentTag(

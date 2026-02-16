@@ -1,7 +1,8 @@
 package eu.koboo.messagetags.api.tests;
 
+import com.hypixel.hytale.server.core.Message;
 import eu.koboo.messagetags.api.MessageTags;
-import eu.koboo.messagetags.api.variable.TagVariable;
+import eu.koboo.messagetags.api.variable.TagPlaceholder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -51,7 +52,7 @@ public class SimpleTagTests {
 
     @Test
     public void test2() {
-        String expected = "{\"Children\": [{\"MessageId\": \"server.commands.help.desc\", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null, \"Color\": \"#55ffff\", \"Link\": \"https://github.com/Koboo\"}, {\"RawText\": \" Test \", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null, \"Color\": \"#55ffff\"}, {\"RawText\": \"Translations\", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null, \"Color\": \"#55ff55\"}, {\"RawText\": \"\\n\", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null}], \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null}";
+        String expected = "{\"Children\": [{\"MessageId\": \"server.commands.help.desc\", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null, \"Color\": \"#55ffff\", \"Link\": \"https://github.com/Koboo\"}, {\"RawText\": \" Test \", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null, \"Color\": \"#55ffff\"}, {\"RawText\": \"Translations\", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null, \"Color\": \"#55ff55\"}, {\"RawText\": \"\\n\", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null, \"Color\": \"#55ff55\"}], \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null}";
         String tagText = "<aqua><link:https://github.com/Koboo><lang:server.commands.help.desc></link> Test <green>Translations<linebreak>";
         assertMessage(expected, MessageTags.parse(tagText));
     }
@@ -65,8 +66,8 @@ public class SimpleTagTests {
 
     @Test
     public void test4() {
-        String expected = "{\"Children\": [{\"RawText\": \"L\", \"Bold\": true, \"Italic\": null, \"Monospace\": null, \"Underline\": null}, {\"RawText\": \"eg\", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null}, {\"RawText\": \"ac\", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null, \"Color\": \"#aa0000\"}, {\"RawText\": \"y c\", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": true, \"Color\": \"#aa0000\"}, {\"RawText\": \"olor \", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": true, \"Color\": \"#ffffff\"}, {\"RawText\": \"t\", \"Bold\": true, \"Italic\": null, \"Monospace\": null, \"Underline\": true, \"Color\": \"#ffffff\"}, {\"RawText\": \"est\", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null}, {\"RawText\": \"\\n\", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null}], \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null}";
-        String tagText = "<bold>L</bold>eg&4ac<underline>y c§folor <bold>t&rest<linebreak>";
+        String expected = "{\"Children\": [{\"RawText\": \"Bold\", \"Bold\": true, \"Italic\": null, \"Monospace\": null, \"Underline\": null}, {\"RawText\": \"NotBold\", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null}, {\"RawText\": \"Red\", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null, \"Color\": \"#aa0000\"}, {\"RawText\": \"RedUnderlined\", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": true, \"Color\": \"#aa0000\"}, {\"RawText\": \"WhiteUnderlined\", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": true, \"Color\": \"#ffffff\"}, {\"RawText\": \"Bold\", \"Bold\": true, \"Italic\": null, \"Monospace\": null, \"Underline\": true, \"Color\": \"#ffffff\"}, {\"RawText\": \"Reset\", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null}, {\"RawText\": \"\\n\", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null, \"Color\": \"#55ff55\"}], \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null}";
+        String tagText = "<bold>Bold</bold>NotBold&4Red<underline>RedUnderlined§fWhiteUnderlined<bold>Bold&rReset<linebreak>";
         assertMessage(expected, MessageTags.parse(tagText));
     }
 
@@ -74,16 +75,18 @@ public class SimpleTagTests {
     public void test5() {
         String expected = "{\"Children\": [{\"RawText\": \"Hello World!\", \"Bold\": true, \"Italic\": null, \"Monospace\": null, \"Underline\": null}], \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null}";
         String tagText = "<bold><text></bold>";
-        assertMessage(expected, MessageTags.parse(tagText, TagVariable.of("text", "Hello World!")));
+        assertMessage(expected, MessageTags.parse(tagText, TagPlaceholder.raw("text", "Hello World!")));
     }
 
     @Test
     public void test6() {
-        String expected = "{\"Children\": [{\"RawText\": \"Hello World!\", \"Bold\": true, \"Italic\": true, \"Monospace\": null, \"Underline\": null, \"Color\": \"#ff5555\"}], \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null}";
-        String tagText = "<bold><style><text></bold>";
+        String expected = "{\"Children\": [{\"RawText\": \"Admin \", \"Bold\": true, \"Italic\": null, \"Monospace\": null, \"Underline\": null, \"Color\": \"#ff5555\"}, {\"RawText\": \"Koboo\", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null}, {\"RawText\": \" Clan\", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null, \"Color\": \"#55ffff\"}, {\"RawText\": \": \", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null}, {\"RawText\": \"Hello World!\", \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null}], \"Bold\": null, \"Italic\": null, \"Monospace\": null, \"Underline\": null}";
+        String tagText = "<prefix><username><suffix>: <message>";
         assertMessage(expected, MessageTags.parse(tagText,
-            TagVariable.of("text", "Hello World!"),
-            TagVariable.of("style", "<red><italic>")
+            TagPlaceholder.parse("prefix", "<red><bold>Admin "),
+            TagPlaceholder.parse("suffix", "<aqua> Clan"),
+            TagPlaceholder.raw("username", "Koboo"),
+            TagPlaceholder.message("message", Message.raw("Hello World!"))
         ));
     }
 

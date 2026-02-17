@@ -103,7 +103,6 @@ public final class MessageParser {
 
     @Nullable
     public NamedColor getNamedColorByName(@Nonnull String colorName) {
-        colorName = colorName.toLowerCase(Locale.ROOT).trim();
         return nameToColorRegistry.get(colorName);
     }
 
@@ -333,18 +332,21 @@ public final class MessageParser {
         if (length == 0) {
             return null;
         }
-        char firstCharacter = colorString.charAt(0);
 
         // #ffffff
-        if (firstCharacter == MessageParser.COLOR_PREFIX && length == 7) {
-            return colorString;
+        if (length == 7) {
+            char firstCharacter = colorString.charAt(0);
+            if(firstCharacter == MessageParser.COLOR_PREFIX) {
+                return colorString;
+            }
         }
 
         // white -> #ffffff
-        NamedColor namedColor = getNamedColorByName(colorString);
+        NamedColor namedColor = nameToColorRegistry.get(colorString);
         if (namedColor != null) {
             return namedColor.hexCode();
         }
+
         return null;
     }
 

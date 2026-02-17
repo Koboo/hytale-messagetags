@@ -19,6 +19,24 @@ public final class MessageTags {
     private static final MessageParser INSTANCE = new MessageParser();
 
     /**
+     * Register a non-default {@link DynamicTagHandler} to the global {@link MessageParser} instance.
+     *
+     * @param dynamicTagHandler The {@link DynamicTagHandler} instance to register.
+     */
+    public static void registerDynamicTagHandler(@Nonnull DynamicTagHandler dynamicTagHandler) {
+        INSTANCE.registerDynamicTagHandler(dynamicTagHandler);
+    }
+
+    /**
+     * Register a non-default {@link BakedTagHandler} to the global {@link MessageParser} instance.
+     *
+     * @param bakedTagHandler The {@link BakedTagHandler} instance to register.
+     */
+    public static void registerBakedTagHandler(@Nonnull BakedTagHandler bakedTagHandler) {
+        INSTANCE.registerBakedTagHandler(bakedTagHandler);
+    }
+
+    /**
      * Uses the given String and parses it to Hytale's {@link Message} object.
      *
      * @param text The text to parse.
@@ -55,30 +73,23 @@ public final class MessageTags {
     }
 
     /**
-     * Register a non-default {@link DynamicTagHandler} to the global {@link MessageParser} instance.
-     *
-     * @param dynamicTagHandler The {@link DynamicTagHandler} instance to register.
-     */
-    public static void registerDynamicTagHandler(@Nonnull DynamicTagHandler dynamicTagHandler) {
-        INSTANCE.registerDynamicTagHandler(dynamicTagHandler);
-    }
-
-    /**
-     * Register a non-default {@link BakedTagHandler} to the global {@link MessageParser} instance.
-     *
-     * @param bakedTagHandler The {@link BakedTagHandler} instance to register.
-     */
-    public static void registerBakedTagHandler(@Nonnull BakedTagHandler bakedTagHandler) {
-        INSTANCE.registerBakedTagHandler(bakedTagHandler);
-    }
-
-    /**
      * Register a non-default {@link NamedColor} to the global {@link MessageParser} instance.
      *
      * @param namedColor The {@link NamedColor} instance to register.
      */
     public static void registerNamedColor(@Nonnull NamedColor namedColor) {
         INSTANCE.registerNamedColor(namedColor);
+    }
+
+    /**
+     * Resolves a string to a color, if it's the name of a {@link NamedColor}
+     * or returns it if it's a valid hexadecimal color code.
+     * @param colorString The {@link String}, which should be parsed to a color.
+     * @return A parsed color {@link String} in hexadecimal format (#ffffff) or null.
+     */
+    @Nullable
+    public static String parseColor(@Nonnull String colorString) {
+        return INSTANCE.parseColor(colorString);
     }
 
     /**

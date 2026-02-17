@@ -26,9 +26,7 @@ public final class TranslationTagHandler extends BakedTagHandler {
             return false;
         }
         FormattedMessage message = context.createByTranslation(translationKey);
-        // Translations can't use gradients because they get resolved by the client.
-        //state.createGradientMessage(translationKey);
-        context.appendStyledMessage(message);
+        context.appendMessage(message);
         return true;
     }
 }

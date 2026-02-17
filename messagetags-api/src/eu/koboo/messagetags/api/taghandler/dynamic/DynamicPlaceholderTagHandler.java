@@ -44,11 +44,11 @@ public final class DynamicPlaceholderTagHandler extends DynamicTagHandler {
             case MESSAGE -> {
                 Object value = tagPlaceholder.value();
                 if(value instanceof Message message) {
-                    context.appendStyledMessage(message.getFormattedMessage());
+                    context.appendMessage(message.getFormattedMessage());
                     return true;
                 }
                 if(value instanceof FormattedMessage message) {
-                    context.appendStyledMessage(message);
+                    context.appendMessage(message);
                     return true;
                 }
                 return false;
@@ -71,7 +71,7 @@ public final class DynamicPlaceholderTagHandler extends DynamicTagHandler {
                 }
                 for (int i = 0; i < childrenLength; i++) {
                     FormattedMessage child = children[i];
-                    context.appendStyledMessage(child);
+                    context.appendMessage(child);
                 }
                 return true;
             }

@@ -27,7 +27,7 @@ public final class LineBreakTagHandler extends BakedTagHandler {
 
     @Override
     public boolean handle(@Nonnull ParseContext context) {
-        context.appendStyledMessage(LINE_SEPARATOR);
+        context.appendMessage(LINE_SEPARATOR, false);
         return true;
     }
 }

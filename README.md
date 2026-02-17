@@ -70,10 +70,10 @@ Basically, a MiniMessage clone for Hytale.
 ````kotlin
 dependencies {
     // To include the library in your plugin:
-    implementation("eu.koboo:messagetags-api:1.0.0")
+    implementation("eu.koboo:messagetags-api:1.2.0")
 
     // Or to use the standalone plugin:
-    compileOnly("eu.koboo:messagetags-plugin:1.0.0")
+    compileOnly("eu.koboo:messagetags-plugin:1.2.0")
 }
 ````
 
@@ -100,7 +100,7 @@ Message message = MessageTags.strip("<bold><red>Hello World!</red></bold>");
 
 ## Tag Format
 
-Every tag follows the same format. There only 3 tag types:
+Every tag follows the same format. There are only three tag types:
 
 **Opening a new tag**
 ````html

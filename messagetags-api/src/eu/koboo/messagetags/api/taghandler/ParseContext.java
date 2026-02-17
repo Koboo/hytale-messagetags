@@ -86,11 +86,17 @@ public final class ParseContext {
             return;
         }
         FormattedMessage message = createByText(textPart);
-        appendStyledMessage(message);
+        appendMessage(message);
     }
 
-    public void appendStyledMessage(FormattedMessage message) {
-        applyStyleTo(message);
+    public void appendMessage(FormattedMessage message) {
+        appendMessage(message, true);
+    }
+
+    public void appendMessage(FormattedMessage message, boolean styled) {
+        if(styled) {
+            applyStyleTo(message);
+        }
         messageList.add(message);
     }
 

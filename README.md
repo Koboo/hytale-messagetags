@@ -50,6 +50,7 @@ Basically, a MiniMessage clone for Hytale.
 - Create own ``MessageParser``
 - Create own ``NamedColor``
 - Implement own ``TagHandler``
+- Add placeholders (raw, embedded, parsable)
 - Multiplatform support:
   - Standalone plugin
   - Maven/Gradle library (shadable)
@@ -60,9 +61,10 @@ Basically, a MiniMessage clone for Hytale.
 - Single-pass parsing
 
 **Limitations**
-- Dynamic colors cannot be closed
+- Tags using dynamic colors can't be closed directly and need to be closed a reset tag
 - Gradients do not apply to translations
-- Invalid tags are rendered as raw text
+- The client parses translations, so styling within translations doesn't work (for now)
+- Invalid tags are rendered as raw text, no error is shown or thrown
 
 ## 🐇 Quick Start
 

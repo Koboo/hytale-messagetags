@@ -14,6 +14,9 @@ dependencies {
 
     // We need hytale on test scope
     testImplementation("com.hypixel.hytale:Server:2026.02.06-aa1b071c2")
+
+    // https://central.sonatype.com/artifact/com.google.code.gson/gson
+    testImplementation("com.google.code.gson:gson:2.13.2")
 }
 
 tasks.test {

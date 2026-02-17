@@ -372,4 +372,4 @@ You can edit your texts there and just parse them using this library.
 
 ## Benchmarks
 
-You can check out benchmarks for this library [here](https://github.com/Koboo/hytale-messagetags/BENCHMARKS.md).
+You can check out benchmarks for this library [here](https://github.com/Koboo/hytale-messagetags/blob/main/BENCHMARKS.md).

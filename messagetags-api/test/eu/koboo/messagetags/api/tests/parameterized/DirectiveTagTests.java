@@ -1,14 +1,13 @@
-package eu.koboo.messagetags.api.tests;
+package eu.koboo.messagetags.api.tests.parameterized;
 
 import eu.koboo.messagetags.api.MessageTags;
+import eu.koboo.messagetags.api.tests.AbstractTest;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-import static eu.koboo.messagetags.api.tests.TestUtils.assertMessage;
-
-public class DirectiveTagTests {
+public class DirectiveTagTests extends AbstractTest {
 
     public record TestCase(String tagName, String expected) {
     }
@@ -27,5 +26,4 @@ public class DirectiveTagTests {
         String tagText = "<" + testCase.tagName + "/>";
         assertMessage(testCase.expected, MessageTags.parse(tagText));
     }
-
 }

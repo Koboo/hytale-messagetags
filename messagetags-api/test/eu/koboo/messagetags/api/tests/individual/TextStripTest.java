@@ -1,11 +1,10 @@
-package eu.koboo.messagetags.api.tests;
+package eu.koboo.messagetags.api.tests.individual;
 
 import eu.koboo.messagetags.api.MessageTags;
+import eu.koboo.messagetags.api.tests.AbstractTest;
 import org.junit.jupiter.api.Test;
 
-import static eu.koboo.messagetags.api.tests.TestUtils.assertStripped;
-
-public class TextStripTest {
+public class TextStripTest extends AbstractTest {
 
     @Test
     public void test1() {

@@ -25,7 +25,9 @@ public final class TranslationTagHandler extends BakedTagHandler {
         if (translationKey == null) {
             return false;
         }
-        FormattedMessage message = context.createByTranslation(translationKey);
+
+        FormattedMessage message = new FormattedMessage();
+        message.messageId = translationKey;
         context.appendMessage(message);
         return true;
     }

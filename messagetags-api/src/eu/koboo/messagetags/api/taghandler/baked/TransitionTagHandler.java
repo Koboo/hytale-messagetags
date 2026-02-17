@@ -58,14 +58,14 @@ public final class TransitionTagHandler extends BakedTagHandler {
         return false;
     }
 
-    private String[] createColorList(ParseContext state, String[] colorSplit, int length, int lastCursor) {
+    private String[] createColorList(ParseContext context, String[] colorSplit, int length, int lastCursor) {
         String[] colors = new String[0];
         for (int cursor = 0; cursor < length; cursor++) {
             if (cursor == lastCursor) {
                 break;
             }
             String colorString = colorSplit[cursor];
-            String color = state.parseColor(colorString);
+            String color = context.parser.parseColor(colorString);
             if (color == null) {
                 return null;
             }

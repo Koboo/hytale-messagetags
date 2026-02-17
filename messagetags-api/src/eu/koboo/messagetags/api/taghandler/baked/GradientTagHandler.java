@@ -39,7 +39,7 @@ public final class GradientTagHandler extends BakedTagHandler {
         return false;
     }
 
-    private String[] createColorList(ParseContext state, String argument) {
+    private String[] createColorList(ParseContext context, String argument) {
         if (argument == null) {
             return null;
         }
@@ -49,7 +49,7 @@ public final class GradientTagHandler extends BakedTagHandler {
         }
         String[] colors = new String[0];
         for (String colorString : colorSplit) {
-            String color = state.parseColor(colorString);
+            String color = context.parser.parseColor(colorString);
             if (color == null) {
                 return null;
             }

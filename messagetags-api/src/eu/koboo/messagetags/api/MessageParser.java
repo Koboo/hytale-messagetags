@@ -325,6 +325,29 @@ public final class MessageParser {
         return builder.toString();
     }
 
+    public String parseColor(String colorString) {
+        if (colorString == null) {
+            return null;
+        }
+        int length = colorString.length();
+        if (length == 0) {
+            return null;
+        }
+        char firstCharacter = colorString.charAt(0);
+
+        // #ffffff
+        if (firstCharacter == MessageParser.COLOR_PREFIX && length == 7) {
+            return colorString;
+        }
+
+        // white -> #ffffff
+        NamedColor namedColor = getNamedColorByName(colorString);
+        if (namedColor != null) {
+            return namedColor.hexCode();
+        }
+        return null;
+    }
+
     private boolean hasParseableCharacter(String inputText, int inputLength) {
         for (int i = 0; i < inputLength; i++) {
             char character = inputText.charAt(i);

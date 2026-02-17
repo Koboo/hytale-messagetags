@@ -15,7 +15,7 @@ public final class DynamicPlaceholderTagHandler extends DynamicTagHandler {
 
     @Override
     public boolean canHandle(@Nonnull ParseContext context) {
-        if (context.getPlaceholderMap() == null || context.getPlaceholderMap().isEmpty()) {
+        if (context.placeholderMap == null || context.placeholderMap.isEmpty()) {
             return false;
         }
         if (context.hasArguments()) {
@@ -27,7 +27,7 @@ public final class DynamicPlaceholderTagHandler extends DynamicTagHandler {
     @Override
     public boolean handle(@Nonnull ParseContext context) {
         String tag = context.getCurrentTag();
-        TagPlaceholder tagPlaceholder = context.getPlaceholderMap().get(tag);
+        TagPlaceholder tagPlaceholder = context.placeholderMap.get(tag);
         if (tagPlaceholder == null) {
             return false;
         }
@@ -59,7 +59,7 @@ public final class DynamicPlaceholderTagHandler extends DynamicTagHandler {
                     return false;
                 }
                 String stringValue = String.valueOf(value);
-                Message parsed = context.getParser().parse(stringValue, context.strip);
+                Message parsed = context.parser.parse(stringValue, context.strip);
                 FormattedMessage message = parsed.getFormattedMessage();
                 FormattedMessage[] children = message.children;
                 if (children == null) {

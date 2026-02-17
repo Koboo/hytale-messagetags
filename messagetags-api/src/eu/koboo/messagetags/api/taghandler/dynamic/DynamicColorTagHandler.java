@@ -21,7 +21,7 @@ public final class DynamicColorTagHandler extends DynamicTagHandler {
     @Override
     public boolean handle(@Nonnull ParseContext context) {
         String tag = context.getCurrentTag();
-        String color = context.parseColor(tag);
+        String color = context.parser.parseColor(tag);
         if (color == null) {
             return false;
         }

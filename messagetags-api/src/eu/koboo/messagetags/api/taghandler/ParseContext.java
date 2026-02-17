@@ -16,11 +16,12 @@ import java.util.Map;
 
 public final class ParseContext {
 
-    private final MessageParser parser;
+    public final MessageParser parser;
     private final String inputText;
-    private final Map<String, TagPlaceholder> placeholderMap;
-    public final boolean strip;
     private final List<FormattedMessage> messageList = new ArrayList<>();
+
+    public final boolean strip;
+    public final Map<String, TagPlaceholder> placeholderMap;
 
     public boolean bold;
     public boolean italic;
@@ -43,14 +44,7 @@ public final class ParseContext {
         this.strip = strip;
     }
 
-    public MessageParser getParser() {
-        return parser;
-    }
-
-    public Map<String, TagPlaceholder> getPlaceholderMap() {
-        return placeholderMap;
-    }
-
+    @Nonnull
     public Message buildRootMessage() {
         FormattedMessage rootMessage = new FormattedMessage();
         int arraySize = messageList.size();
@@ -76,8 +70,8 @@ public final class ParseContext {
         gradientColors = null;
     }
 
-    public void appendStyledText(String textPart) {
-        if (textPart == null || textPart.isEmpty()) {
+    public void appendStyledText(@Nonnull String textPart) {
+        if (textPart.isEmpty()) {
             return;
         }
         if (gradientColors != null && gradientColors.length != 0) {
@@ -85,22 +79,24 @@ public final class ParseContext {
             messageList.addAll(gradientMessageList);
             return;
         }
-        FormattedMessage message = createByText(textPart);
+
+        FormattedMessage message = new FormattedMessage();
+        message.rawText = textPart;
         appendMessage(message);
     }
 
-    public void appendMessage(FormattedMessage message) {
+    public void appendMessage(@Nonnull FormattedMessage message) {
         appendMessage(message, true);
     }
 
-    public void appendMessage(FormattedMessage message, boolean styled) {
+    public void appendMessage(@Nonnull FormattedMessage message, boolean styled) {
         if (styled) {
             applyStyleTo(message);
         }
         messageList.add(message);
     }
 
-    private void applyStyleTo(FormattedMessage message) {
+    private void applyStyleTo(@Nonnull FormattedMessage message) {
         if (strip) {
             return;
         }
@@ -125,9 +121,12 @@ public final class ParseContext {
         }
     }
 
-    private List<FormattedMessage> createGradientMessageList(String text) {
+    @Nonnull
+    private List<FormattedMessage> createGradientMessageList(@Nonnull String text) {
         if (strip) {
-            return List.of(createByText(text));
+            FormattedMessage message = new FormattedMessage();
+            message.rawText = text;
+            return List.of(message);
         }
         List<FormattedMessage> gradientMessageList = new ArrayList<>();
         int textLength = text.length();
@@ -135,7 +134,8 @@ public final class ParseContext {
             char textChar = text.charAt(cursor);
             float progress = (float) cursor / (textLength - 1);
 
-            FormattedMessage message = createByText(String.valueOf(textChar));
+            FormattedMessage message = new FormattedMessage();
+            message.rawText = String.valueOf(textChar);
             applyStyleTo(message);
 
             String hexColor = ColorUtils.interpolateColor(gradientColors, progress);
@@ -146,41 +146,6 @@ public final class ParseContext {
             gradientMessageList.add(message);
         }
         return gradientMessageList;
-    }
-
-    public FormattedMessage createByText(String rawText) {
-        FormattedMessage message = new FormattedMessage();
-        message.rawText = rawText;
-        return message;
-    }
-
-    public FormattedMessage createByTranslation(String translation) {
-        FormattedMessage message = new FormattedMessage();
-        message.messageId = translation;
-        return message;
-    }
-
-    public String parseColor(String colorString) {
-        if (colorString == null) {
-            return null;
-        }
-        int length = colorString.length();
-        if (length == 0) {
-            return null;
-        }
-        char firstCharacter = colorString.charAt(0);
-
-        // #ffffff
-        if (firstCharacter == MessageParser.COLOR_PREFIX && length == 7) {
-            return colorString;
-        }
-
-        // white -> #ffffff
-        NamedColor namedColor = parser.getNamedColorByName(colorString);
-        if (namedColor != null) {
-            return namedColor.hexCode();
-        }
-        return null;
     }
 
     @Nullable

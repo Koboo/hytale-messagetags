@@ -26,7 +26,7 @@ public final class ColorTagHandler extends BakedTagHandler {
                 if (argument == null) {
                     return false;
                 }
-                String color = context.parseColor(argument);
+                String color = context.parser.parseColor(argument);
                 if (color == null) {
                     return false;
                 }

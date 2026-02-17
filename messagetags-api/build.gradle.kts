@@ -1,5 +1,5 @@
 dependencies {
-    val jupiterVersion = "6.0.2"
+    val jupiterVersion = "6.0.3"
     // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
     testImplementation("org.junit.jupiter:junit-jupiter-api:$jupiterVersion")
 

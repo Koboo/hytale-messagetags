@@ -342,12 +342,4 @@ public final class MessageParser {
         String unflushedContent = inputText.substring(startPos, endPos);
         state.appendStyledText(unflushedContent);
     }
-
-    public static int createStringHashCode(String string, int start, int end) {
-        int hash = 0;
-        for (int i = start; i < end; i++) {
-            hash = hash * 31 + string.charAt(i);
-        }
-        return hash;
-    }
 }

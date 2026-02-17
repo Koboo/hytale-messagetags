@@ -5,8 +5,8 @@ import com.hypixel.hytale.server.core.Message;
 import eu.koboo.messagetags.api.color.LegacyColorCodes;
 import eu.koboo.messagetags.api.color.NamedColor;
 import eu.koboo.messagetags.api.taghandler.BakedTagHandler;
-import eu.koboo.messagetags.api.taghandler.ParseContext;
 import eu.koboo.messagetags.api.taghandler.DynamicTagHandler;
+import eu.koboo.messagetags.api.taghandler.ParseContext;
 import eu.koboo.messagetags.api.taghandler.TagType;
 import eu.koboo.messagetags.api.taghandler.baked.*;
 import eu.koboo.messagetags.api.taghandler.dynamic.DynamicColorTagHandler;
@@ -32,7 +32,7 @@ public final class MessageParser {
     public static final char LEGACY_AMPERSAND = '&';
     public static final char LEGACY_SECTION = '§';
 
-    private final  Int2ObjectMap<BakedTagHandler> bakedTagHandlers = new Int2ObjectOpenHashMap<>();
+    private final Int2ObjectMap<BakedTagHandler> bakedTagHandlers = new Int2ObjectOpenHashMap<>();
     private DynamicTagHandler[] dynamicTagHandlers = new DynamicTagHandler[0];
     private long handlerLength = 0;
 

@@ -1,7 +1,7 @@
 package eu.koboo.messagetags.api.taghandler.dynamic;
 
-import eu.koboo.messagetags.api.taghandler.ParseContext;
 import eu.koboo.messagetags.api.taghandler.DynamicTagHandler;
+import eu.koboo.messagetags.api.taghandler.ParseContext;
 import eu.koboo.messagetags.api.taghandler.TagType;
 
 import javax.annotation.Nonnull;
@@ -12,7 +12,7 @@ public final class DynamicColorTagHandler extends DynamicTagHandler {
 
     @Override
     public boolean canHandle(@Nonnull ParseContext context) {
-        if(context.hasArguments()) {
+        if (context.hasArguments()) {
             return false;
         }
         return context.isType(TagType.Open) || context.isType(TagType.Directive);

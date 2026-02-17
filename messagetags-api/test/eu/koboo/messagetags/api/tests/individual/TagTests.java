@@ -3,7 +3,6 @@ package eu.koboo.messagetags.api.tests.individual;
 import com.hypixel.hytale.server.core.Message;
 import eu.koboo.messagetags.api.MessageTags;
 import eu.koboo.messagetags.api.tests.AbstractTest;
-import eu.koboo.messagetags.api.tests.BeautifyJson;
 import eu.koboo.messagetags.api.variable.TagPlaceholder;
 import org.junit.jupiter.api.Test;
 

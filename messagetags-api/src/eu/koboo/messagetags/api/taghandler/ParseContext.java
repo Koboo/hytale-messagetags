@@ -60,7 +60,7 @@ public final class ParseContext {
         }
         rootMessage.children = messageArray;
         messageList.clear();
-        if(placeholderMap != null) {
+        if (placeholderMap != null) {
             placeholderMap.clear();
         }
         return new Message(rootMessage);
@@ -94,7 +94,7 @@ public final class ParseContext {
     }
 
     public void appendMessage(FormattedMessage message, boolean styled) {
-        if(styled) {
+        if (styled) {
             applyStyleTo(message);
         }
         messageList.add(message);

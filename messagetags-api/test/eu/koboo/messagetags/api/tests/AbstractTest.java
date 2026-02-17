@@ -11,8 +11,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
-import java.awt.*;
-
 @Execution(ExecutionMode.CONCURRENT)
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 public abstract class AbstractTest {
@@ -25,7 +23,7 @@ public abstract class AbstractTest {
     boolean beautifyOutput = false;
 
     public AbstractTest() {
-        if(this.getClass().isAnnotationPresent(BeautifyJson.class)) {
+        if (this.getClass().isAnnotationPresent(BeautifyJson.class)) {
             this.beautifyOutput = true;
         }
     }
@@ -48,10 +46,10 @@ public abstract class AbstractTest {
     }
 
     private String beautify(String json) {
-        if(!beautifyOutput) {
+        if (!beautifyOutput) {
             return json;
         }
-        if(json == null || json.isEmpty()) {
+        if (json == null || json.isEmpty()) {
             return json;
         }
         JsonObject object = JsonParser.parseString(json).getAsJsonObject();
